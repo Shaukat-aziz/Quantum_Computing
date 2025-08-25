@@ -1,0 +1,854 @@
+% Clean Beamer presentation (fixed titlepage and TOC)
+\documentclass{beamer}
+\usetheme{Madrid}
+\usecolortheme{seahorse}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\graphicspath{{./}}
+
+\title[Terahertz quantum sensing]{Terahertz Quantum Sensing}
+\subtitle{``Terahertz quantum sensing'' — M. Kutas et al., Sci. Adv. 2020}
+\author[Your Name]{Prepared by: Your Name}
+\date{August 26, 2025}
+
+\begin{document}
+
+% Title frame (use \frame{} with \titlepage)
+\begin{frame}[plain]
+  \titlepage
+\end{frame}
+
+% Table of contents (use only once)
+\begin{frame}{Outline}
+  \tableofcontents[hideallsubsections]
+\end{frame}
+
+\section{Motivation}
+\begin{frame}{Why terahertz quantum sensing?}
+  \begin{itemize}
+    \item Terahertz (THz) carries material-specific contrast but detectors are inefficient.
+    \item Use correlated photons: idler (THz) interacts with sample; signal (visible) is detected.
+    \item Infer THz properties without direct THz detection.
+  \end{itemize}
+\end{frame}
+
+\section{Key concepts}
+\begin{frame}{Induced coherence without induced emission}
+  \begin{itemize}
+    \item SPDC produces signal (visible) + idler (THz) photon pairs.
+    \item Two indistinguishable generation pathways interfere at the signal, dependent on idler path.
+    \item Object transmissivity and idler phase modulate interference visibility.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Operator picture (intuition)}
+  \begin{equation*}
+    \hat a'_s = u\,\hat a_s + v\,\hat a_i^{\dagger},\qquad
+    \hat a'_i = u\,\hat a_i + v\,\hat a_s^{\dagger},
+  \end{equation*}
+  with $|u|^2-|v|^2=1$. Low-gain: $|v|\ll1$.
+\end{frame}
+
+\section{Theory}
+\begin{frame}{Signal rate (schematic)}
+  \begin{equation}
+    R(\theta_s) = N\int d\omega_i\,d\theta_i\;\big[1 + t(\theta_i)\cos(\phi_0 + \tfrac{\omega_i}{c}\Delta l_i)\big]
+  \end{equation}
+\end{frame}
+
+\section{Experiment}
+\begin{frame}{Setup (Fig.1)}
+  \centering
+  \includegraphics[width=0.85\linewidth]{fig-001.png}
+  \\
+  {\scriptsize Schematic (paper Fig.1).}
+\end{frame}
+
+\begin{frame}{Layout (Fig.2)}
+  \centering
+  \includegraphics[width=0.9\linewidth]{fig-000.png}
+  \\
+  {\scriptsize Experimental layout and key components.}
+\end{frame}
+
+\section{Results}
+\begin{frame}{Interference and FFT (Fig.3)}
+  \centering
+  \includegraphics[width=0.9\linewidth]{fig-002.png}
+  \\
+  {\scriptsize FFT peak near 1.26 THz.}
+\end{frame}
+
+\begin{frame}{Thickness sensing (Fig.4)}
+  \centering
+  \includegraphics[width=0.9\linewidth]{fig-003.png}
+  \\
+  {\scriptsize Fitted envelope shift vs PTFE thickness.}
+\end{frame}
+
+\begin{frame}{Checks (Fig.5 & Fig.6)}
+  \centering
+  \includegraphics[width=0.48\linewidth]{fig-004.png}\hfill
+  \includegraphics[width=0.48\linewidth]{fig-005.png}
+  \\
+  {\scriptsize Pump-power linearity and idler angular distribution.}
+\end{frame}
+
+\section{Conclusions}
+\begin{frame}{Conclusions}
+  \begin{itemize}
+    \item Induced coherence enables THz sensing using visible detectors.
+    \item Demonstrated thickness extraction and FFT signatures around 1.26 THz.
+    \item Improvements: better idler collection, reduced loss, spectral control.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{References}
+  \footnotesize
+  M. Kutas et al., "Terahertz quantum sensing," Sci. Adv. 6, eaaz8065 (2020).
+\end{frame}
+
+\end{document}
+\documentclass{beamer}
+\usetheme{Madrid}
+\usecolortheme{seahorse}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\graphicspath{{./}}
+
+	itle{Terahertz Quantum Sensing}
+\subtitle{``Terahertz quantum sensing'' — M. Kutas et al., Sci. Adv. 2020}
+\author{Prepared by: Your Name}
+\date{August 26, 2025}
+
+\begin{document}
+
+\begin{frame}
+		itlepage
+\end{frame}
+
+\begin{frame}{Outline}
+		ableofcontents
+\end{frame}
+
+\section{Motivation}
+\begin{frame}{Why terahertz quantum sensing?}
+	\begin{itemize}
+		\item Terahertz (THz) region contains valuable material information but lacks sensitive detectors.
+		\item Idea: generate correlated photon pairs; let the idler (THz) interact with the sample and detect the signal (visible).
+		\item Benefit: access THz information while using efficient visible detectors.
+	\end{itemize}
+\end{frame}
+
+\section{Key concepts}
+\begin{frame}{Induced coherence without induced emission}
+	\begin{itemize}
+		\item SPDC in a nonlinear crystal creates signal (visible) + idler (THz) pairs.
+		\item Two indistinguishable generation paths (first vs second pass) cause interference in the detected signal even if idler is undetected.
+		\item Interference depends on idler path phase and object transmissivity — basis for sensing.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{SPDC — operator picture (intuition)}
+	\begin{equation*}
+		\hat a'_s = u\,\hat a_s + v\,\hat a_i^{\dagger},\qquad
+		\hat a'_i = u\,\hat a_i + v\,\hat a_s^{\dagger},
+	\end{equation*}
+	with $|u|^2-|v|^2=1$. Low-gain regime: $|v|\ll1$ (pair production rare, linear in pump power).
+\end{frame}
+
+\begin{frame}{Two-photon state (concept)}
+	\begin{equation*}
+		|\Psi\rangle = N\iint d^3k_s d^3k_i\,\Phi(k_s,k_i)\,\hat a^{\dagger}(k_s)\hat a^{\dagger}(k_i)|0\rangle + (\text{second pass}).
+	\end{equation*}
+	$\Phi$ encodes phase matching; interference requires overlap of idler modes from both passes.
+\end{frame}
+
+\section{Theory}
+\begin{frame}{Signal rate and interference (schematic)}
+	\begin{equation}
+		R(\theta_s) = N\int d\omega_i\,d\theta_i\;[1 + t(\theta_i)\cos(\phi_0 + \tfrac{\omega_i}{c}\Delta l_i)]
+	\end{equation}
+	$t(\theta_i)$: object transmission; $\Delta l_i$: idler optical path difference. The cosine term yields oscillations used to sense optical thickness.
+\end{frame}
+
+\begin{frame}{Fit function used by authors}
+	\begin{equation*}
+		f(x) = y_0 + A\sin(\nu x + \phi)\,\exp\!\left[-\frac{(x-x_c)^2}{2\omega^2}\right].
+	\end{equation*}
+	The fitted center $x_c$ shifts when a plate (index $n$, thickness $d$) is inserted; shift maps to optical thickness $(n-1)d$.
+\end{frame}
+
+\section{Experimental setup}
+\begin{frame}{Schematic (paper Fig.1)}
+	\centering
+	\includegraphics[width=0.85\linewidth]{fig-001.png}
+	\\
+	{\scriptsize Scheme and nomenclature for the theoretical analysis (paper Fig.1).}
+\end{frame}
+
+\begin{frame}{Full layout (paper Fig.2)}
+	\centering
+	\includegraphics[width=0.9\linewidth]{fig-000.png}
+	\\
+	{\scriptsize Experimental layout: pump (VBG), PPLN, ITO separation, parabolic mirror for idler, movable mirror Mi, VBG filters, sCMOS.}
+	\\
+	{\scriptsize Key params: 659.58 nm CW pump; 1-mm MgO:PPLN, poling 90\,\textmu m; sCMOS detection.}
+\end{frame}
+
+\section{Measurements}
+\begin{frame}{Interference and FFT (paper Fig.3)}
+	\centering
+	\includegraphics[width=0.9\linewidth]{fig-002.png}
+	\\
+	{\scriptsize FFT of interference shows a peak near 1.26 THz; control (ITO) blocks interference.}
+\end{frame}
+
+\begin{frame}{Thickness sensing (paper Fig.4)}
+	\centering
+	\includegraphics[width=0.9\linewidth]{fig-003.png}
+	\\
+	{\scriptsize Plate insertion shifts envelope; fitted thickness agrees with caliper within a few percent.}
+\end{frame}
+
+\begin{frame}{Additional checks (paper Fig.5 \, Fig.6)}
+	\centering
+	\includegraphics[width=0.48\linewidth]{fig-004.png}\hfill
+	\includegraphics[width=0.48\linewidth]{fig-005.png}
+	\\
+	{\scriptsize Left: pump-power linearity confirms low-gain SPDC. Right: idler angular distribution limits visibility.}
+\end{frame}
+
+\section{Discussion}
+% Single clean Beamer presentation for the paper (fixed titlepage and TOC)
+\documentclass{beamer}
+\usetheme{Madrid}
+\usecolortheme{seahorse}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\graphicspath{{./}}
+
+	itle[Terahertz quantum sensing]{Terahertz Quantum Sensing}
+\subtitle{``Terahertz quantum sensing'' — M. Kutas et al., Sci. Adv. 2020}
+\author[Your Name]{Prepared by: Your Name}
+\date{August 26, 2025}
+
+\begin{document}
+
+% Title page
+\begin{frame}[plain]
+		itlepage
+\end{frame}
+
+% TOC
+\begin{frame}{Outline}
+		ableofcontents[hideallsubsections]
+\end{frame}
+
+\section{Motivation}
+\begin{frame}{Why terahertz quantum sensing?}
+	\begin{itemize}
+		\item Terahertz (THz) carries material-specific contrast but detectors are inefficient.
+		\item Use correlated photons: idler (THz) interacts with sample; signal (visible) is detected.
+		\item Infer THz properties without direct THz detection.
+	\end{itemize}
+\end{frame}
+
+\section{Key concepts}
+\begin{frame}{Induced coherence without induced emission}
+	\begin{itemize}
+		\item SPDC produces signal (visible) + idler (THz) photon pairs.
+		\item Two indistinguishable generation pathways interfere at the signal, dependent on idler path.
+		\item Object transmissivity and idler phase modulate interference visibility.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Operator picture (intuition)}
+	\begin{equation*}
+		\hat a'_s = u\,\hat a_s + v\,\hat a_i^{\dagger},\qquad
+		\hat a'_i = u\,\hat a_i + v\,\hat a_s^{\dagger},
+	\end{equation*}
+	with $|u|^2-|v|^2=1$. Low-gain: $|v|\\ll1$.
+\end{frame}
+
+\section{Theory}
+\begin{frame}{Signal rate (schematic)}
+	\begin{equation}
+		R(\theta_s) = N\int d\omega_i\,d\theta_i\;\big[1 + t(\theta_i)\cos(\phi_0 + \tfrac{\omega_i}{c}\Delta l_i)\big]
+	\end{equation}
+\end{frame}
+
+\section{Experiment}
+\begin{frame}{Setup (Fig.1)}
+	\centering
+	\includegraphics[width=0.85\linewidth]{fig-001.png}
+	\\
+	{\scriptsize Schematic (paper Fig.1).}
+\end{frame}
+
+\begin{frame}{Layout (Fig.2)}
+	\centering
+	\includegraphics[width=0.9\linewidth]{fig-000.png}
+	\\
+	{\scriptsize Experimental layout and key components.}
+\end{frame}
+
+\section{Results}
+\begin{frame}{Interference and FFT (Fig.3)}
+	\centering
+	\includegraphics[width=0.9\linewidth]{fig-002.png}
+	\\
+	{\scriptsize FFT peak near 1.26 THz.}
+\end{frame}
+
+\begin{frame}{Thickness sensing (Fig.4)}
+	\centering
+	\includegraphics[width=0.9\linewidth]{fig-003.png}
+	\\
+	{\scriptsize Fitted envelope shift vs PTFE thickness.}
+\end{frame}
+
+\begin{frame}{Checks (Fig.5 \& Fig.6)}
+	\centering
+	\includegraphics[width=0.48\linewidth]{fig-004.png}\hfill
+	\includegraphics[width=0.48\linewidth]{fig-005.png}
+	\\
+	{\scriptsize Pump-power linearity and idler angular distribution.}
+\end{frame}
+
+\section{Conclusions}
+\begin{frame}{Conclusions}
+	\begin{itemize}
+		\item Induced coherence enables THz sensing using visible detectors.
+		\item Demonstrated thickness extraction and FFT signatures around 1.26 THz.
+		\item Improvements: better idler collection, reduced loss, spectral control.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{References}
+	\footnotesize
+	M. Kutas et al., "Terahertz quantum sensing," Sci. Adv. 6, eaaz8065 (2020).
+\end{frame}
+
+\end{document}
+\end{frame}
+
+\section{Measurements}
+\begin{frame}{Interference and FFT (paper Fig.3)}
+	\centering
+	\includegraphics[width=0.9\linewidth]{fig-002.png}
+	\\
+	{\scriptsize FFT of interference shows peak at ~1.26 THz (collinear forward); inserting ITO in idler path removes interference (control).}
+\end{frame}
+
+\begin{frame}{Thickness sensing (paper Fig.4)}
+	\centering
+	\includegraphics[width=0.9\linewidth]{fig-003.png}
+	\\
+	{\scriptsize Inserting PTFE plates shifts the interference envelope; fitted thickness matches mechanical caliper to within a few percent.}
+\end{frame}
+
+\begin{frame}{Additional checks (paper Fig.5 and Fig.6)}
+	\centering
+	\includegraphics[width=0.48\linewidth]{fig-004.png}\hfill
+	\includegraphics[width=0.48\linewidth]{fig-005.png}
+	\\
+	{\scriptsize Left: pump-power test (blocked/unblocked idler) shows linear behavior — low-gain regime. Right: idler angular distribution explains limited visibility.}
+\end{frame}
+
+\section{Discussion}
+\begin{frame}{Interpretation and limitations}
+	\begin{itemize}
+		\item Interference due to indistinguishability of pair-creation events (quantum picture).
+		\item Thermal idler occupation and up/down-conversion relevant for THz — included in theory.
+		\item Practical limits: THz absorption, Fresnel losses, limited idler collection angle, asymmetry in measured traces.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{How to present this paper}
+	\begin{itemize}
+		\item Start with problem statement (lack of THz detectors) and concept (ICWIE).
+		\item Explain Fig.1 and Fig.2 clearly: where THz interacts and where visible is detected.
+		\item Walk through Fig.3 (interference and FFT) and Fig.4 (thickness extraction).
+		\item Finish with limitations and potential improvements.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{References}
+	\footnotesize
+	M. Kutas et al., "Terahertz quantum sensing," Sci. Adv. 6, eaaz8065 (2020).\\
+	Lemos et al., Nature 2014; Lahiri et al., PRA 2015; Chekhova \& Ou, Adv. Opt. Photon. 2016.
+\end{frame}
+
+\end{document}
+\documentclass{beamer}
+\usetheme{Madrid}
+\usecolortheme{seahorse}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\graphicspath{{./}}
+
+	itle{Terahertz Quantum Sensing}
+\subtitle{``Terahertz quantum sensing'' — M. Kutas et al., Sci. Adv. 2020}
+\author{Prepared by: Your Name}
+\date{August 26, 2025}
+
+\begin{document}
+
+\begin{frame}
+		itlepage
+\end{frame}
+
+\begin{frame}{Outline}
+		ableofcontents
+\end{frame}
+
+\section{Motivation}
+\begin{frame}{Why terahertz quantum sensing?}
+	\begin{itemize}
+		\item Terahertz (THz) range carries useful contrast (thickness, molecular resonances) but lacks convenient detectors.
+		\item Use correlated photons: idler in THz interacts with sample, signal (visible) is detected.
+		\item Information transferred from THz to visible using induced coherence without induced emission (ICWIE).
+	\end{itemize}
+\end{frame}
+
+\section{Key concepts}
+\begin{document}
+
+\begin{frame}
+		itlepage
+\end{frame}
+
+\begin{frame}{Outline}
+		ableofcontents
+\end{frame}
+
+\section{Motivation}
+\begin{frame}{Why terahertz quantum sensing?}
+	\begin{itemize}
+		\item Terahertz (THz) range carries useful contrast (thickness, molecular resonances) but lacks convenient detectors.
+		\item Use correlated photons: idler in THz interacts with sample, signal (visible) is detected.
+		\item Information transferred from THz to visible using induced coherence without induced emission (ICWIE).
+	\end{itemize}
+\end{frame}
+
+\section{Key concepts}
+\begin{frame}{Induced coherence without induced emission}
+	\begin{itemize}
+		\item Two passes through the same nonlinear crystal generate two indistinguishable SPDC pathways.
+		\item If idler modes are aligned and indistinguishable, signal photons interfere depending on idler path and object.
+		\item This enables sensing/imaging without directly detecting THz photons.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{SPDC operators (single-mode intuition)}
+	\begin{equation*}
+		\hat a'_s = u\,\hat a_s + v\,\hat a_i^{\dagger},\\qquad
+		\hat a'_i = u\,\hat a_i + v\,\hat a_s^{\dagger},
+	\end{equation*}
+	with unitarity constraint $|u|^2-|v|^2=1$. Low-gain regime: $|v|\\ll1$.
+\end{frame}
+
+\begin{frame}{Two-photon state (schematic)}
+	\begin{equation*}
+		|\\Psi\\rangle = N_1\\iint d^3k_{s1}d^3k_{i1}\\,\\Phi(k_{s1},k_{i1})\\,\\hat a^{\\dagger}(k_{s1})\\hat a^{\\dagger}(k_{i1})|0\\rangle + (\\text{second pass}).
+	\end{equation*}
+	Phase-matching function $\\Phi$ enforces energy/momentum conservation; interference depends on alignment of idler modes and phases accumulated between passes.
+\end{frame}
+
+\section{Theory: signal rate}
+\begin{frame}{Signal rate and interference (schematic)}
+	\begin{equation}
+		R(\\theta_s) = N\\!\\int d\\omega_i\\,d\\theta_i\\,\\ldots\\;\\big[1 + t(\\theta_i)\\cos(\\phi_0 + \\tfrac{\\omega_i}{c}\\Delta l_i)\\big]
+	\end{equation}
+	The cosine term carries the idler-path-dependent phase; varying idler optical length or inserting a sample (transmissivity $t$) shifts the interference envelope.
+\end{frame}
+
+  \tableofcontents
+\end{frame}
+
+\section{Motivation}
+\begin{frame}{Why terahertz quantum sensing?}
+  \begin{itemize}
+    \item Terahertz (THz) range carries useful contrast (thickness, molecular resonances) but lacks convenient detectors.
+    \item Use correlated photons: idler in THz interacts with sample, signal (visible) is detected.
+    \item Information transferred from THz to visible using induced coherence without induced emission (ICWIE).
+  \end{itemize}
+\end{frame}
+
+\section{Key concepts}
+\begin{frame}{Induced coherence without induced emission}
+  \begin{itemize}
+    \item Two passes through the same nonlinear crystal generate two indistinguishable SPDC pathways.
+    \item If idler modes are aligned and indistinguishable, signal photons interfere depending on idler path and object.
+    \item This enables sensing/imaging without directly detecting THz photons.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{SPDC operators (single-mode intuition)}
+  \begin{equation*}
+    \hat a'_s = u\,\hat a_s + v\,\hat a_i^{\dagger},\qquad
+    \hat a'_i = u\,\hat a_i + v\,\hat a_s^{\dagger},
+  \end{equation*}
+  with unitarity constraint $|u|^2-|v|^2=1$. Low-gain regime: $|v|\ll1$.
+\end{frame}
+
+\begin{frame}{Two-photon state (schematic)}
+  \begin{equation*}
+    |\Psi\rangle = N_1\iint d^3k_{s1}d^3k_{i1}\,\Phi(k_{s1},k_{i1})\,\hat a^{\dagger}(k_{s1})\hat a^{\dagger}(k_{i1})|0\rangle + (\text{second pass}).
+  \end{equation*}
+  Phase-matching function $\Phi$ enforces energy/momentum conservation; interference depends on alignment of idler modes and phases accumulated between passes.
+\end{frame}
+
+\section{Theory: signal rate}
+\begin{frame}{Signal rate and interference (schematic)}
+  \begin{equation}
+    R(\theta_s) = N\!\int d\omega_i\,d\theta_i\,\ldots\;\big[1 + t(\theta_i)\cos(\phi_0 + \tfrac{\omega_i}{c}\Delta l_i)\big]
+  \end{equation}
+  The cosine term carries the idler-path-dependent phase; varying idler optical length or inserting a sample (transmissivity $t$) shifts the interference envelope.
+\end{frame}
+
+\begin{frame}{Data analysis: fit used in paper}
+  Authors fit the collinear signal envelope with:
+  \begin{equation*}
+    f(x) = y_0 + A\sin(\nu x + \phi)\,\exp\!\left[-\frac{(x-x_c)^2}{2\omega^2}\right].
+  \end{equation*}
+  Center $x_c$ maps to optical path; inserting a plate of refractive index $n$ and thickness $d$ shifts $x_c$ by an amount proportional to $(n-1)d$.
+\end{frame}
+
+\section{Experimental setup}
+\begin{frame}{Schematic (Fig.1)}
+  \begin{figure}
+    \centering
+    \includegraphics[width=0.85\linewidth]{fig-001.png}
+    \caption{Scheme and nomenclature for the theoretical analysis (paper Fig.1).}
+  \end{figure}
+  Notes: single-crystal Michelson-like interferometer; idler (THz) interacts with object O in free space between passages.
+\end{frame}
+
+\begin{frame}{Full layout (Fig.2)}
+  \begin{figure}
+    \centering
+    \includegraphics[width=0.9\linewidth]{fig-000.png}
+    \caption{Experimental layout (paper Fig.2): pump (VBG), PPLN, ITO separation, parabolic mirror, moveable mirror Mi, VBG filters, sCMOS.}
+  \end{figure}
+  Key parameters: pump 659.58 nm CW laser; 1-mm MgO:PPLN, poling period 90 \textmu m; sCMOS detection after VBG filters and grating.
+\end{frame}
+
+\section{Measurements}
+\begin{frame}{Interference and FFT (Fig.3)}
+  \begin{figure}
+    \centering
+    \includegraphics[width=0.9\linewidth]{fig-002.png}
+    \caption{Interference in collinear forward spot (Stokes/anti-Stokes) and FFT peaks (~1.26 THz).}
+  \end{figure}
+  Control: placing ITO in idler path removes interference peak (no THz reaches object).
+\end{frame}
+
+\begin{frame}{Thickness sensing (Fig.4)}
+  \begin{figure}
+    \centering
+    \includegraphics[width=0.9\linewidth]{fig-003.png}
+    \caption{Envelope shift vs PTFE plate thickness; fitted values compared to caliper.}
+  \end{figure}
+  Result: thickness extraction accurate to a few percent; demonstrated at various plate thicknesses (0.5–5 mm).
+\end{frame}
+
+\begin{frame}{Additional checks (Fig.5, Fig.6)}
+  \begin{figure}
+    \centering
+    \includegraphics[width=0.48\linewidth]{fig-004.png}\hfill
+    \includegraphics[width=0.48\linewidth]{fig-005.png}
+    \caption{Left: pump-power test (blocked/unblocked idler). Right: idler angular distribution for various pump waists.}
+  \end{figure}
+  These show low-gain SPDC (linear pump dependence) and that limited idler angular collection reduces visibility.
+\end{frame}
+
+\section{Discussion}
+\begin{frame}{Interpretation, limitations, outlook}
+  \begin{itemize}
+    \item Quantum explanation: indistinguishability of generation paths leads to interference in detected signal.
+    \item Practical limits: THz absorption in PPLN, Fresnel losses, limited coupling angles, thermal idler occupation.
+    \item Outlook: improve collection efficiency, reduce loss, extend to spectroscopic contrast and imaging.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{How to present this paper}
+  \begin{itemize}
+    \item Start with problem statement (lack of THz detectors), explain the ICWIE idea with Fig.1.
+    \    \item Walk through Fig.2 (setup) step-by-step.
+    \item Show experimental data (Fig.3–Fig.5) and explain fit-to-thickness mapping.
+    \item Finish with limitations and potential next steps.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{References}
+  \footnotesize
+  M. Kutas et al., "Terahertz quantum sensing," Sci. Adv. 6, eaaz8065 (2020).\\
+  Lemos et al., Nature 2014; Lahiri et al., PRA 2015; Chekhova & Ou, Adv. Opt. Photon. 2016.
+\end{frame}
+
+\end{document}
+
+\documentclass{beamer}
+\usetheme{Madrid}
+\title{Ultrafast and Reversible Control of the Exchange Interaction in Mott Insulators}
+\author{A. Singer, S. Parameswaran, et al.}
+\date{August 26, 2025}
+
+\begin{document}
+
+\begin{frame}
+		\titlepage
+\end{frame}
+
+\begin{frame}{Outline}
+	\tableofcontents
+\end{frame}
+
+\section{Concepts}
+\documentclass{beamer}
+\usetheme{Madrid}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\graphicspath{{./}}
+	itle{Terahertz Quantum Sensing}
+\subtitle{"Terahertz quantum sensing" — M. Kutas, B. Haase, P. Bickert, F. Riexinger, D. Molter, G. von Freymann (Sci. Adv. 2020)}
+\author{Mirco Kutas, Björn Haase, et al. \\ Prepared by: Your Name}
+\date{August 26, 2025}
+
+\begin{document}
+
+\begin{frame}
+		itlepage
+\end{frame}
+
+\begin{frame}{Outline}
+		ableofcontents
+\end{frame}
+
+\section{Motivation}
+\begin{frame}{Why terahertz quantum sensing?}
+	\begin{itemize}
+		\item Terahertz (THz) region contains useful material information but lacks widely available, sensitive detectors.
+		\item Quantum sensing with undetected photons transfers sample information from THz to visible wavelengths where detectors are efficient.
+		\item Goal of paper: demonstrate free-space THz interaction with a sample and read out thickness information using visible photons.
+	\end{itemize}
+\end{frame}
+
+\section{Key concepts}
+\begin{frame}{Induced coherence without induced emission (ICWIE)}
+	\begin{itemize}
+		\item Photon pairs (signal: visible, idler: THz) are generated by SPDC in a nonlinear crystal.
+		\item Two indistinguishable generation pathways (first and second pass) produce interference in the detected signal even when the idler is not detected.
+		\item This enables sensing in spectral ranges where direct detection is hard.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{SPDC and Bogoliubov transforms}
+	In each passage through the crystal the input/output field operators are related by Bogoliubov transformations (single-mode notation):
+	\begin{equation*}
+		\hat{a}'_s = u\,\hat{a}_s + v\,\hat{a}_i^{\dagger},\qquad
+		\hat{a}'_i = u\,\hat{a}_i + v\,\hat{a}_s^{\dagger}.
+	\end{equation*}
+	Unitarity implies $|u|^2-|v|^2=1$. In the low-gain regime $|v|\ll1$ and pair creation probability is small.
+\end{frame}
+
+\begin{frame}{Two-photon state (multimode) — intuition}
+	The produced two-photon state is a superposition of pairs created on the first and the second pass:
+	\begin{equation*}
+		|\Psi\rangle = N_1\int d^3k_{s1}d^3k_{i1}\,\Phi(k_{s1},k_{i1})\,\hat a^{\dagger}(k_{s1})\hat a^{\dagger}(k_{i1})|0\rangle + N_2(\text{second pass}).
+	\end{equation*}
+	Phase matching (encoded in $\Phi$) and the alignment of idler modes determine interference visibility.
+\end{frame}
+
+\section{Theory: signal rate and interference}
+\begin{frame}{Signal rate — origin of interference}
+	The detector signal rate can be written schematically as:
+	\begin{equation}
+		R(\theta_s) = N\int d\omega_i\,d\theta_i\,\ldots\;\big[1 + t(\theta_i)\cos(\phi_0 + \tfrac{\omega_i}{c}\Delta l_i)\big],
+	\end{equation}
+	where $t(\theta_i)$ is object transmission, $\Delta l_i$ is idler optical path difference, and $\phi_0$ summarizes constant phases. Interference arises from the cosine term.
+\end{frame}
+
+\begin{frame}{Interference fit used to extract shifts}
+	The authors fit the collinear signal envelope with:
+	\begin{equation*}
+		f(x) = y_0 + A\sin(\nu x + \phi)\,\exp\!\left[-\frac{(x-x_c)^2}{2\omega^2}\right],
+	\end{equation*}
+	The fitted center $x_c$ shifts when a plate of refractive index $n$ and thickness $d$ is inserted; the shift maps to optical thickness $n d$.
+\end{frame}
+
+\section{Experimental setup}
+\begin{frame}{Setup (schematic) — Fig.1}
+	\begin{figure}
+		\centering
+		\includegraphics[width=0.9\linewidth]{fig-001.png}
+		\caption{Scheme and nomenclature for the theoretical analysis (from paper). Signal (s) and idler (i) modes pass through PPLN twice; idler interacts with object O in free space.}
+	\end{figure}
+	Explanation:
+	\begin{itemize}
+		\item Single-crystal Michelson-like interferometer: pump and signal reflected back for second pass.
+		\item Idler path includes object O; its optical length and transmissivity modify interference.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Full experimental layout — Fig.2}
+	\begin{figure}
+		\centering
+		\includegraphics[width=0.9\linewidth]{fig-000.png}
+		\caption{Experimental layout: pump (VBG), PPLN, ITO separation, parabolic mirror for idler, moveable mirror Mi, VBG filters and sCMOS detection.}
+	\end{figure}
+	Notes:
+	\begin{itemize}
+		\item Pump: 659.58 nm CW laser (narrow linewidth), focused into 1-mm PPLN.
+		\item ITO glass transmits idler (THz) and separates visible signal for detection.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Observed interference (Fig.3) — explanation}
+	\begin{figure}
+		\centering
+		\includegraphics[width=0.9\linewidth]{fig-002.png}
+		\caption{Interference in collinear forward spot (Stokes and anti-Stokes) and corresponding FFT peaks at ~1.26 THz.}
+	\end{figure}
+	Key points:
+	\begin{itemize}
+		\item FFT peak frequency matches phase-matching expectation (collinear forward: ~1.26 THz).
+		\item Inserting ITO in idler path removes interference (control), confirming idler-mediated effect.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Quantum sensing demonstration (Fig.4)}
+	\begin{figure}
+		\centering
+		\includegraphics[width=0.9\linewidth]{fig-003.png}
+		\caption{Shift of interference envelope when PTFE plates of different thicknesses are inserted; fitted thickness vs caliper measurement.}
+	\end{figure}
+	Result: thickness extracted from interference agrees with mechanical measurement within a few percent.
+\end{frame}
+
+\begin{frame}{Checks and additional data (Fig.5, Fig.6)}
+	\begin{figure}
+		\centering
+		\includegraphics[width=0.48\linewidth]{fig-004.png}\hfill
+		\includegraphics[width=0.48\linewidth]{fig-005.png}
+		\caption{Left: pump-power test (blocked/unblocked idler) showing linear dependence (low-gain). Right: idler angular distribution for various pump waists.}
+	\end{figure}
+	These support the low-gain SPDC regime and explain visibility limits due to limited idler angular collection.
+\end{frame}
+
+\section{Discussion and limitations}
+\begin{frame}{Interpretation and limitations}
+	\begin{itemize}
+		\item Quantum explanation: indistinguishability of creation events causes interference even with undetected idler.
+		\item Thermal idler occupation and up/down-conversion processes are relevant in THz; authors include thermal terms in theory.
+		\item Practical limitations: THz absorption in PPLN, Fresnel losses, limited idler collection angle, and asymmetry in measured interference.
+	\end{itemize}
+\end{frame}
+
+\section{Presentation tips}
+\begin{frame}{How to present this to your professor}
+	\begin{itemize}
+		\item Use Fig.1 and Fig.2 to explain the concept and the apparatus step-by-step.
+		\item Show Fig.3 (interference & FFT) to connect theory and measurement.
+		\item Explain the fit (show equation) and how shifts map to thickness (Fig.4).
+		\item End with limitations and potential improvements.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{References}
+	\footnotesize
+	M. Kutas et al., "Terahertz quantum sensing," Sci. Adv. 6, eaaz8065 (2020).\\
+	Further reading: Lemos et al., Nature 2014; Lahiri et al., PRA 2015; Chekhova & Ou, Adv. Opt. Photon. 2016.
+\end{frame}
+
+\end{document}
+		\section{Experimental setup}
+		\begin{frame}{Main elements}
+			\begin{itemize}
+				\item Pump: continuous-wave, frequency-doubled laser at 659.58 nm (narrow linewidth).
+				\item Nonlinear medium: 1 mm MgO-doped periodically poled LiNbO3 (PPLN), poling period $\Lambda=90\,\mu$m.
+				\item Separation: ITO-coated glass separates visible (signal) and THz (idler) radiation.
+				\item Idler path: parabolic mirror to collimate THz, mirror on piezo/fine stage provides variable path length.
+				\item Detection: signal filtered by VBGs and a transmission grating, then recorded on sCMOS camera (visible detection).
+			\end{itemize}
+			% TODO: add figure from the paper (Fig.2) here when available
+		\end{frame}
+
+		\begin{frame}{Operating regime and practical points}
+			\begin{itemize}
+				\item Low-gain SPDC (V0 \ll 1): signal intensity linear in pump power.
+				\item Thermal idler occupation matters in THz: $N_{th}=1/(e^{\hbar\omega_i/k_BT}-1)$ appears in theory.
+				\item Only idler angles up to a maximum ($\theta_{\max}\approx5^\circ$ inside crystal) can be coupled back; limits visibility.
+				\item Losses (absorption, Fresnel reflections) reduce visibility compared to ideal theory.
+			\end{itemize}
+		\end{frame}
+
+		\section{Measurements and results}
+		\begin{frame}{Interference and FFT peaks}
+			\begin{itemize}
+				\item Observed interference in both Stokes (down-conversion) and anti-Stokes (up-conversion) regions.
+				\item Fast Fourier Transform of interference envelope shows peaks at ~1.26 THz (collinear forward) and ~0.47 THz (collinear backward) — matches phase matching.
+				\item Inserting an ITO glass in idler path blocks THz; interference disappears (control test).
+			\end{itemize}
+			% placeholder for Fig.3 (interference and FFT)
+		\end{frame}
+
+		\begin{frame}{Terahertz quantum sensing (thickness measurement)}
+			\begin{itemize}
+				\item PTFE plates of known thickness inserted in idler path cause a shift of the interference envelope center $x_c$.
+				\item Using measured refractive index $n_{\mathrm{PTFE}}=1.42\pm0.01$ and the shift, the optical thickness (physical thickness) is extracted.
+				\item Results agree with caliper measurements within a few percent (example: 2.9% accuracy for 5 mm plate in Stokes).
+			\end{itemize}
+		\end{frame}
+
+		\section{Discussion}
+		\begin{frame}{Interpretation and robustness}
+			\begin{itemize}
+				\item Interference arises from indistinguishability of pair creation events (quantum explanation). Classical explanations exist but do not capture all observations.
+				\item Tests: blocking idler, varying pump power (linear behavior consistent with low-gain), adding ITO — confirm quantum sensing mechanism.
+				\item Limitations: asymmetry in measured interference, THz absorption in crystal, limited angular collection.
+			\end{itemize}
+		\end{frame}
+
+		\begin{frame}{Applications and outlook}
+			\begin{itemize}
+				\item Noninvasive thickness measurements and imaging in THz range without THz detectors.
+				\item Potential for industrial non-destructive testing and quantum-enhanced metrology.
+				\item Improvements: increase collection efficiency, reduce losses, extend to spectroscopic contrast.
+			\end{itemize}
+		\end{frame}
+
+		\section{Practical notes for your presentation}
+		\begin{frame}{How to present this paper to your professor}
+			\begin{itemize}
+				\item Start with the problem: lack of good THz detectors and the idea of using undetected photons.
+				\item Explain the experiment schematic clearly (use Fig.2 from the paper).
+				\item Walk through the theory intuitively: SPDC, indistinguishability, how path changes give interference.
+				\item Show data (interference and FFT) and explain how thickness is extracted (fit and refractive index).
+				\item End with limitations and future directions — be ready to discuss thermal idler contribution and low-gain regime.
+			\end{itemize}
+		\end{frame}
+
+		\begin{frame}{Further reading}
+			\begin{itemize}
+				\item Lemos et al., Nature 2014 — Quantum imaging with undetected photons.
+				\item Lahiri et al., Phys. Rev. A 2015 — Theory of quantum imaging with undetected photons.
+				\item Reviews on SPDC and nonlinear interferometers: Chekhova & Ou, Adv. Opt. Photon. 2016.
+				\item Practical: Overleaf Beamer guide for slide polish.
+			\end{itemize}
+		\end{frame}
+
+		\begin{frame}{References}
+			\footnotesize
+			M. Kutas et al., "Terahertz quantum sensing," Sci. Adv. 6, eaaz8065 (2020).\\
+			See paper for full author list and experimental details.
+		\end{frame}
+
+		\end{document}
