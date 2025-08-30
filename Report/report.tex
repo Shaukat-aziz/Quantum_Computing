@@ -2,19 +2,15 @@
 \usepackage{amsmath}
 \usepackage{graphicx}
 \usepackage{geometry}
-\geometry{margin=1in}
-\title{Stadium Billiard Assignment --- Analytic Simulation}
-\author{}
+\geometry{margin=0.8in}
+\title{Assignment 1}
+\author{Shaukat Aziz, Suresh Karthik}
 \date{}
 
 \begin{document}
 \maketitle
 
-\section*{Assignment Question}
-
-A stadium billiard consists of a rectangle of width $2a$ and height $2b$, capped at each end by a half-ellipse of semi-axes $r_x$ (horizontal) and $r_y$ (vertical). A point particle moves freely inside the stadium, bouncing elastically off the boundary.
-
-\subsection*{(a) Stadium Boundary Equations}
+\section{Stadium Boundary Equations}
 
 The boundary of the stadium consists of:
 \begin{enumerate}
@@ -32,7 +28,8 @@ The boundary of the stadium consists of:
     \]
 \end{enumerate}
 
-\subsection*{Collision Conditions}
+\section{Classical Motion (Newtonian Dynamics)}
+\subsection{Collision Conditions}
 \begin{itemize}
     \item \textbf{Horizontal walls:} Collision occurs when $y = +b$ or $y = -b$ and $|x| \leq a$.
     \item \textbf{Ellipse caps:} Collision occurs when the particle reaches the ellipse boundary at $x = \pm a$ and satisfies:
@@ -42,17 +39,14 @@ The boundary of the stadium consists of:
     \item \textbf{Note:} Only collisions with horizontal walls and ellipse caps are considered; there are no vertical-wall reflections at $x = \pm a$.
 \end{itemize}
 
-\section*{Simulation Results}
+\subsection{Simulation, Checks and Results}
+Stadium parameters used for simulation: $a = 3.0$, $b = r_y = 1.0$, $r_x = 2.0$, mass: $m = 1$
+\subsubsection{Simulation}
 
-\begin{itemize}
-    \item Stadium parameters: $a = 1.0$, $b = 1.0$, $r_x = 2.0$, $r_y = 1.0$
-    \item Number of bounces recorded: 38
-    \item Final velocity: $v_x = 1.2828$, $v_y = 0.5953$, speed $= 1.4093$
-\end{itemize}
 
 \begin{figure}[h!]
     \centering
- %   \includegraphics[width=0.8\textwidth]{stadium_billiard_clean.png}
+    \includegraphics[width=0.8\textwidth]{stadium_billiard_clean.png}
     \caption{Stadium billiard trajectory and boundary}
 \end{figure}
 
