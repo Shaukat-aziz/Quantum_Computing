@@ -1,0 +1,78 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{geometry}
+\geometry{margin=1in}
+\title{Stadium Billiard Assignment --- Analytic Simulation}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section*{Assignment Question}
+
+A stadium billiard consists of a rectangle of width $2a$ and height $2b$, capped at each end by a half-ellipse of semi-axes $r_x$ (horizontal) and $r_y$ (vertical). A point particle moves freely inside the stadium, bouncing elastically off the boundary.
+
+\subsection*{(a) Stadium Boundary Equations}
+
+The boundary of the stadium consists of:
+\begin{enumerate}
+    \item \textbf{Rectangle (centered at origin):}
+    \[
+        |x| \leq a, \quad |y| \leq b
+    \]
+    \item \textbf{Left ellipse cap (centered at $x = -a$):}
+    \[
+        \frac{(x + a)^2}{r_x^2} + \frac{y^2}{r_y^2} = 1
+    \]
+    \item \textbf{Right ellipse cap (centered at $x = +a$):}
+    \[
+        \frac{(x - a)^2}{r_x^2} + \frac{y^2}{r_y^2} = 1
+    \]
+\end{enumerate}
+
+\subsection*{Collision Conditions}
+\begin{itemize}
+    \item \textbf{Horizontal walls:} Collision occurs when $y = +b$ or $y = -b$ and $|x| \leq a$.
+    \item \textbf{Ellipse caps:} Collision occurs when the particle reaches the ellipse boundary at $x = \pm a$ and satisfies:
+    \[
+        \frac{(x \mp a)^2}{r_x^2} + \frac{y^2}{r_y^2} = 1
+    \]
+    \item \textbf{Note:} Only collisions with horizontal walls and ellipse caps are considered; there are no vertical-wall reflections at $x = \pm a$.
+\end{itemize}
+
+\section*{Simulation Results}
+
+\begin{itemize}
+    \item Stadium parameters: $a = 1.0$, $b = 1.0$, $r_x = 2.0$, $r_y = 1.0$
+    \item Number of bounces recorded: 38
+    \item Final velocity: $v_x = 1.2828$, $v_y = 0.5953$, speed $= 1.4093$
+\end{itemize}
+
+\begin{figure}[h!]
+    \centering
+ %   \includegraphics[width=0.8\textwidth]{stadium_billiard_clean.png}
+    \caption{Stadium billiard trajectory and boundary}
+\end{figure}
+
+\section*{Bounce Data (first 10 shown)}
+
+\begin{tabular}{cccc}
+\hline
+Index & $x$ & $y$ & Kind \\
+\hline
+53 & 1.0000 & 1.0000 & ellipse \\
+137 & 2.6000 & -0.6000 & ellipse \\
+196 & 1.9959 & 0.8672 & ellipse \\
+316 & -0.6138 & -1.0000 & hwall \\
+412 & -2.7221 & 0.5085 & ellipse \\
+469 & -2.0576 & -0.8488 & ellipse \\
+609 & 1.2243 & 0.9937 & ellipse \\
+687 & 2.9403 & -0.2425 & ellipse \\
+842 & -1.0337 & 0.9999 & ellipse \\
+913 & -2.8282 & 0.4055 & ellipse \\
+\hline
+\end{tabular}
+
+\end{document}
