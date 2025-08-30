@@ -2,9 +2,10 @@
 \usepackage{amsmath}
 \usepackage{graphicx}
 \usepackage{geometry}
+\usepackage{float}
 \geometry{margin=0.8in}
 \title{Assignment 1}
-\author{Shaukat Aziz, Suresh Karthik}
+\author{Shaukat Aziz, Suresh Karthik, Gurudeva Prasath}
 \date{}
 
 \begin{document}
@@ -41,32 +42,121 @@ The boundary of the stadium consists of:
 
 \subsection{Simulation, Checks and Results}
 Stadium parameters used for simulation: $a = 3.0$, $b = r_y = 1.0$, $r_x = 2.0$, mass: $m = 1$
-\subsubsection{Simulation}
-
-
-\begin{figure}[h!]
+\subsubsection{Plots}
+\begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{stadium_billiard_clean.png}
-    \caption{Stadium billiard trajectory and boundary}
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{stadium_billiard_clean.png}
+        \caption{Stadium billiard trajectory with 21 bounces}
+    \end{minipage}\hfill
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{stadium_billiard_clean1.png}
+        \caption{Stadium billiard trajectory with 542 bounces}
+    \end{minipage}
+\end{figure}
+\newpage
+
+\begin{figure}[H]
+    \centering
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{kinetic_energy_over_bounces.png}
+        \caption{Kinetic energy over bounces (for 21 bounces)}
+    \end{minipage}\hfill
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{kinetic_energy_over_bounces2.png}
+        \caption{Kinetic energy over bounces (for 542 bounces)}
+    \end{minipage}
+\end{figure}
+%plot ergodicity.png
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.55\textwidth]{ergodicity.png}
+    \caption{Sensitivity to initial conditions in stadium billiard (4000 steps)}
 \end{figure}
 
-\section*{Bounce Data (first 10 shown)}
+\subsubsection{Simulation}
+For plotting the above figures, the following initial conditions were used: 
+\begin{itemize}
+    \item Initial position: $(x_0, y_0) = (0.0, 0.0)$
+    \item Initial velocity: $(v_{x0}, v_{y0}) = (1.0, 1.0)$
+    \item Time step: $dt = 0.01$ - The fixed increment of time for each simulation loop iteration.
+    \item Total steps: $4000$ and $100000$ -The total number of simulation steps executed.
+\end{itemize}
+The simulation was performed with a time step of $dt = 0.01$ and total steps of $4000$ (for 21 bounces) and $100000$ (for 542 bounces). The particle's trajectory was plotted along with the stadium boundary. Kinetic energy was computed at each bounce and plotted to verify energy conservation.
+\subsubsection{Checks}
+\begin{itemize}
+    \item \textbf{Energy Conservation:} The kinetic energy was calculated at every 10 bounces and plotted. The energy remained constant, confirming conservation of energy.
+    \item \textbf{Reflections:} The velocity components were correctly inverted upon collisions with the horizontal walls and ellipse caps, ensuring accurate reflection behavior. (By the formulae provided in the code)
+    \item \textbf{CHAOS:} Sensitivity to initial conditions was demonstrated by simulating two trajectories with slightly different initial positions $\Delta x = 10^{-6}, \Delta y = 0$ (Figure 5). The path divergence was clearly visible in the figure, illustrating the system's sensitivity to initial conditions.
+\end{itemize}
+\subsubsection{Results}
+\begin{itemize}
+    \item Figures 1 and 2 show the particle's trajectory in the stadium billiard for 21 and 542 bounces, respectively. The trajectory is chaotic and fills the available space over time.
+    \item The kinetic energy plots (Figures 3 and 4) demonstrate energy conservation, with kinetic energy remaining constant at each bounce.
+    \item Figure 5 illustrates sensitivity to initial conditions: two trajectories starting from nearly identical positions diverge significantly over time.
+\end{itemize}
 
-\begin{tabular}{cccc}
-\hline
-Index & $x$ & $y$ & Kind \\
-\hline
-53 & 1.0000 & 1.0000 & ellipse \\
-137 & 2.6000 & -0.6000 & ellipse \\
-196 & 1.9959 & 0.8672 & ellipse \\
-316 & -0.6138 & -1.0000 & hwall \\
-412 & -2.7221 & 0.5085 & ellipse \\
-469 & -2.0576 & -0.8488 & ellipse \\
-609 & 1.2243 & 0.9937 & ellipse \\
-687 & 2.9403 & -0.2425 & ellipse \\
-842 & -1.0337 & 0.9999 & ellipse \\
-913 & -2.8282 & 0.4055 & ellipse \\
-\hline
-\end{tabular}
+\subsubsection{Discussion: Ergodicity and Generic Initial Conditions in Stadium Billiards}
+
+In the stadium billiard, the geometry combines straight segments (rectangle) and curved caps (half-ellipses), which produces chaotic dynamics. When a particle is launched with \textbf{generic initial conditions}—meaning its starting position and velocity are not specially chosen—the trajectory typically explores the available phase space in a complex, unpredictable manner.
+
+\paragraph{Why Generic Initial Conditions Matter}
+\begin{itemize}
+    \item \textbf{Non-integrable Dynamics:} The stadium billiard is not integrable; it lacks enough conserved quantities to restrict motion to regular, repeating paths.
+    \item \textbf{Sensitive Dependence:} Small changes in initial conditions lead to vastly different trajectories due to the system's sensitivity (a hallmark of chaos).
+    \item \textbf{Mixing:} Over time, the trajectory "mixes" through the available space, bouncing off both straight and curved boundaries.
+\end{itemize}
+
+\paragraph{Ergodic-like Coverage}
+\begin{itemize}
+    \item \textbf{Ergodicity:} In an ergodic system, a single trajectory eventually visits every region of the allowed phase space, given enough time.
+    \item \textbf{Stadium Billiard:} For most initial conditions, the stadium billiard exhibits ergodic-like behavior: the particle's path densely covers the interior, and time averages converge to space averages.
+    \item \textbf{Exceptions:} Special initial conditions (e.g., perfectly vertical or horizontal velocity) may produce non-ergodic, periodic orbits, but these are rare and unstable.
+\end{itemize}
+
+\paragraph{Implications}
+\begin{itemize}
+    \item \textbf{Statistical Properties:} Observables (like bounce locations or kinetic energy) computed along a long trajectory approximate ensemble averages.
+    \item \textbf{Physical Realism:} In real experiments, imperfections ensure that initial conditions are generic, so ergodic-like coverage is typical.
+\end{itemize}
+
+\textbf{Conclusion:} Generic initial conditions in the stadium billiard lead to trajectories that densely and uniformly explore the available space, demonstrating ergodic-like behavior and supporting statistical analysis of the system.
+
+\subsubsection{Sensitivity to Initial Conditions: A Diagnostic of Chaos in Stadium Billiards}
+
+One hallmark of chaotic systems is \textbf{extreme sensitivity to initial conditions}—tiny differences in starting position or velocity lead to vastly different trajectories over time (the "butterfly effect").
+
+\paragraph{Demonstration in Stadium Billiards}
+Consider two particles launched with nearly identical initial conditions:
+\begin{itemize}
+    \item \textbf{Particle A:} $(x_0, y_0, v_{x0}, v_{y0})$
+    \item \textbf{Particle B:} $(x_0 + \delta x, y_0, v_{x0}, v_{y0})$ with $\delta x$ very small (e.g., $10^{-6}$)
+\end{itemize}
+Both particles start with the same velocity, but a minuscule difference in position.
+
+\paragraph{What Happens?}
+\begin{itemize}
+    \item \textbf{Initially:} The trajectories are almost indistinguishable.
+    \item \textbf{After Many Bounces:} The difference grows rapidly; the particles hit different parts of the boundary and follow unrelated paths.
+    \item \textbf{Result:} The separation between the two trajectories increases exponentially—a signature of chaos.
+\end{itemize}
+
+\paragraph{Why Does This Occur?}
+\begin{itemize}
+    \item \textbf{Nonlinear Reflections:} Each collision with the curved boundary (ellipse caps) amplifies small differences.
+    \item \textbf{Phase Space Mixing:} The stadium geometry ensures that trajectories diverge quickly.
+\end{itemize}
+
+\paragraph{Quantitative Measure: Lyapunov Exponent}
+\begin{itemize}
+    \item The \textbf{Lyapunov exponent} quantifies the rate of separation of infinitesimally close trajectories.
+    \item A \textbf{positive Lyapunov exponent} indicates chaos.
+\end{itemize}
+
+\textbf{Conclusion:} Sensitivity to initial conditions is a defining feature of chaos in the stadium billiard. Even the tiniest change in starting position or velocity leads to dramatically different outcomes, making long-term prediction impossible and confirming the system's chaotic nature.
 
 \end{document}
