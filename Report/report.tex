@@ -159,4 +159,90 @@ Both particles start with the same velocity, but a minuscule difference in posit
 
 \textbf{Conclusion:} Sensitivity to initial conditions is a defining feature of chaos in the stadium billiard. Even the tiniest change in starting position or velocity leads to dramatically different outcomes, making long-term prediction impossible and confirming the system's chaotic nature.
 
+\section{Quantum Motion (Schrödinger Equation)}
+\subsection{Simulation, Checks and Results}
+Stadium parameters used for simulation are same as Classical case: $a = 3.0$, $b = r_y = 1.0$, $r_x = 2.0$, mass: $m = 1$, $\hbar = 1$
+\subsubsection{Plots}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{infinal.png}
+    \caption{Initial probability density and Final probability density $|\psi(x,y,T)|^2$ after $T=40$ (4000 steps)}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{norm.png}
+        \caption{Norm evolution over time}
+    \end{minipage}\hfill
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{xy.png}
+        \caption{Trajectory Exceptions $<x>$(t) v/s $<y>$(t)}
+    \end{minipage}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{xy1.png}
+        \caption{Trajectory Exceptions $<x>$(t) v/s $<y>$(t)}
+    \end{minipage}\hfill
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{stadium_billiard_clean.png}
+        \caption{Stadium billiard boundary for reference}
+    \end{minipage}
+\end{figure}
+\subsection{Simulation}
+The simulation was performed using the Crank-Nicolson method to solve the time-dependent Schrödinger equation within the stadium billiard. The following parameters were used:
+\begin{itemize}
+    \item Initial wave packet: Gaussian centered at $(x_0, y_0) = (0, 0)$ with momentum $(p_x, p_y) = (1.0, 1.0)$ and width $\sigma = 0.2$
+    \item Time step: $dt = 0.01$
+    \item Total time steps: $T_{steps} = 4000$ (total time $T = 40$)
+\end{itemize}
+The wavefunction was initialized as a Gaussian wave packet and evolved over time using the Crank-Nicolson scheme. The stadium boundary conditions were enforced by setting the wavefunction to zero outside the stadium. The probability density $|\psi(x,y,t)|^2$ was computed at each time step, and the norm of the wavefunction was monitored to ensure conservation.
+\subsection{Checks}
+\begin{itemize}
+    \item \textbf{Norm Conservation:} The norm of the wavefunction was computed at each time step and plotted(Figure 7). As you can see, the norm remains same throughout the simulation, confirming conservation of probability. 
+    \item \textbf{Boundary Conditions:} The wavefunction was set to zero outside the stadium boundary, ensuring that the particle remains confined within the billiard. (Probability density is zero outside the stadium in Figure 6)
+    \item \textbf{Stability:} The Crank-Nicolson method is unconditionally stable, and no numerical instabilities were observed during the simulation.
+\end{itemize}
+\subsection{Results}
+\begin{itemize}
+    \item Figure 6 shows the initial and final probability density $|\psi(x,y,T)|^2$ after $T=40$. The wave packet spreads and reflects off the stadium boundaries over time.
+    \item Figure 7 shows the norm evolution over time, confirming conservation of probability.
+    \item Figures 8 and 9 show the expectation values $<x>(t)$ and $<y>(t)$ over time, illustrating the quantum trajectory within the stadium.  The trajectory is complex and does not follow a simple periodic path, reflecting the underlying chaotic nature of the stadium billiard.
+    \item The quantum trajectory (Figures 8 and 9) does not closely follow the classical trajectory (Figure 10), demonstrating the breakdown of Ehrenfest correspondence in this chaotic system.
+\end{itemize}
+\subsubsection{Discussuion: Comparison of Classical and Quantum Dynamics in Stadium Billiards}
+\paragraph{Classical Dynamics}
+In the classical stadium billiard, a particle moves freely within the boundary, reflecting elastically off the walls. The combination of straight segments and curved caps leads to chaotic trajectories for generic initial conditions. Over time, the particle's path densely fills the available space, demonstrating ergodic-like behavior and extreme sensitivity to initial conditions—a hallmark of chaos.
+
+\paragraph{Quantum Dynamics}
+In the quantum regime, the particle is described by a wavefunction evolving according to the Schrödinger equation. The probability density $|\psi(x, y, t)|^2$ spreads and reflects off the boundaries, but quantum interference and diffraction effects become significant. While the wave packet explores the stadium, its evolution is smoother and governed by the principles of quantum mechanics, such as norm conservation and boundary conditions.
+
+\paragraph{Classical vs. Quantum Comparison}
+\begin{itemize}
+    \item \textbf{Trajectories vs. Probability:} Classical dynamics yield well-defined trajectories, while quantum dynamics describe probability distributions.
+    \item \textbf{Chaos and Sensitivity:} Classical chaos manifests as exponential divergence of nearby trajectories. In quantum mechanics, sensitivity to initial conditions is suppressed by wave interference, but signatures of chaos appear in statistical properties (e.g., energy level statistics).
+    \item \textbf{Ergodicity:} Both regimes show ergodic-like exploration of the stadium, but quantum ergodicity is reflected in the uniformity of eigenstate distributions and time-averaged observables.
+    \item \textbf{Boundary Effects:} Classical particles reflect sharply, while quantum wave packets experience diffraction and can interfere, leading to complex patterns near boundaries.
+    \item \textbf{Expectation Values:} In classical dynamics, the expectation values $\langle x \rangle$ and $\langle y \rangle$ follow the actual particle trajectory. In quantum dynamics, $\langle x \rangle$ and $\langle y \rangle$ 
+    represent the average position of the probability distribution, which was close to the centre of the stadium in our simulation. This is the breakdown of the Ehrenfest Correspondence (Figure 8,9).
+\end{itemize}
+\subsubsection{Ehrenfest Correspondence and Its Breakdown in Stadium Billiards}
+
+Ehrenfest's theorem states that the expectation values of position and momentum for a quantum particle follow the classical equations of motion, provided the potential is smooth and the wave packet remains localized. In chaotic systems like the stadium billiard, this correspondence breaks down over time due to several factors:
+
+\begin{itemize}
+    \item \textbf{Wave Packet Spreading:} The initial Gaussian wave packet quickly spreads and interacts with the complex stadium boundary, losing its localization.
+    \item \textbf{Boundary Effects:} The stadium has hard, infinite walls. Quantum reflections differ fundamentally from classical point-particle bounces, especially at curved boundaries.
+    \item \textbf{Quantum Interference:} Multiple reflections and interference patterns develop, causing the quantum probability density to deviate from any classical trajectory.
+    \item \textbf{Chaotic Dynamics:} In the classical stadium, trajectories diverge exponentially (chaos). Quantum expectation values $\langle x \rangle$, $\langle y \rangle$ do not follow a single classical path and instead show erratic, non-classical behavior after a short time.
+\end{itemize}
+
+\textbf{Result:} The trajectory of expectation values $\langle x \rangle(t)$, $\langle y \rangle(t)$ initially mimics the classical motion but rapidly diverges due to quantum effects and chaotic mixing. This demonstrates the breakdown of Ehrenfest correspondence in quantum stadium billiards.
 \end{document}
