@@ -3,4 +3,11 @@ report.pdf
 report.synctex.gz
 report.fls
 report.fdb_latexmk
-
+appendix.out
+appendix.fls
+appendix.fdb_latexmk
+appendix.synctex.gz
+appendix.pdf
+appendix.log
+appendix.toc
+appendix.aux
