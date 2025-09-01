@@ -307,4 +307,66 @@ billiard is not feasible due to the complex geometry. However: \begin{itemize}
 and motion. \item Numerical methods are typically used to solve the TDSE in the
 stadium billiard with hard-wall boundaries. \end{itemize}
 
+\section{Loschmidt Echo in Stadium Billiard}
+
+The Loschmidt echo \(M(t) = |\langle \psi_0 | e^{i(H + \delta H)t} e^{-i H t} | \psi_0 \rangle|^2\) measures the overlap between the unperturbed and perturbed quantum evolutions. In the stadium billiard, perturbations are introduced by changing geometric parameters, leading to exponential decay of \(M(t)\) over time. This decay reflects the system's sensitivity to changes, a hallmark of quantum chaos.
+
+To illustrate, we first show the Loschmidt echo for specific perturbationsrturbations \(a = 0.05\) and \(a = 0.5\). These plots demonstrate the typical behavior: starting near 1 (perfect overlap) and decaying exponentially as time progresses. The decay is justified by the accumulation of phase differences between the perturbed and unperturbed wavefunctions, amplified by the chaotic geometry of the stadium.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{loschmidt_echo_a005.png}
+    \caption{Loschmidt echo for \(a = 0.05\), showing exponential decay over time due to geometric perturbation.}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{loschmidt_a_05.png}
+    \caption{Loschmidt echo for \(a = 0.5\), illustrating rapid decay compared to smaller perturbations.}
+\end{figure}
+
+\subsection{Comparing Smaller and Larger Perturbations}
+Smaller perturbations (e.g., slight changes in \(a\)) result in slower decay of the Loschmidt echo because the perturbed and unperturbed systems remain similar for longer times. Larger perturbations (e.g., significant changes in \(a\)) cause faster decay, as the wavefunction evolves along more divergent paths, leading to quicker loss of overlap. This is due to the nonlinear dynamics in the stadium, where small geometric changes amplify quantum interference and phase accumulation.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{loschmidt_echo_different_a.png}
+    \caption{Loschmidt echo for different values of \(a\), comparing decay rates for small and large perturbations.}
+\end{figure}
+
+\subsection{Loschmidt Decay for Different Parameters}
+The Loschmidt echo also varies with other stadium parameters like \(b\), \(r_x\), and \(r_y\). Perturbations in these parameters similarly lead to decay, with the rate depending on how the parameter affects the boundary shape and wavefunction confinement.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{loschmidt_echo_params.png}
+    \caption{Loschmidt echo decay for perturbations in parameters \(a\), \(b\), \(r_x\), and \(r_y\).}
+\end{figure}
+\subsection{Sanity Check}
+To validate the implementation, we consider the case of no perturbation (\(\delta a = 0\)). In this scenario, the Loschmidt echo remains at 1 throughout the simulation, indicating perfect overlap between the evolved wavefunctions. This confirms that our code correctly handles the time evolution and overlap calculations, as any deviation from 1 would suggest numerical errors or implementation issues.
+
+
+\subsection{Decay Rate}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{../loschmidt_echo_gamma.png}
+    \caption{Decay rates \(\gamma\) as a function of perturbation strength, highlighting the difference between small and large changes.}
+\end{figure}
+
+The decay is fitted to \(M(t) \approx e^{-\gamma t}\), where \(\gamma\) is the decay rate. For small perturbations (e.g., \(\delta a = 0.001\)), \(\gamma \approx 0.002\), indicating slow decay. For large perturbations (e.g., \(\delta a = 0.5\)), \(\gamma = 0.624\), showing fast decay. This quantifies the sensitivity: larger perturbations yield higher \(\gamma\), reflecting stronger quantum chaotic behavior.
+
+
+\subsection{Relation to quantum chaos}
+The Loschmidt echo is a key diagnostic of quantum chaos. In classically chaotic systems, tiny changes in initial conditions or system parameters lead to exponential divergence of trajectories. Quantum chaos studies how this sensitivity appears in quantum systems, where the concept of trajectory is replaced by wavefunction evolution.
+
+In quantum chaotic systems, the Loschmidt echo decays rapidly when the system is perturbed, reflecting the underlying chaotic nature of the classical counterpart. The rate of echo decay is linked to the system's sensitivity to perturbations—a hallmark of chaos. Faster decay means stronger quantum chaotic behavior. In regular (non-chaotic) systems, the echo decays slowly or may even revive, showing less sensitivity. Thus, the Loschmidt echo provides a quantitative way to distinguish quantum chaotic systems from regular ones, connecting quantum dynamics to classical chaos.
+
+Summary:
+A rapid decay of the Loschmidt echo under perturbations is a signature of quantum chaos, mirroring the sensitivity and unpredictability found in classical chaotic systems. Using the gamma values, for small perturbations (\(\delta a = 0.1\)), the slow decay indicates regular dynamics, while for large perturbations (\(\delta a = 0.5\)), the fast decay signifies chaotic behavior in the stadium billiard.
+
+
+\subsection{Results}
+The Loschmidt echo simulations reveal a clear dependence on perturbation strength. For small perturbations (\(\delta a = 0.001\)), the decay rate \(\gamma \approx 0.002\), corresponding to a slow decay over time, indicative of regular dynamics. In contrast, for large perturbations (\(\delta a = 0.5\)), \(\gamma = 0.624\), leading to rapid decay, which aligns with chaotic behavior in the stadium billiard system. These results quantify the sensitivity of the quantum system to initial perturbations, providing evidence of quantum chaos through the exponential decay of the echo amplitude.
+
 \end{document}
