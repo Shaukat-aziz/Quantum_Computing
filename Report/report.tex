@@ -55,7 +55,7 @@ Stadium parameters used for simulation: $a = 3.0$, $b = r_y = 1.0$, $r_x = 2.0$,
     \begin{minipage}{0.48\textwidth}
         \centering
         \includegraphics[width=\textwidth]{stadium_billiard_clean1.png}
-        \caption{Stadium billiard trajectory with 542 bounces}
+        \caption{Stadium billiard trajectory with 473 bounces}
     \end{minipage}
 \end{figure}
 \newpage
@@ -70,14 +70,14 @@ Stadium parameters used for simulation: $a = 3.0$, $b = r_y = 1.0$, $r_x = 2.0$,
     \begin{minipage}{0.48\textwidth}
         \centering
         \includegraphics[width=\textwidth]{kinetic_energy_over_bounces2.png}
-        \caption{Kinetic energy over bounces (for 542 bounces)}
+        \caption{Kinetic energy over bounces (for 473 bounces)}
     \end{minipage}
 \end{figure}
 %plot ergodicity.png
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.55\textwidth]{ergodicity.png}
-    \caption{Sensitivity to initial conditions in stadium billiard (4000 steps)}
+    \caption{Sensitivity to initial conditions in stadium billiard (15000 steps, 80 bounces)}
 \end{figure}
 
 \subsubsection{Simulation}
@@ -88,7 +88,7 @@ For plotting the above figures, the following initial conditions were used:
     \item Time step: $dt = 0.01$ - The fixed increment of time for each simulation loop iteration.
     \item Total steps: $4000$ and $100000$ -The total number of simulation steps executed.
 \end{itemize}
-The simulation was performed with a time step of $dt = 0.01$ and total steps of $4000$ (for 21 bounces) and $100000$ (for 542 bounces). The particle's trajectory was plotted along with the stadium boundary. Kinetic energy was computed at each bounce and plotted to verify energy conservation.
+The simulation was performed with a time step of $dt = 0.01$ and total steps of $4000$ (for 21 bounces) and $100000$ (for 473 bounces). The particle's trajectory was plotted along with the stadium boundary. Kinetic energy was computed at each bounce and plotted to verify energy conservation.
 \subsubsection{Checks}
 \begin{itemize}
     \item \textbf{Energy Conservation:} The kinetic energy was calculated at every 10 bounces and plotted. The energy remained constant, confirming conservation of energy.
@@ -97,7 +97,7 @@ The simulation was performed with a time step of $dt = 0.01$ and total steps of 
 \end{itemize}
 \subsubsection{Results}
 \begin{itemize}
-    \item Figures 1 and 2 show the particle's trajectory in the stadium billiard for 21 and 542 bounces, respectively. The trajectory is chaotic and fills the available space over time.
+    \item Figures 1 and 2 show the particle's trajectory in the stadium billiard for 21 and 473 bounces, respectively. The trajectory is chaotic and fills the available space over time.
     \item The kinetic energy plots (Figures 3 and 4) demonstrate energy conservation, with kinetic energy remaining constant at each bounce.
     \item Figure 5 illustrates sensitivity to initial conditions: two trajectories starting from nearly identical positions diverge significantly over time.
 \end{itemize}
