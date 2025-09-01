@@ -248,6 +248,65 @@ Ehrenfest's theorem states that the expectation values of position and momentum 
 
 \textbf{Result:} The trajectory of expectation values $\langle x \rangle(t)$, $\langle y \rangle(t)$ initially mimics the classical motion but rapidly diverges due to quantum effects and chaotic mixing. This demonstrates the breakdown of Ehrenfest correspondence in quantum stadium billiards.
 
+\section*{Time-Dependent Schrödinger Equation} The time-dependent Schrödinger
+equation (TDSE) is given by: \[ i \hbar \frac{\partial \psi(x, y, t)}{\partial
+t} = \hat{H} \psi(x, y, t), \] where the Hamiltonian is: \[ \hat{H} =
+-\frac{\hbar^2}{2m} \nabla^2 + V(x, y). \]
+
+For the stadium billiard: \begin{itemize} \item \( V(x, y) = 0 \) inside the
+stadium. \item \( V(x, y) = \infty \) outside the stadium. \end{itemize}
+
+The infinite potential walls enforce the boundary condition: \[ \psi(x, y, t) =
+0 \quad \text{on the boundary of the stadium.} \]
+
+\section*{Initial Wave Packet} The initial wave packet is chosen as a Gaussian:
+\[ \psi(x, y, 0) = \frac{1}{\sqrt{\pi \sigma^2}} e^{-\frac{(x - x_0)^2 + (y -
+y_0)^2}{2\sigma^2}} e^{i \frac{p_x x + p_y y}{\hbar}}, \] where: \begin{itemize}
+\item \( \sigma \): Width of the Gaussian. \item \( (x_0, y_0) \): Initial
+position of the wave packet. \item \( (p_x, p_y) \): Initial momentum of the
+wave packet. \end{itemize}
+
+\section*{Free-Space Solution} In free space (no boundaries), the solution to
+the TDSE for a Gaussian wave packet is: \[ \psi(x, y, t) = \frac{1}{\sqrt{\pi
+\sigma_t^2}} e^{-\frac{(x - x_c(t))^2 + (y - y_c(t))^2}{2\sigma_t^2}} e^{i
+\phi(x, y, t)}, \] where: \begin{itemize} \item \( \sigma_t = \sigma \sqrt{1 +
+\frac{i \hbar t}{m \sigma^2}} \): Time-dependent width of the wave packet. \item
+\( x_c(t) = x_0 + \frac{p_x}{m} t \), \( y_c(t) = y_0 + \frac{p_y}{m} t \):
+Center of the wave packet. \item \( \phi(x, y, t) \): Phase factor, including
+contributions from momentum and spreading. \end{itemize}
+
+\section*{Incorporating Stadium Boundary Conditions} To solve the TDSE inside
+the stadium billiard, we must enforce the boundary condition \( \psi(x, y, t) =
+0 \) on the stadium walls. This is done by expanding the wave function in terms
+of the eigenfunctions of the Hamiltonian: \[ \psi(x, y, t) = \sum_{n} c_n
+\phi_n(x, y) e^{-i E_n t / \hbar}, \] where: \begin{itemize} \item \( \phi_n(x,
+y) \): Eigenfunctions of the Hamiltonian satisfying \( \hat{H} \phi_n = E_n
+\phi_n \) and the boundary conditions. \item \( E_n \): Corresponding
+eigenvalues. \item \( c_n = \int \psi(x, y, 0) \phi_n^*(x, y) \, dx \, dy \):
+Expansion coefficients. \end{itemize}
+
+\section*{Eigenfunctions and Eigenvalues} For the stadium billiard, the
+eigenfunctions \( \phi_n(x, y) \) are not analytically known due to the complex
+geometry. However: \begin{enumerate} \item \textbf{Rectangular Region:} For the
+rectangular part of the stadium, the eigenfunctions are: \[ \phi_{mn}(x, y) =
+\sin\left(\frac{m \pi x}{2a}\right) \sin\left(\frac{n \pi y}{2b}\right), \] with
+eigenvalues: \[ E_{mn} = \frac{\hbar^2 \pi^2}{2m} \left( \frac{m^2}{4a^2} +
+\frac{n^2}{4b^2} \right). \] \item \textbf{Elliptical Caps:} For the elliptical
+caps, the eigenfunctions involve Mathieu functions, which are not expressible in
+simple closed form. \end{enumerate}
+
+\section*{Approximation: Method of Images} To approximate the solution, we can
+use the \textbf{method of images}: \[ \psi(x, y, t) \approx \sum_{\text{images}}
+\pm \psi_{\text{free}}(x', y', t), \] where \( (x', y') \) are the coordinates
+of the reflected wave packets. This ensures that the boundary conditions are
+approximately satisfied.
+
+\section*{Conclusion} An exact analytical solution for the TDSE in the stadium
+billiard is not feasible due to the complex geometry. However: \begin{itemize}
+\item The free-space solution provides insight into the wave packet's spreading
+and motion. \item Numerical methods are typically used to solve the TDSE in the
+stadium billiard with hard-wall boundaries. \end{itemize}
+
 \section{Loschmidt Echo in Stadium Billiard}
 
 The Loschmidt echo \(M(t) = |\langle \psi_0 | e^{i(H + \delta H)t} e^{-i H t} | \psi_0 \rangle|^2\) measures the overlap between the unperturbed and perturbed quantum evolutions. In the stadium billiard, perturbations are introduced by changing geometric parameters, leading to exponential decay of \(M(t)\) over time. This decay reflects the system's sensitivity to changes, a hallmark of quantum chaos.
