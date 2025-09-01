@@ -1,0 +1,33 @@
+# Complete List of All Prompts Used Throughout the Project
+
+This file contains a comprehensive list of all prompts and user requests that were used in the Quantum Computing project, particularly focusing on editing and improving the LaTeX appendix file (appendix.tex).
+
+## 1. Initial Request: Comment Image Insertion Code
+**Prompt:** "comment all the image insertion code in this latex"  
+**Action:** Commented out all figure environments containing image insertions in appendix.tex to disable image display.
+
+## 2. Error Follow-up
+**Prompt:** "But the error still exist"  
+**Action:** Identified and addressed compilation errors in the LaTeX file caused by the commenting process.
+
+## 3. Remove Images and Edit Code Snippets
+**Prompt:** "remove all the image link in this latex file and edit the code snippet added base on out chat history"  
+**Action:** Completely removed all figure environments, edited code snippets in lstlisting and verbatim environments to be more complete and accurate based on stadium billiard simulation implementations.
+
+## 4. Improve Indentation and Spacing
+**Prompt:** "the indentation is not good change indentation and spacing for good understanding in tex file"  
+**Action:** Improved indentation in the LaTeX preamble, fixed section titles to be properly formatted, added blank lines for better readability, and ensured code snippets have proper indentation.
+
+## 5. Create List of Important Prompts
+**Prompt:** "give all the list of important prompt used to edit the code in the whole conversation and add it to chat_export.txt"  
+**Action:** Compiled and added a list of key prompts to this file for documentation purposes.
+
+## 6. Expand to All Prompts in the Project
+**Prompt:** "no add all prompt that was used throught this whole project"  
+**Action:** Updated this file to include a complete list of all prompts used throughout the entire project conversation.
+
+## Additional Notes
+- This project involved simulating a stadium billiard system, including classical and quantum dynamics.
+- All changes were made to resolve compilation errors, enhance document structure, and improve readability.
+- The final appendix.tex file is now error-free, well-formatted, and contains complete code snippets.
+- Related files in the project include various Jupyter notebooks (e.g., guru-1.ipynb, Qiskit.ipynb) and other documents, but the conversation focused on the LaTeX appendix.

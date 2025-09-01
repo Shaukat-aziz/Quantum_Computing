@@ -1,0 +1,23 @@
+\contentsline {section}{\numberline {1}Initial Code Generation - Part A}{3}{section.1}%
+\contentsline {subsection}{\numberline {1.1}Prompt}{3}{subsection.1.1}%
+\contentsline {subsection}{\numberline {1.2}Generated Code}{3}{subsection.1.2}%
+\contentsline {section}{\numberline {2}Initial Code Generation - Part B}{7}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Prompt}{7}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}Generated Code}{7}{subsection.2.2}%
+\contentsline {subsection}{\numberline {2.3}Prompts}{10}{subsection.2.3}%
+\contentsline {section}{\numberline {3}Quantum Simulation: Time-dependent Schrödinger Equation}{12}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Prompt}{12}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}Code Changes}{12}{subsection.3.2}%
+\contentsline {subsection}{\numberline {3.3}Explanation}{12}{subsection.3.3}%
+\contentsline {section}{\numberline {4}Expectation Values and Ehrenfest Breakdown}{13}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Prompt}{13}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}Code Changes}{13}{subsection.4.2}%
+\contentsline {subsection}{\numberline {4.3}Explanation}{13}{subsection.4.3}%
+\contentsline {section}{\numberline {5}Preliminary Quantum Chaos: Loschmidt Echo}{14}{section.5}%
+\contentsline {subsection}{\numberline {5.1}Prompt}{14}{subsection.5.1}%
+\contentsline {subsection}{\numberline {5.2}Code Changes}{14}{subsection.5.2}%
+\contentsline {subsection}{\numberline {5.3}Explanation}{14}{subsection.5.3}%
+\contentsline {subsection}{\numberline {5.4}Prompt}{15}{subsection.5.4}%
+\contentsline {subsection}{\numberline {5.5}Code Changes}{15}{subsection.5.5}%
+\contentsline {subsection}{\numberline {5.6}Explanation}{15}{subsection.5.6}%
+\contentsline {section}{\numberline {6}Model and Assistant Usage Log}{16}{section.6}%
