@@ -1,0 +1,5 @@
+Part A
+1. Law of reflection show angle of reflection = angle of incidence at any random point in the stadium 1 at rectangular, another 2 at ellipse point left and right
+2. give probability distribution plot
+
+Part B

@@ -1,9 +1,0 @@
-solve the part b for time-dependent schrodinger equation for a guassian wave packet inside the same stadium as done for part A. and add this prompt to the prompts.txt
-
-Check and verify if wave function renormalization is preserved in Part B (e.g., by modifying code to compute norms before renormalization and plotting conservation over time).
-
-Evolve psi such that norm is preserved
-
-for the part b question can you set the boundary condition of the stadium to be infinite rather than masking the probabilty. This will help in having the normalization condition preserved
-
-only the walls of th stadium is infinite potential. set the potential outside the wall as zero and the thickness of a wall as parameter. plot difference between intial - final probability density inside the boundary vs the width of the wall of the stadium taken. vary width from 0 to some finite value

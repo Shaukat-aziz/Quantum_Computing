@@ -1,0 +1,408 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{float}
+\usepackage{xcolor} % Fix for xcolor error with [H] floats
+\usepackage{media9} % For embedding GIFs
+\geometry{margin=0.8in}
+\title{Assignment 1}
+\author{Shaukat Aziz, Suresh Karthik, Gurudeva Prasath}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section{Stadium Boundary Equations}
+
+The boundary of the stadium consists of:
+\begin{enumerate}
+    \item \textbf{Rectangle (centered at origin):}
+    \[
+        |x| \leq a, \quad |y| \leq b
+    \]
+    \item \textbf{Left ellipse cap (centered at $x = -a$):}
+    \[
+        \frac{(x + a)^2}{r_x^2} + \frac{y^2}{r_y^2} = 1
+    \]
+    \item \textbf{Right ellipse cap (centered at $x = +a$):}
+    \[
+        \frac{(x - a)^2}{r_x^2} + \frac{y^2}{r_y^2} = 1
+    \]
+\end{enumerate}
+
+\section{Classical Motion (Newtonian Dynamics)}
+\subsection{Collision Conditions}
+\begin{itemize}
+    \item \textbf{Horizontal walls:} Collision occurs when $y = +b$ or $y = -b$ and $|x| \leq a$.
+    \item \textbf{Ellipse caps:} Collision occurs when the particle reaches the ellipse boundary at $x = \pm a$ and satisfies:
+    \[
+        \frac{(x \mp a)^2}{r_x^2} + \frac{y^2}{r_y^2} = 1
+    \]
+    \item \textbf{Note:} Only collisions with horizontal walls and ellipse caps are considered; there are no vertical-wall reflections at $x = \pm a$.
+\end{itemize}
+
+\subsection{Simulation, Checks and Results}
+Stadium parameters used for simulation: $a = 3.0$, $b = r_y = 1.0$, $r_x = 2.0$, mass: $m = 1$
+\subsubsection{Plots}
+\begin{figure}[H]
+    \centering
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{stadium_billiard_clean.png}
+        \caption{Stadium billiard trajectory with 21 bounces}
+    \end{minipage}\hfill
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{stadium_billiard_clean1.png}
+        \caption{Stadium billiard trajectory with 473 bounces}
+    \end{minipage}
+\end{figure}
+\newpage
+
+\begin{figure}[H]
+    \centering
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{kinetic_energy_over_bounces.png}
+        \caption{Kinetic energy over bounces (for 21 bounces)}
+    \end{minipage}\hfill
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{kinetic_energy_over_bounces2.png}
+        \caption{Kinetic energy over bounces (for 473 bounces)}
+    \end{minipage}
+\end{figure}
+%plot ergodicity.png
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.55\textwidth]{ergodicity.png}
+    \caption{Sensitivity to initial conditions in stadium billiard (15000 steps, 80 bounces)}
+\end{figure}
+
+\subsubsection{Simulation}
+For plotting the above figures, the following initial conditions were used: 
+\begin{itemize}
+    \item Initial position: $(x_0, y_0) = (0.0, 0.0)$
+    \item Initial velocity: $(v_{x0}, v_{y0}) = (1.0, 1.0)$
+    \item Time step: $dt = 0.01$ - The fixed increment of time for each simulation loop iteration.
+    \item Total steps: $4000$ and $100000$ -The total number of simulation steps executed.
+\end{itemize}
+The simulation was performed with a time step of $dt = 0.01$ and total steps of $4000$ (for 21 bounces) and $100000$ (for 473 bounces). The particle's trajectory was plotted along with the stadium boundary. Kinetic energy was computed at each bounce and plotted to verify energy conservation.
+\subsubsection{Checks}
+\begin{itemize}
+    \item \textbf{Energy Conservation:} The kinetic energy was calculated at every 10 bounces and plotted. The energy remained constant, confirming conservation of energy.
+    \item \textbf{Reflections:} The velocity components were correctly inverted upon collisions with the horizontal walls and ellipse caps, ensuring accurate reflection behavior. (By the formulae provided in the code)
+    \item \textbf{CHAOS:} Sensitivity to initial conditions was demonstrated by simulating two trajectories with slightly different initial positions $\Delta x = 10^{-6}, \Delta y = 0$ (Figure 5). The path divergence was clearly visible in the figure, illustrating the system's sensitivity to initial conditions.
+\end{itemize}
+\subsubsection{Results}
+\begin{itemize}
+    \item Figures 1 and 2 show the particle's trajectory in the stadium billiard for 21 and 473 bounces, respectively. The trajectory is chaotic and fills the available space over time.
+    \item The kinetic energy plots (Figures 3 and 4) demonstrate energy conservation, with kinetic energy remaining constant at each bounce.
+    \item Figure 5 illustrates sensitivity to initial conditions: two trajectories starting from nearly identical positions diverge significantly over time.
+\end{itemize}
+
+\subsubsection{Discussion: Ergodicity and Generic Initial Conditions in Stadium Billiards}
+
+In the stadium billiard, the geometry combines straight segments (rectangle) and curved caps (half-ellipses), which produces chaotic dynamics. When a particle is launched with \textbf{generic initial conditions}—meaning its starting position and velocity are not specially chosen—the trajectory typically explores the available phase space in a complex, unpredictable manner.
+
+\paragraph{Why Generic Initial Conditions Matter}
+\begin{itemize}
+    \item \textbf{Non-integrable Dynamics:} The stadium billiard is not integrable; it lacks enough conserved quantities to restrict motion to regular, repeating paths.
+    \item \textbf{Sensitive Dependence:} Small changes in initial conditions lead to vastly different trajectories due to the system's sensitivity (a hallmark of chaos).
+    \item \textbf{Mixing:} Over time, the trajectory "mixes" through the available space, bouncing off both straight and curved boundaries.
+\end{itemize}
+
+\paragraph{Ergodic-like Coverage}
+\begin{itemize}
+    \item \textbf{Ergodicity:} In an ergodic system, a single trajectory eventually visits every region of the allowed phase space, given enough time.
+    \item \textbf{Stadium Billiard:} For most initial conditions, the stadium billiard exhibits ergodic-like behavior: the particle's path densely covers the interior, and time averages converge to space averages.
+    \item \textbf{Exceptions:} Special initial conditions (e.g., perfectly vertical or horizontal velocity) may produce non-ergodic, periodic orbits, but these are rare and unstable.
+\end{itemize}
+
+\paragraph{Implications}
+\begin{itemize}
+    \item \textbf{Statistical Properties:} Observables (like bounce locations or kinetic energy) computed along a long trajectory approximate ensemble averages.
+    \item \textbf{Physical Realism:} In real experiments, imperfections ensure that initial conditions are generic, so ergodic-like coverage is typical.
+\end{itemize}
+
+\textbf{Conclusion:} Generic initial conditions in the stadium billiard lead to trajectories that densely and uniformly explore the available space, demonstrating ergodic-like behavior and supporting statistical analysis of the system.
+
+\subsubsection{Sensitivity to Initial Conditions: A Diagnostic of Chaos in Stadium Billiards}
+
+One hallmark of chaotic systems is \textbf{extreme sensitivity to initial conditions}—tiny differences in starting position or velocity lead to vastly different trajectories over time (the "butterfly effect").
+
+\paragraph{Demonstration in Stadium Billiards}
+Consider two particles launched with nearly identical initial conditions:
+\begin{itemize}
+    \item \textbf{Particle A:} $(x_0, y_0, v_{x0}, v_{y0})$
+    \item \textbf{Particle B:} $(x_0 + \delta x, y_0, v_{x0}, v_{y0})$ with $\delta x$ very small (e.g., $10^{-6}$)
+\end{itemize}
+Both particles start with the same velocity, but a minuscule difference in position.
+
+\paragraph{What Happens?}
+\begin{itemize}
+    \item \textbf{Initially:} The trajectories are almost indistinguishable.
+    \item \textbf{After Many Bounces:} The difference grows rapidly; the particles hit different parts of the boundary and follow unrelated paths.
+    \item \textbf{Result:} The separation between the two trajectories increases exponentially—a signature of chaos.
+\end{itemize}
+
+\paragraph{Why Does This Occur?}
+\begin{itemize}
+    \item \textbf{Nonlinear Reflections:} Each collision with the curved boundary (ellipse caps) amplifies small differences.
+    \item \textbf{Phase Space Mixing:} The stadium geometry ensures that trajectories diverge quickly.
+\end{itemize}
+
+\paragraph{Quantitative Measure: Lyapunov Exponent}
+\begin{itemize}
+    \item The \textbf{Lyapunov exponent} quantifies the rate of separation of infinitesimally close trajectories.
+    \item A \textbf{positive Lyapunov exponent} indicates chaos.
+\end{itemize}
+
+\textbf{Conclusion:} Sensitivity to initial conditions is a defining feature of chaos in the stadium billiard. Even the tiniest change in starting position or velocity leads to dramatically different outcomes, making long-term prediction impossible and confirming the system's chaotic nature.
+
+\section{Quantum Motion (Schrödinger Equation)}
+\subsection{Simulation, Checks and Results}
+Stadium parameters used for simulation are same as Classical case: $a = 3.0$, $b = r_y = 1.0$, $r_x = 2.0$, mass: $m = 1$, $\hbar = 1$
+\subsubsection{Plots}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{infinal.png}
+    \caption{Initial probability density and Final probability density $|\psi(x,y,T)|^2$ after $T=40$ (4000 steps)}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{norm.png}
+        \caption{Norm evolution over time}
+    \end{minipage}\hfill
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{xy.png}
+        \caption{Trajectory Exceptions $<x>$(t) v/s $<y>$(t)}
+    \end{minipage}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{xy1.png}
+        \caption{Trajectory Exceptions $<x>$(t) v/s $<y>$(t)}
+    \end{minipage}\hfill
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{stadium_billiard_clean.png}
+        \caption{Stadium billiard boundary for reference}
+    \end{minipage}
+\end{figure}
+\subsection{Simulation}
+The simulation was performed using the Crank-Nicolson method to solve the time-dependent Schrödinger equation within the stadium billiard. The following parameters were used:
+\begin{itemize}
+    \item Initial wave packet: Gaussian centered at $(x_0, y_0) = (0, 0)$ with momentum $(p_x, p_y) = (1.0, 1.0)$ and width $\sigma = 0.2$
+    \item Time step: $dt = 0.01$
+    \item Total time steps: $T_{steps} = 4000$ (total time $T = 40$)
+\end{itemize}
+The wavefunction was initialized as a Gaussian wave packet and evolved over time using the Crank-Nicolson scheme. The stadium boundary conditions were enforced by setting the wavefunction to zero outside the stadium. The probability density $|\psi(x,y,t)|^2$ was computed at each time step, and the norm of the wavefunction was monitored to ensure conservation.
+\subsection{Checks}
+\begin{itemize}
+    \item \textbf{Norm Conservation:} The norm of the wavefunction was computed at each time step and plotted(Figure 7). As you can see, the norm remains same throughout the simulation, confirming conservation of probability. 
+    \item \textbf{Boundary Conditions:} The wavefunction was set to zero outside the stadium boundary, ensuring that the particle remains confined within the billiard. (Probability density is zero outside the stadium in Figure 6)
+    \item \textbf{Stability:} The Crank-Nicolson method is unconditionally stable, and no numerical instabilities were observed during the simulation.
+\end{itemize}
+\subsection{Results}
+\begin{itemize}
+    \item Figure 6 shows the initial and final probability density $|\psi(x,y,T)|^2$ after $T=40$. The wave packet spreads and reflects off the stadium boundaries over time.
+    \item Figure 7 shows the norm evolution over time, confirming conservation of probability.
+    \item Figures 8 and 9 show the expectation values $<x>(t)$ and $<y>(t)$ over time, illustrating the quantum trajectory within the stadium.  The trajectory is complex and does not follow a simple periodic path, reflecting the underlying chaotic nature of the stadium billiard.
+    \item The quantum trajectory (Figures 8 and 9) does not closely follow the classical trajectory (Figure 10), demonstrating the breakdown of Ehrenfest correspondence in this chaotic system.
+\end{itemize}
+\subsubsection{Discussuion: Comparison of Classical and Quantum Dynamics in Stadium Billiards}
+\paragraph{Classical Dynamics}
+In the classical stadium billiard, a particle moves freely within the boundary, reflecting elastically off the walls. The combination of straight segments and curved caps leads to chaotic trajectories for generic initial conditions. Over time, the particle's path densely fills the available space, demonstrating ergodic-like behavior and extreme sensitivity to initial conditions—a hallmark of chaos.
+
+\paragraph{Quantum Dynamics}
+In the quantum regime, the particle is described by a wavefunction evolving according to the Schrödinger equation. The probability density $|\psi(x, y, t)|^2$ spreads and reflects off the boundaries, but quantum interference and diffraction effects become significant. While the wave packet explores the stadium, its evolution is smoother and governed by the principles of quantum mechanics, such as norm conservation and boundary conditions.
+
+\paragraph{Classical vs. Quantum Comparison}
+\begin{itemize}
+    \item \textbf{Trajectories vs. Probability:} Classical dynamics yield well-defined trajectories, while quantum dynamics describe probability distributions.
+    \item \textbf{Chaos and Sensitivity:} Classical chaos manifests as exponential divergence of nearby trajectories. In quantum mechanics, sensitivity to initial conditions is suppressed by wave interference, but signatures of chaos appear in statistical properties (e.g., energy level statistics).
+    \item \textbf{Ergodicity:} Both regimes show ergodic-like exploration of the stadium, but quantum ergodicity is reflected in the uniformity of eigenstate distributions and time-averaged observables.
+    \item \textbf{Boundary Effects:} Classical particles reflect sharply, while quantum wave packets experience diffraction and can interfere, leading to complex patterns near boundaries.
+    \item \textbf{Expectation Values:} In classical dynamics, the expectation values $\langle x \rangle$ and $\langle y \rangle$ follow the actual particle trajectory. In quantum dynamics, $\langle x \rangle$ and $\langle y \rangle$ 
+    represent the average position of the probability distribution, which was close to the centre of the stadium in our simulation. This is the breakdown of the Ehrenfest Correspondence (Figure 8,9).
+\end{itemize}
+\subsubsection{Ehrenfest Correspondence and Its Breakdown in Stadium Billiards}
+
+Ehrenfest's theorem states that the expectation values of position and momentum for a quantum particle follow the classical equations of motion, provided the potential is smooth and the wave packet remains localized. In chaotic systems like the stadium billiard, this correspondence breaks down over time due to several factors:
+
+\begin{itemize}
+    \item \textbf{Wave Packet Spreading:} The initial Gaussian wave packet quickly spreads and interacts with the complex stadium boundary, losing its localization.
+    \item \textbf{Boundary Effects:} The stadium has hard, infinite walls. Quantum reflections differ fundamentally from classical point-particle bounces, especially at curved boundaries.
+    \item \textbf{Quantum Interference:} Multiple reflections and interference patterns develop, causing the quantum probability density to deviate from any classical trajectory.
+    \item \textbf{Chaotic Dynamics:} In the classical stadium, trajectories diverge exponentially (chaos). Quantum expectation values $\langle x \rangle$, $\langle y \rangle$ do not follow a single classical path and instead show erratic, non-classical behavior after a short time.
+\end{itemize}
+
+\textbf{Result:} The trajectory of expectation values $\langle x \rangle(t)$, $\langle y \rangle(t)$ initially mimics the classical motion but rapidly diverges due to quantum effects and chaotic mixing. This demonstrates the breakdown of Ehrenfest correspondence in quantum stadium billiards.
+\section*{Time-Dependent Schrödinger Equation}
+
+The time-dependent Schrödinger equation (TDSE) is given by:
+\[
+    i \hbar \frac{\partial \psi(x, y, t)}{\partial t} = \hat{H} \psi(x, y, t),
+\]
+where the Hamiltonian is:
+\[
+    \hat{H} = -\frac{\hbar^2}{2m} \nabla^2 + V(x, y).
+\]
+
+For the stadium billiard:
+\begin{itemize}
+    \item \( V(x, y) = 0 \) inside the stadium.
+    \item \( V(x, y) = \infty \) outside the stadium.
+\end{itemize}
+
+The infinite potential walls enforce the boundary condition:
+\[
+    \psi(x, y, t) = 0 \quad \text{on the boundary of the stadium.}
+\]
+
+\section*{Initial Wave Packet}
+
+The initial wave packet is chosen as a Gaussian:
+\[
+    \psi(x, y, 0) = \frac{1}{\sqrt{\pi \sigma^2}} e^{-\frac{(x - x_0)^2 + (y - y_0)^2}{2\sigma^2}} e^{i \frac{p_x x + p_y y}{\hbar}},
+\]
+where:
+\begin{itemize}
+    \item \( \sigma \): Width of the Gaussian.
+    \item \( (x_0, y_0) \): Initial position of the wave packet.
+    \item \( (p_x, p_y) \): Initial momentum of the wave packet.
+\end{itemize}
+
+\section*{Free-Space Solution}
+
+In free space (no boundaries), the solution to the TDSE for a Gaussian wave packet is:
+\[
+    \psi(x, y, t) = \frac{1}{\sqrt{\pi \sigma_t^2}} e^{-\frac{(x - x_c(t))^2 + (y - y_c(t))^2}{2\sigma_t^2}} e^{i \phi(x, y, t)},
+\]
+where:
+\begin{itemize}
+    \item \( \sigma_t = \sigma \sqrt{1 + \frac{i \hbar t}{m \sigma^2}} \): Time-dependent width of the wave packet.
+    \item \( x_c(t) = x_0 + \frac{p_x}{m} t \), \( y_c(t) = y_0 + \frac{p_y}{m} t \): Center of the wave packet.
+    \item \( \phi(x, y, t) \): Phase factor, including contributions from momentum and spreading.
+\end{itemize}
+
+\section*{Incorporating Stadium Boundary Conditions}
+
+To solve the TDSE inside the stadium billiard, we must enforce the boundary condition \( \psi(x, y, t) = 0 \) on the stadium walls. This is done by expanding the wave function in terms of the eigenfunctions of the Hamiltonian:
+\[
+    \psi(x, y, t) = \sum_{n} c_n \phi_n(x, y) e^{-i E_n t / \hbar},
+\]
+where:
+\begin{itemize}
+    \item \( \phi_n(x, y) \): Eigenfunctions of the Hamiltonian satisfying \( \hat{H} \phi_n = E_n \phi_n \) and the boundary conditions.
+    \item \( E_n \): Corresponding eigenvalues.
+    \item \( c_n = \int \psi(x, y, 0) \phi_n^*(x, y) \, dx \, dy \): Expansion coefficients.
+\end{itemize}
+
+\section*{Eigenfunctions and Eigenvalues}
+
+For the stadium billiard, the eigenfunctions \( \phi_n(x, y) \) are not analytically known due to the complex geometry. However:
+\begin{enumerate}
+    \item \textbf{Rectangular Region:} For the rectangular part of the stadium, the eigenfunctions are:
+    \[
+        \phi_{mn}(x, y) = \sin\left(\frac{m \pi x}{2a}\right) \sin\left(\frac{n \pi y}{2b}\right),
+    \]
+    with eigenvalues:
+    \[
+        E_{mn} = \frac{\hbar^2 \pi^2}{2m} \left( \frac{m^2}{4a^2} + \frac{n^2}{4b^2} \right).
+    \]
+    \item \textbf{Elliptical Caps:} For the elliptical caps, the eigenfunctions involve Mathieu functions, which are not expressible in simple closed form.
+\end{enumerate}
+
+\section*{Approximation: Method of Images}
+
+To approximate the solution, we can use the \textbf{method of images}:
+\[
+    \psi(x, y, t) \approx \sum_{\text{images}} \pm \psi_{\text{free}}(x', y', t),
+\]
+where \( (x', y') \) are the coordinates of the reflected wave packets. This ensures that the boundary conditions are approximately satisfied.
+
+\section*{Conclusion}
+
+An exact analytical solution for the TDSE in the stadium billiard is not feasible due to the complex geometry. However:
+\begin{itemize}
+    \item The free-space solution provides insight into the wave packet's spreading and motion.
+    \item Numerical methods are typically used to solve the TDSE in the stadium billiard with hard-wall boundaries.
+\end{itemize}
+
+
+
+\newpage
+
+\section{Loschmidt Echo in Stadium Billiard}
+
+The Loschmidt echo \(M(t) = |\langle \psi_0 | e^{i(H + \delta H)t} e^{-i H t} | \psi_0 \rangle|^2\) measures the overlap between the unperturbed and perturbed quantum evolutions. In the stadium billiard, perturbations are introduced by changing geometric parameters, leading to exponential decay of \(M(t)\) over time. This decay reflects the system's sensitivity to changes, a hallmark of quantum chaos.
+
+To illustrate, we first show the Loschmidt echo for specific perturbationsrturbations \(a = 0.05\) and \(a = 0.5\). These plots demonstrate the typical behavior: starting near 1 (perfect overlap) and decaying exponentially as time progresses. The decay is justified by the accumulation of phase differences between the perturbed and unperturbed wavefunctions, amplified by the chaotic geometry of the stadium.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{loschmidt_echo_a005.png}
+    \caption{Loschmidt echo for \(a = 0.05\), showing exponential decay over time due to geometric perturbation.}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{loschmidt_a_05.png}
+    \caption{Loschmidt echo for \(a = 0.5\), illustrating rapid decay compared to smaller perturbations.}
+\end{figure}
+
+\subsection{Comparing Smaller and Larger Perturbations}
+Smaller perturbations (e.g., slight changes in \(a\)) result in slower decay of the Loschmidt echo because the perturbed and unperturbed systems remain similar for longer times. Larger perturbations (e.g., significant changes in \(a\)) cause faster decay, as the wavefunction evolves along more divergent paths, leading to quicker loss of overlap. This is due to the nonlinear dynamics in the stadium, where small geometric changes amplify quantum interference and phase accumulation.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{loschmidt_echo_different_a.png}
+    \caption{Loschmidt echo for different values of \(a\), comparing decay rates for small and large perturbations.}
+\end{figure}
+
+\subsection{Loschmidt Decay for Different Parameters}
+The Loschmidt echo also varies with other stadium parameters like \(b\), \(r_x\), and \(r_y\). Perturbations in these parameters similarly lead to decay, with the rate depending on how the parameter affects the boundary shape and wavefunction confinement.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{loschmidt_echo_params.png}
+    \caption{Loschmidt echo decay for perturbations in parameters \(a\), \(b\), \(r_x\), and \(r_y\).}
+\end{figure}
+\subsection{Sanity Check}
+To validate the implementation, we consider the case of no perturbation (\(\delta a = 0\)). In this scenario, the Loschmidt echo remains at 1 throughout the simulation, indicating perfect overlap between the evolved wavefunctions. This confirms that our code correctly handles the time evolution and overlap calculations, as any deviation from 1 would suggest numerical errors or implementation issues.
+
+
+\subsection{Decay Rate}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{../loschmidt_echo_gamma.png}
+    \caption{Decay rates \(\gamma\) as a function of perturbation strength, highlighting the difference between small and large changes.}
+\end{figure}
+
+The decay is fitted to \(M(t) \approx e^{-\gamma t}\), where \(\gamma\) is the decay rate. For small perturbations (e.g., \(\delta a = 0.001\)), \(\gamma \approx 0.002\), indicating slow decay. For large perturbations (e.g., \(\delta a = 0.5\)), \(\gamma = 0.624\), showing fast decay. This quantifies the sensitivity: larger perturbations yield higher \(\gamma\), reflecting stronger quantum chaotic behavior.
+
+
+\subsection{Relation to quantum chaos}
+The Loschmidt echo is a key diagnostic of quantum chaos. In classically chaotic systems, tiny changes in initial conditions or system parameters lead to exponential divergence of trajectories. Quantum chaos studies how this sensitivity appears in quantum systems, where the concept of trajectory is replaced by wavefunction evolution.
+
+In quantum chaotic systems, the Loschmidt echo decays rapidly when the system is perturbed, reflecting the underlying chaotic nature of the classical counterpart. The rate of echo decay is linked to the system's sensitivity to perturbations—a hallmark of chaos. Faster decay means stronger quantum chaotic behavior. In regular (non-chaotic) systems, the echo decays slowly or may even revive, showing less sensitivity. Thus, the Loschmidt echo provides a quantitative way to distinguish quantum chaotic systems from regular ones, connecting quantum dynamics to classical chaos.
+
+Summary:
+A rapid decay of the Loschmidt echo under perturbations is a signature of quantum chaos, mirroring the sensitivity and unpredictability found in classical chaotic systems. Using the gamma values, for small perturbations (\(\delta a = 0.1\)), the slow decay indicates regular dynamics, while for large perturbations (\(\delta a = 0.5\)), the fast decay signifies chaotic behavior in the stadium billiard.
+
+
+\subsection{Results}
+The Loschmidt echo simulations reveal a clear dependence on perturbation strength. For small perturbations (\(\delta a = 0.001\)), the decay rate \(\gamma \approx 0.002\), corresponding to a slow decay over time, indicative of regular dynamics. In contrast, for large perturbations (\(\delta a = 0.5\)), \(\gamma = 0.624\), leading to rapid decay, which aligns with chaotic behavior in the stadium billiard system. These results quantify the sensitivity of the quantum system to initial perturbations, providing evidence of quantum chaos through the exponential decay of the echo amplitude.
+
+\end{document}
