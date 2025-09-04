@@ -7,15 +7,16 @@
 
 \begin{center}
     \textbf{\huge QT207: Introduction to Quantum Computation}\\[1ex]
-    \Large Assignment 1 \quad | \quad Shaukat Aziz (22171) \quad | \quad \today
+    \Large Assignment 1 \; | \; Shaukat Aziz (22171) \; | \; \today
 \end{center}
 
-\section*{Problem 1}
-Let $\{ |\varphi_1\rangle, \ldots, |\varphi_n\rangle \}$ and $\{ |\psi_1\rangle, \ldots, |\psi_n\rangle \}$ be orthonormal bases of a finite-dimensional vector space $V$. Define
+% --- Problem 1 ---
+\section*{\textbf{Problem 1}}
+\textbf{Let $\{ |\varphi_1\rangle, \ldots, |\varphi_n\rangle \}$ and $\{ |\psi_1\rangle, \ldots, |\psi_n\rangle \}$ be orthonormal bases of a finite-dimensional vector space $V$. Define}
 \[
 U = \sum_{i=1}^n |\psi_i\rangle \langle \varphi_i|
 \]
-\begin{enumerate}[label=\arabic*.]
+\begin{enumerate}[label=\textbf{\arabic*.}]
     \item \textbf{Show that $U$ is unitary, i.e., $U^\dagger U = I$.}
     \begin{align*}
         U^\dagger U &= \left(\sum_{i=1}^n |\varphi_i\rangle \langle \psi_i|\right)\left(\sum_{j=1}^n |\psi_j\rangle \langle \varphi_j|\right) \\
@@ -35,9 +36,10 @@ U = \sum_{i=1}^n |\psi_i\rangle \langle \varphi_i|
     So $U$ maps each $|\varphi_j\rangle$ to $|\psi_j\rangle$.
 \end{enumerate}
 
-\section*{Problem 2}
-Let $H$ be Hermitian and $U$ be unitary.
-\begin{enumerate}[label=\arabic*.]
+% --- Problem 2 ---
+\section*{\textbf{Problem 2}}
+\textbf{Let $H$ be Hermitian and $U$ be unitary.}
+\begin{enumerate}[label=\textbf{\arabic*.}]
     \item \textbf{All eigenvalues of $U$ have unit modulus.}\\[1ex] 
     $U |u\rangle = \lambda|u\rangle \implies \langle u | U^\dagger = \langle u | \lambda^*$ where $\lambda \quad \& \quad \lambda^*$ are the eigenvalues of $U$ and $U^\dagger$ respectively.
     \begin{align*}
@@ -69,50 +71,75 @@ Then:
     \end{align*}
     The Above $H$ is Hermitian as the matrix is a diagonalizable matrix with real eigen values $\phi_j$.
 
-    \item \textbf{Two eigenvectors of $U$ with different eigenvalues are orthogonal.}
+    \item \textbf{Two eigenvectors of $U$ with different eigenvalues are orthogonal.}\\
     Let $U|u_1\rangle = \lambda_1|u_1\rangle$ and $U|u_2\rangle = \lambda_2|u_2\rangle$ with $\lambda_1 \neq \lambda_2$. Consider
     \begin{align*}
-        \langle u_1|U|u_2\rangle &= \lambda_2 \langle u_1|u_2\rangle \\
-        \langle Uu_1|u_2\rangle &= \lambda_1 \langle u_1|u_2\rangle \\
-        \text{But } \langle Uu_1|u_2\rangle &= \langle u_1|U^\dagger|u_2\rangle = \lambda_2^* \langle u_1|u_2\rangle
+        \langle u_1|(U|u_2\rangle) &= \lambda_2 \langle u_1|u_2\rangle \\
+        (\langle u_1|U)|u_2\rangle &= \lambda_1 \langle u_1|u_2\rangle \\
+        \implies (\lambda_1 - \lambda_2)& \langle u_1|u_2\rangle = 0
     \end{align*}
-    Since $U$ is unitary, $\lambda_1^* = \lambda_1^{-1}$ and $|\lambda_1| = |\lambda_2| = 1$. Equating both expressions:
-    \[
-        \lambda_1 \langle u_1|u_2\rangle = \lambda_2^* \langle u_1|u_2\rangle \implies (\lambda_1 - \lambda_2^*) \langle u_1|u_2\rangle = 0
-    \]
+    In the above we have use $\langle u_1|U = \langle u_1| \lambda_1$ because:
+    \begin{align*}
+        \langle u_1|U^\dagger &= \langle u_1| \lambda_1^* \\
+        \implies \langle u_1|U^\dagger U &= \lambda_1^* \langle u_1|U \\
+        \text{But } U^\dagger U = I &\implies \langle u_1|U = \frac{1}{\lambda_1^*} \langle u_1| \\
+        \text{Since } |\lambda_1|^2 = 1 &\implies \lambda_1^* = \lambda_1^{-1} \\
+        \implies \langle u_1|U = \lambda_1 \langle u_1| &
+    \end{align*}
     Since $\lambda_1 \neq \lambda_2$, $\langle u_1|u_2\rangle = 0$. Thus, eigenvectors with distinct eigenvalues are orthogonal.
 
-    \textbf{Same for Hermitian $H$:} If $H|v_1\rangle = \mu_1|v_1\rangle$, $H|v_2\rangle = \mu_2|v_2\rangle$, $\mu_1 \neq \mu_2$, then
+    \textbf{Similarly for Hermitian $H$:} If $H|v_1\rangle = \mu_1|v_1\rangle$, $H|v_2\rangle = \mu_2|v_2\rangle$, $\mu_1 \neq \mu_2$, then using $\langle v_1|H = \mu_1 \langle v_1|$ as $H = H^\dagger$:
     \begin{align*}
-        \langle v_1|H|v_2\rangle &= \mu_2 \langle v_1|v_2\rangle \\
-        \langle Hv_1|v_2\rangle &= \mu_1 \langle v_1|v_2\rangle \\
-        \text{But } \langle Hv_1|v_2\rangle &= \langle v_1|H|v_2\rangle \text{ (since $H$ is Hermitian)}
+        \langle v_1 | (H | v_2 \rangle )&= \mu_2 \langle v_1 | v_2 \rangle \\
+        \langle (v_1 | H )| v_2 \rangle &=  \mu_1 \langle v_1 | v_2 \rangle \\
+        \implies (\mu_1 - \mu_2) &\langle v_1 | v_2 \rangle = 0
     \end{align*}
-    So $(\mu_1 - \mu_2)\langle v_1|v_2\rangle = 0$. If $\mu_1 \neq \mu_2$, $\langle v_1|v_2\rangle = 0$.
-
-    \item \textbf{All columns of $U$ are orthonormal.}
-    Write $U$ in the basis $\{|\varphi_j\rangle\}$: $U|\varphi_j\rangle = |\psi_j\rangle$. The columns of $U$ are $\{|\psi_j\rangle\}$.
+    So $(\mu_1 - \mu_2)\langle v_1 | v_2 \rangle = 0$. If $\mu_1 \neq \mu_2$, $\langle v_1 | v_2 \rangle = 0 \implies$ eigenvectors with distinct eigenvalues are orthogonal.
+    \item \textbf{All columns of $U$ are orthonormal.}\\
+    if $U_i$ is the column of a matrix U then 
     \begin{align*}
-        \langle \psi_i | \psi_j \rangle &= \langle \varphi_i | U^\dagger U | \varphi_j \rangle \\
-        &= \langle \varphi_i | I | \varphi_j \rangle = \delta_{ij}
+        U = \begin{bmatrix}
+            | & | & & | \\
+            U_1 & U_2 & \cdots & U_n \\
+            | & | & & |
+        \end{bmatrix}
     \end{align*}
-    Thus, the columns of $U$ form an orthonormal set. Similarly, since $U$ is unitary, its rows are also orthonormal.
+    \begin{align*}
+        I = (U^\dagger U)_{ij} = \sum_k (U^\dagger)_{ik} U_{kj} = \sum_k U_{ki}^* U_{kj} = \langle U_i | U_j \rangle = \delta_{ij}
+    \end{align*}
+    The above is orthonormality condition for column and for rows:
+    \begin{align*}
+                U = \begin{bmatrix}
+            - & R_1 & - \\
+            - & R_2 & - \\
+            & \vdots & \\
+            - & R_n & -
+        \end{bmatrix}
+    \end{align*}
+    \begin{align*}
+        I = (U U^\dagger)_{ij} = \sum_k U_{ik} U_{jk}^* = R_i R_j^* = \delta_{ij}
+    \end{align*}
 \end{enumerate}
-\section*{Problem 3}
-Let $P$ be a linear operator on a finite-dimensional complex inner-product space $V$ with $P^2 = P$.
-\begin{enumerate}[label=\arabic*.]
+
+% --- Problem 3 ---
+\section*{\textbf{Problem 3}}
+\textbf{Let $P$ be a linear operator on a finite-dimensional complex inner-product space $V$ with $P^2 = P$.}
+\begin{enumerate}[label=\textbf{\arabic*.}]
     \item \textbf{All eigenvalues of $P$ are $0$ or $1$.}
     \begin{align*}
-        P|v\rangle = \lambda|v\rangle \\
-        P^2|v\rangle = P(P|v\rangle) = P(\lambda|v\rangle) = \lambda P|v\rangle = \lambda^2|v\rangle \\
-        \text{But } P^2|v\rangle = P|v\rangle = \lambda|v\rangle \\
-        \implies \lambda^2 = \lambda \implies \lambda = 0 \text{ or } 1
+        P|v\rangle &= \lambda|v\rangle \\
+        P^2|v\rangle &= P(P|v\rangle) = P(\lambda|v\rangle) = \lambda P|v\rangle = \lambda^2|v\rangle \\
+        \implies P^2|v\rangle &= P|v\rangle = \lambda|v\rangle \\
+        \implies \lambda^2 = & \;\lambda  \implies \lambda = 0 \text{ or } 1
     \end{align*}
-    Thus, $P$ is diagonalizable.
-
+    \textbf{To prove P is diagonalizable:}
+    We will be using a property of jordan matrix $J$ that if $J^2 = J$, then $J$ is diagonal matrix.
+    Also, Any matrix can be expressed in terms of its Jordan form:
+    \[ P = Y J Y^{-1} \implies P^2 = Y J Y^{-1} Y J Y^{-1} = Y J^2 Y^{-1} = Y J Y^{-1} = P \implies J^2 = J \]
+    Since $J^2 = J$, $J$ is diagonal matrix. Hence $P$ is diagonalizable.
     \item \textbf{The complementary operator $Q = I - P$ is also a projector.}
     \begin{align*}
-        Q^2 &= (I - P)^2 = I - 2P + P^2 \\
+        Q^2 &= (I - P)(I - P) = I - 2P + P^2 \\
         &= I - 2P + P = I - P = Q
     \end{align*}
 
@@ -120,76 +147,111 @@ Let $P$ be a linear operator on a finite-dimensional complex inner-product space
     \begin{align*}
         P^2 &= \left(\sum_{i=1}^r |u_i\rangle\langle u_i|\right)^2 \\
         &= \sum_{i,j=1}^r |u_i\rangle\langle u_i|u_j\rangle\langle u_j| \\
+        &= \sum_{i,j=1}^r |u_i\rangle \delta_{ij} \langle u_j| \tag{\text{since $\langle u_i|u_j\rangle = \delta_{ij}$}}\\
         &= \sum_{i=1}^r |u_i\rangle\langle u_i| = P
     \end{align*}
 \end{enumerate}
 
 % --- Problem 4 ---
-\section*{Problem 4}
-The Pauli matrices are:
+\section*{\textbf{Problem 4}}
+\textbf{The Pauli matrices are:}
 \[
 \sigma_x = \begin{pmatrix} 0 & 1 \\ 1 & 0 \end{pmatrix}, \quad
 \sigma_y = \begin{pmatrix} 0 & -i \\ i & 0 \end{pmatrix}, \quad
 \sigma_z = \begin{pmatrix} 1 & 0 \\ 0 & -1 \end{pmatrix}
 \]
 They are Hermitian, unitary, and traceless. Prove:
-\begin{enumerate}[label=\arabic*.]
-    \item \textbf{Squares and inverses: $\sigma_k^2 = I$ and $\sigma_k^{-1} = \sigma_k$.}
-    \begin{align*}
-        \sigma_x^2 &= \begin{pmatrix} 0 & 1 \\ 1 & 0 \end{pmatrix}^2 = \begin{pmatrix} 1 & 0 \\ 0 & 1 \end{pmatrix} = I \\
-        \sigma_y^2 &= \begin{pmatrix} 0 & -i \\ i & 0 \end{pmatrix}^2 = \begin{pmatrix} 1 & 0 \\ 0 & 1 \end{pmatrix} = I \\
-        \sigma_z^2 &= \begin{pmatrix} 1 & 0 \\ 0 & -1 \end{pmatrix}^2 = \begin{pmatrix} 1 & 0 \\ 0 & 1 \end{pmatrix} = I
-    \end{align*}
-    Since $\sigma_k^2 = I$, $\sigma_k^{-1} = \sigma_k$.
-    
+\begin{enumerate}[label=\textbf{\arabic*.}]
+    \item \textbf{Squares and inverses: $\sigma_k^2 = I$ and $\sigma_k^{-1} = \sigma_k$ $k = x,y,z$.}
+    Since $\sigma_k$ are Hermitian and Unitary, $\sigma_k^\dagger = \sigma_k = \sigma_k^{-1}$.
+    \[ \implies \sigma_k = \sigma_k^{-1} \implies \sigma_k^2 = I \]
+
     \item \textbf{Commutators and anticommutators: $[\sigma_i, \sigma_j] = 2i\epsilon_{ijk}\sigma_k$ and $\{\sigma_i, \sigma_j\} = 2\delta_{ij}I$.}
+    We will use the property : $ \sigma_i \sigma_j = - \sigma_j \sigma_i $ if $i \neq j$.
     \begin{align*}
+        &\textbf{Commutators: } \\
         [\sigma_x, \sigma_y] &= \sigma_x\sigma_y - \sigma_y\sigma_x = i\sigma_z - (-i\sigma_z) = 2i\sigma_z \\
         [\sigma_y, \sigma_z] &= 2i\sigma_x, \quad [\sigma_z, \sigma_x] = 2i\sigma_y \\
-        \{\sigma_i, \sigma_j\} &= \sigma_i\sigma_j + \sigma_j\sigma_i = 2\delta_{ij}I
+        \implies [\sigma_i, \sigma_j] &= 2i\epsilon_{ijk}\sigma_k \\
+        &\textbf{Anticommutators: }  \\
+        \{\sigma_x, \sigma_y\} &= \sigma_x\sigma_y + \sigma_y\sigma_x = 0 \\
+        \{\sigma_i, \sigma_i\} &= \sigma_i \sigma_i + \sigma_i \sigma_i = 2\sigma_i^2 = 2I \\
+        \implies \{\sigma_i, \sigma_j\} &= \sigma_i\sigma_j + \sigma_j\sigma_i = 2\delta_{ij}I
     \end{align*}
     
     \item \textbf{Product identity: $\sigma_i\sigma_j = \delta_{ij}I + i\epsilon_{ijk}\sigma_k$.}
     \begin{align*}
-        \sigma_x\sigma_y &= i\sigma_z, \quad \sigma_y\sigma_x = -i\sigma_z \\
-        \sigma_i\sigma_j &= \delta_{ij}I + i\epsilon_{ijk}\sigma_k
+        \sigma_i\sigma_j &= \frac{1}{2}\left([\sigma_i, \sigma_j] + \{\sigma_i, \sigma_j\}\right) \\
+        &= \frac{1}{2}\left(2i\epsilon_{ijk}\sigma_k + 2\delta_{ij}I\right) \\
+        &= \delta_{ij}I + i\epsilon_{ijk}\sigma_k
     \end{align*}
+    For example, $\sigma_x\sigma_y = i\sigma_z$, $\sigma_y\sigma_x = -i\sigma_z$, and $\sigma_i\sigma_i = I$.
+
+    \item \textbf{Vector identities for $\mathbf{a}, \mathbf{b}, \boldsymbol{\sigma} \in \mathbb{R}^3$:}\\
+    Define:
     
-    \item \textbf{Vector identities for $\mathbf{a}, \mathbf{b} \in \mathbb{R}^3$:}
+    \begin{itemize}
+        \item $\mathbf{a} = (a_1, a_2, a_3)$
+        \item $\mathbf{b} = (b_1, b_2, b_3)$
+        \item $\boldsymbol{\sigma} = (\sigma_x, \sigma_y, \sigma_z)$ (by definition)
+    \end{itemize}
+We will Prove first that $(\mathbf{a} \cdot \boldsymbol{\sigma})(\mathbf{b} \cdot \boldsymbol{\sigma}) = (\mathbf{a} \cdot \mathbf{b})I + i(\mathbf{a} \times \mathbf{b}) \cdot \boldsymbol{\sigma}$ :
     \begin{align*}
-        (\mathbf{a} \cdot \boldsymbol{\sigma})^2 &= |\mathbf{a}|^2 I \\
-        (\mathbf{a} \cdot \boldsymbol{\sigma})(\mathbf{b} \cdot \boldsymbol{\sigma}) &= (\mathbf{a} \cdot \mathbf{b})I + i(\mathbf{a} \times \mathbf{b}) \cdot \boldsymbol{\sigma}
+        (\mathbf{a} \cdot \boldsymbol{\sigma})(\mathbf{b} \cdot \boldsymbol{\sigma}) &= \sum_{i} a_i \sigma_i \sum_{j} b_j \sigma_j = \sum_{i,j} a_i b_j \sigma_i \sigma_j \\
+        &= \sum_{i,j} a_i b_j \left(\delta_{ij}I + i\epsilon_{ijk}\sigma_k\right) \tag{$\because \sigma_i\sigma_j = \delta_{ij}I + i\epsilon_{ijk}\sigma_k$}\\
+        &= \sum_{i} a_i b_i + i\sum_{i,j} a_i b_j \epsilon_{ijk}\sigma_k \\
+        &= (\mathbf{a} \cdot \mathbf{b})I + i(\mathbf{a} \times \mathbf{b}) \cdot \boldsymbol{\sigma}
+    \end{align*}
+    Now taking $\mathbf{a} = \mathbf{b}$, we find:
+    \begin{align*}
+        (\mathbf{a} \cdot \boldsymbol{\sigma})^2 &= (\mathbf{a} \cdot \boldsymbol{\sigma})(\mathbf{a} \cdot \boldsymbol{\sigma}) \\
+        &= (\mathbf{a} \cdot \mathbf{a})I + i(\mathbf{a} \times \mathbf{a}) \cdot \boldsymbol{\sigma} \\
+        &= |\mathbf{a}|^2 I + 0 \\
+        &= |\mathbf{a}|^2 I
     \end{align*}
 \end{enumerate}
 
 % --- Problem 5 ---
-\section*{Problem 5}
-A density operator $\rho$ on a finite-dimensional Hilbert space $\mathcal{H}$ for an ensemble $\{p_i, |\psi_i\rangle\}$ is $\rho = \sum_i p_i |\psi_i\rangle\langle\psi_i|$. Prove:
-\begin{enumerate}[label=\arabic*.]
-    \item $\rho$ is Hermitian, positive semidefinite, and $\mathrm{Tr}(\rho) = 1$.
+\section*{\textbf{Problem 5}}
+\textbf{A density operator $\rho$ on a finite-dimensional Hilbert space $\mathcal{H}$ for an ensemble $\{p_i, |\psi_i\rangle\}$ is $\rho = \sum_i p_i |\psi_i\rangle\langle\psi_i|$. Prove:}
+\begin{enumerate}[label=\textbf{\arabic*.}]
+    \item \textbf{$\rho$ is Hermitian, positive semidefinite, and $\mathrm{Tr}(\rho) = 1$.}
     \begin{align*}
-        \rho^\dagger &= \sum_i p_i (|\psi_i\rangle\langle\psi_i|)^\dagger = \sum_i p_i |\psi_i\rangle\langle\psi_i| = \rho \\
-        \langle\phi|\rho|\phi\rangle &= \sum_i p_i |\langle\psi_i|\phi\rangle|^2 \geq 0 \\
-        \mathrm{Tr}(\rho) &= \sum_i p_i \langle\psi_i|\psi_i\rangle = \sum_i p_i = 1
+        \rho^\dagger &= \sum_i p_i (|\psi_i\rangle\langle\psi_i|)^\dagger = \sum_i p_i |\psi_i\rangle\langle\psi_i| = \rho \tag{$\implies \rho \text{ is Hermitian}$}\\
+        \langle\phi|\rho|\phi\rangle &= \sum_i p_i \langle\phi|\psi_i\rangle\langle\psi_i|\phi\rangle = \sum_i p_i |\langle\phi|\psi_i\rangle|^2 \geq 0 \tag{$\implies \rho \text{ is positive semidefinite}$}\\
+        \mathrm{Tr}(\rho) &= \sum_i p_i \mathrm{Tr}(| \psi_i \rangle \langle \psi_i |) =\sum_i p_i \langle\psi_i|\psi_i\rangle = \sum_i p_i |\psi_i|^2 = 1 \tag{$\implies \mathrm{Tr}(\rho) = 1$}
     \end{align*}
-    
-    \item $0 \leq \mathrm{Tr}(\rho^2) \leq 1$ and $\rho$ represents a pure state $\iff \rho^2 = \rho \implies \mathrm{Tr}(\rho^2) = 1$.
+    $\text{In the above: }p_i \geq 0 \text{ as it is probability and } |\langle\phi|\psi_i\rangle|^2  \geq 0 $, $\mathrm{Tr}(|a\rangle\langle a|) = \langle a|a\rangle$.
+    \item \textbf{$0 \leq \mathrm{Tr}(\rho^2) \leq 1$ and $\rho$ represents a pure state $\iff \rho^2 = \rho \implies \mathrm{Tr}(\rho^2) = 1$.}
     \begin{align*}
         \mathrm{Tr}(\rho^2) &= \mathrm{Tr}\left(\sum_{i,j} p_i p_j |\psi_i\rangle\langle\psi_i|\psi_j\rangle\langle\psi_j|\right) \\
+        &= \sum_{i,j} p_i p_j \mathrm{Tr}\left(|\psi_i\rangle\langle\psi_i|\psi_j\rangle\langle\psi_j|\right) \\
+        &= \sum_{i,j} p_i p_j \langle\psi_i|\psi_j\rangle \mathrm{Tr}\left(|\psi_j\rangle\langle\psi_i|\right) \\
         &= \sum_{i,j} p_i p_j |\langle\psi_i|\psi_j\rangle|^2 \leq \sum_{i,j} p_i p_j = (\sum_i p_i)^2 = 1
     \end{align*}
-    For pure states, $\rho = |\psi\rangle\langle\psi|$, $\rho^2 = \rho$, $\mathrm{Tr}(\rho^2) = 1$. For mixed states, $\mathrm{Tr}(\rho^2) < 1$.
-    
-    \item Spectral form: $\rho = \sum_k \lambda_k |\phi_k\rangle\langle\phi_k|$, $\lambda_k \geq 0$, $\sum_k \lambda_k = 1$. Probabilities $\lambda_k$, purity $\mathrm{Tr}(\rho^2) = \sum_k \lambda_k^2$.
-    
-    \item Expectation values: For observable $A$, $\langle A \rangle = \mathrm{Tr}(\rho A) = \sum_i p_i \langle\psi_i|A|\psi_i\rangle$.
+    For pure states, $\rho = |\psi\rangle\langle\psi|$, $\rho^2 = \rho$, $\mathrm{Tr}(\rho^2) = 1$. For mixed states, $\mathrm{Tr}(\rho^2) < 1$. Like above, we can see that the inequality becomes strict for mixed states.
+
+    \item \textbf{Spectral form: $\rho = \sum_k \lambda_k |\phi_k\rangle\langle\phi_k|$, $\lambda_k \geq 0$, $\sum_k \lambda_k = 1$. Probabilities are $\lambda_k$.}\\
+    \begin{align*}
+        \mathrm{Tr}(\rho^2) &= \mathrm{Tr}\left(\sum_{k,l} \lambda_k \lambda_l |\phi_k\rangle\langle\phi_k|\phi_l\rangle\langle\phi_l|\right) \nonumber \\
+        &= \sum_{k,l} \lambda_k \lambda_l \delta_{k,l} \mathrm{Tr}\left(|\phi_l\rangle\langle\phi_k|\right) \tag{$\because \langle\phi_k|\phi_l\rangle = \delta_{k,l} \text{(orthonormality)}$} \nonumber \\
+        &= \sum_k \lambda_k^2 \langle\phi_k|\phi_k\rangle \nonumber \\
+        &= \sum_k \lambda_k^2 = 1 \text{ ($\because \rho^2 = \rho$) as orthonormal basis $|\phi_k\rangle$ is used for spectral decomposition}
+    \end{align*}
+    $ \rho $ here a pure state which was defined as $\rho = \sum_k |\phi_k\rangle\langle\phi_k|$ where $|\phi_k\rangle$ are orthonormal .
+
+    \item \textbf{Expectation values: For observable $A$, $\langle A \rangle = \mathrm{Tr}(\rho A) = \sum_i p_i \langle\psi_i|A|\psi_i\rangle$.}
+    \begin{align*}
+        \langle A \rangle &= \langle\psi|A|\psi\rangle \text{ and } |\psi \rangle = \sum_i \sqrt{p_i} |\psi_i\rangle \tag{Definition}\\
+        \langle A \rangle &= \sum_i p_i \langle\psi_i|A|\psi_i\rangle = \sum_i p_i \mathrm{Tr}(|\psi_i\rangle\langle\psi_i| A) = \mathrm{Tr}(\rho A) \\
+    \end{align*}
 \end{enumerate}
 
-% --- Problem 6 (reworked, full solution) ---
-\section*{Problem 6}
-In finite dimensions, positivity of an operator $X$ means $\langle\psi|X|\psi\rangle\ge 0$ for all $|\psi\rangle$. Prove:
-\begin{enumerate}[label=\arabic*.]
-    \item A positive operator is Hermitian.
+% --- Problem 6 ---
+\section*{\textbf{Problem 6}}
+\textbf{In finite dimensions, positivity of an operator $X$ means $\langle\psi|X|\psi\rangle\ge 0$ for all $|\psi\rangle$. Prove:}
+\begin{enumerate}[label=\textbf{\arabic*.}]
+    \item \textbf{A positive operator is Hermitian.}
     \begin{proof}
     Write $A$ as $A=B+iC$ where $B=(A+A^\dagger)/2$ and $C=(A-A^\dagger)/(2i)$ are Hermitian. For any vector $|\psi\rangle$,
     \[
@@ -199,10 +261,18 @@ In finite dimensions, positivity of an operator $X$ means $\langle\psi|X|\psi\ra
     \[
         \langle\psi|C|\psi\rangle = 0 \qquad\text{for all } |\psi\rangle.
     \]
-    Since $C$ is Hermitian it has a spectral decomposition $C=\sum_k c_k |\phi_k\rangle\langle\phi_k|$ with real eigenvalues $c_k$. Plugging $|\psi\rangle=|\phi_k\rangle$ gives $c_k=0$ for every $k$. Hence $C=0$ and $A=B$ is Hermitian.
+    Since $C$ is Hermitian, it admits a spectral decomposition:
+    \[
+        C = \sum_k c_k |\phi_k\rangle\langle\phi_k|
+    \]
+    where $c_k$ are real eigenvalues and $|\phi_k\rangle$ are orthonormal eigenvectors. Setting $|\psi\rangle = |\phi_k\rangle$ gives
+    \[
+        \langle\phi_k|C|\phi_k\rangle = c_k = 0 \qquad\text{for all } k.
+    \]
+    Therefore, all eigenvalues vanish and $C = 0$. Thus, $A = B$ is Hermitian.
     \end{proof}
 
-    \item For any linear operator $A$, the operator $A^\dagger A$ is positive and Hermitian.
+    \item \textbf{For any linear operator $A$, the operator $A^\dagger A$ is positive and Hermitian.}
     \begin{proof}
     For any $|\psi\rangle$,
     \[
@@ -212,22 +282,37 @@ In finite dimensions, positivity of an operator $X$ means $\langle\psi|X|\psi\ra
     \end{proof}
 \end{enumerate}
 
-% --- Problem 7 (reworked, full solution) ---
-\section*{Problem 7}
-For matrices $A\in\mathbb{C}^{m\times n}$, $C\in\mathbb{C}^{n\times p}$, $B\in\mathbb{C}^{k\times\ell}$ and $D\in\mathbb{C}^{\ell\times q}$ (so the products below are conformable), prove the mixed-product property
+% --- Problem 7 ---
+\section*{\textbf{Problem 7}}
+\textbf{For matrices $A \in \mathbb{C}^{m \times n}$, $C \in \mathbb{C}^{n \times p}$, $B \in \mathbb{C}^{k \times \ell}$, and $D \in \mathbb{C}^{\ell \times q}$, prove the mixed-product property:}
 \[
-    (A\otimes B)(C\otimes D) = (AC)\otimes(BD).
+    (A \otimes B)(C \otimes D) = (AC) \otimes (BD).
 \]
 \begin{proof}
-We prove the identity by comparing matrix entries using the standard row/column ordering for Kronecker products. Index the rows/columns of $A\otimes B$ by the pair $(i,\alpha)$ with $i=1,\dots,m$ and $\alpha=1,\dots,k$, similarly for columns by $(j,\beta)$. The $( (i,\alpha),(j,\delta) )$ entry of the product is
-\begin{align*}
-    &\quad\;\big[(A\otimes B)(C\otimes D)\big]_{(i,\alpha),(j,\delta)} \\[4pt]
-    &= \sum_{(r,\beta)} (A\otimes B)_{(i,\alpha),(r,\beta)}\,(C\otimes D)_{(r,\beta),(j,\delta)} \\[4pt]
-    &= \sum_{r=1}^n\sum_{\beta=1}^{\ell} \big(A_{ir}B_{\alpha\beta}\big)\big(C_{rj}D_{\beta\delta}\big) \\
-    &= \Big(\sum_{r=1}^n A_{ir}C_{rj}\Big)\Big(\sum_{\beta=1}^{\ell} B_{\alpha\beta}D_{\beta\delta}\Big) \\
-    &= (AC)_{ij}\,(BD)_{\alpha\delta}.
-\end{align*}
-The right-hand side is exactly the $((i,\alpha),(j,\delta))$ entry of $(AC)\otimes(BD)$. Since all matrix entries agree, the two matrices are equal.
+Let $A \in \mathbb{C}^{m \times n}$, $C \in \mathbb{C}^{n \times p}$, $B \in \mathbb{C}^{k \times \ell}$, $D \in \mathbb{C}^{\ell \times q}$. The $(i,j)$-th block of $(A \otimes B)(C \otimes D)$ is:
+\[
+    \sum_{r=1}^n (a_{ir}B)(c_{rj}D).
+\]
+Since scalars commute with matrices, we can regroup:
+\[
+    \sum_{r=1}^n (a_{ir}c_{rj})(BD).
+\]
+Thus the $(i,j)$-th block of $(A \otimes B)(C \otimes D)$ is:
+\[
+    \left(\sum_{r=1}^n a_{ir}c_{rj}\right) BD = (AC)_{ij} BD.
+\]
+But this is exactly the $(i,j)$-th block of $(AC) \otimes (BD)$:
+\[
+    (AC) \otimes (BD) = \begin{bmatrix}
+        (AC)_{11}(BD) & \cdots & (AC)_{1p}(BD) \\
+        \vdots & \ddots & \vdots \\
+        (AC)_{m1}(BD) & \cdots & (AC)_{mp}(BD)
+    \end{bmatrix}.
+\]
+Therefore,
+\[
+    (A \otimes B)(C \otimes D) = (AC) \otimes (BD).
+\]
 \end{proof}
 
 \end{document}
