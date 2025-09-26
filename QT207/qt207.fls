@@ -1,7 +1,7 @@
-PWD /home/shaukat/Quantum_Computing
+PWD /home/shaukat/Quantum_Computing/QT207
 INPUT /usr/share/texmf-dist/web2c/texmf.cnf
 INPUT /var/lib/texmf/web2c/pdftex/pdflatex.fmt
-INPUT /home/shaukat/Quantum_Computing/qt207.tex
+INPUT /home/shaukat/Quantum_Computing/QT207/qt207.tex
 OUTPUT qt207.log
 INPUT /usr/share/texmf-dist/tex/latex/base/article.cls
 INPUT /usr/share/texmf-dist/tex/latex/base/article.cls

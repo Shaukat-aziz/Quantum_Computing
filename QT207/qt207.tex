@@ -162,10 +162,20 @@ Then:
 \]
 They are Hermitian, unitary, and traceless. Prove:
 \begin{enumerate}[label=\textbf{\arabic*.}]
-    \item \textbf{Squares and inverses: $\sigma_k^2 = I$ and $\sigma_k^{-1} = \sigma_k$ $k = x,y,z$.}
+    \item \textbf{Squares and inverses and eigenvalues  : $\sigma_k^2 = I$ and $\sigma_k^{-1} = \sigma_k$ $k = x,y,z$.}
     Since $\sigma_k$ are Hermitian and Unitary, $\sigma_k^\dagger = \sigma_k = \sigma_k^{-1}$.
     \[ \implies \sigma_k = \sigma_k^{-1} \implies \sigma_k^2 = I \]
+    To show the eigenvalues of a general Pauli matrix $\sigma_k$ are $\pm 1$, note that each Pauli matrix is $2 \times 2$, Hermitian, traceless, and unitary, and satisfies $\sigma_k^2 = I$. 
 
+    Let $\lambda$ be an eigenvalue of $\sigma_k$, so $\sigma_k |v\rangle = \lambda |v\rangle$. Applying $\sigma_k$ again:
+    \[
+    \sigma_k^2 |v\rangle = \sigma_k (\sigma_k |v\rangle) = \sigma_k (\lambda |v\rangle) = \lambda \sigma_k |v\rangle = \lambda^2 |v\rangle
+    \]
+    But $\sigma_k^2 = I$, so $I|v\rangle = |v\rangle = \lambda^2 |v\rangle$. Thus,
+    \[
+    \lambda^2 = 1 \implies \lambda = \pm 1
+    \]
+    Therefore, any Pauli matrix $\sigma_k$ has eigenvalues $\pm 1$.
     \item \textbf{Commutators and anticommutators: $[\sigma_i, \sigma_j] = 2i\epsilon_{ijk}\sigma_k$ and $\{\sigma_i, \sigma_j\} = 2\delta_{ij}I$.}
     We will use the property : $ \sigma_i \sigma_j = - \sigma_j \sigma_i $ if $i \neq j$.
     \begin{align*}
