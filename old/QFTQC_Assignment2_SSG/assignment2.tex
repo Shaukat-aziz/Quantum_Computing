@@ -1,0 +1,817 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath, amssymb, amsfonts}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{siunitx}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{float}
+\usepackage{xcolor}
+\usepackage{caption}
+\usepackage{subcaption}
+
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=cyan,
+    filecolor=magenta,      
+    urlcolor=cyan,
+    pdftitle={Quantum Field Theory on a Quantum Computer - Team Assignment 2},
+    pdfpagemode=FullScreen,
+    }
+
+\sisetup{round-mode=places, round-precision=4}
+
+\title{\Huge Team Assignment~2\\Quantum Field Theory on a Quantum Computer}
+\author{\Large \textbf{Team Members:} Shaukat Aziz, Gurudeva Prasad, Suresh Karthik}
+\date{September 27, 2025}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+This report documents our solutions to the tasks in Team Assignment~\#2 for the course \emph{Quantum Field Theory on a Quantum Computer}. Question~\ref{sec:q1} studies an intentionally faulty Quantum Fourier Transform (QFT) circuit and explores a noisy-$R_3$ variant, Question~\ref{sec:q2} outlines our work-in-progress plan for the transverse-field Ising model (TFIM) simulation, and Question~\ref{sec:q3} presents a detailed Quantum Phase Estimation (QPE) study of a custom three-qubit unitary. All numerical results are reproduced from the companion notebooks \texttt{Question-1.ipynb}, \texttt{Question-2.ipynb} and \texttt{Question-3.ipynb} with additional context drawn from the accompanying development chat log.
+\end{abstract}
+
+\tableofcontents
+
+\newpage
+\section*{Overview}
+We implemented the required analyses in Python using Qiskit's Aer simulator. The notebooks listed below contain the executable code and retain inline commentary and execution metadata for reproducibility:
+
+\begin{itemize}[leftmargin=*]
+    \item \texttt{Question-1.ipynb}: Erroneous QFT construction, Hadamard-test amplitude complex estimation, baseline comparisons with DFT and correct QFT, and noisy $R_3$ affect on the results.
+    \item \texttt{Question-3.ipynb}: QPE eigenstate identification and multi-ancilla experiments (Question~3), including the debugging steps recorded in the chat log.
+\end{itemize}
+
+Unless otherwise noted, all experiments were executed on the Aer \texttt{qasm\_simulator} with the shot counts stated in the corresponding sections.
+
+\section{Question 1: Faulty QFT circuit analysis}\label{sec:q1}
+
+
+\subsection{Q1.1: Faulty gate placements}
+Replacing every controlled-$R_3$ gate (phase $e^{i\pi/4}$) in the standard three-qubit QFT by controlled-$R_2$ (phase $e^{i\pi/2}$) yields the erroneous unitary $\widehat{\mathrm{QFT}}_8$. Figure documents the altered locations. 
+\begin{figure}[H]
+    \centering
+    \fbox{%
+        \includegraphics[width=0.43\textwidth]{FILES/Question-1_3_0.png}
+    }
+    \hspace{0.001cm}
+    \raisebox{5\height}{\Large$\implies$}
+    \hspace{0.001cm}
+    \fbox{%
+        \includegraphics[width=0.43\textwidth]{FILES/Question-1_2_0.png}
+    }
+    \caption{Erroneous QFT circuit with all $R_3$ gates replaced by $R_2$ i.e  $QFT_8$ to $\widetilde{QFT_8}$.}
+    \label{fig:erroneous-qft}
+\end{figure}
+
+\subsection{Q1.2: Hadamard-test amplitude estimation}
+
+
+We fix $n=3$ system qubits ($N=2^n = 8$ basis states). The padded input vector is
+\begin{align*}
+	v' &= (1,\; i,\; 2.5,\; 4+i,\; 5,\; 7,\; 0,\; 0) \\
+	||v'|| &= \sqrt{1^2 + 1^2 + 2.5^2 + (4^2 + 1^2) + 5^2 + 7^2} = \sqrt{99.25} \approx 9.9623
+\end{align*}
+After Normalization we get
+\begin{equation*}
+    v = (0.100377,\; 0.100377i,\; 0.250943,\; 0.401508+0.100377i,\; 0.501886,\; 0.70264,\; 0,\; 0)
+\end{equation*}
+After amplitude encoding, the state $\lvert v' \rangle$ = $0.100377 \lvert 000 \rangle + 0.100377 i \lvert 001 \rangle + 0.250943 \lvert 010 \rangle + (0.401508 + 0.100377 i) \lvert 011 \rangle + 0.501886 \lvert 100 \rangle + 0.70264 \lvert 101 \rangle$.
+    \begin{table}[H]
+        \centering
+        \begin{minipage}{0.45\textwidth}
+            \centering
+            \caption{Hadamard-test amplitude estimates for the erroneous QFT circuit ($10{,}000$ shots).}
+            \label{tab:hadamard-10k}
+            \begin{tabular}{|c|c|c|}
+                \toprule
+                $j$ & $\Re\,a_j^{(\mathrm{err})}$ & $\Im\,a_j^{(\mathrm{err})}$ \\
+                \midrule
+                0 & $0.7004 \pm 0.0071$ & $0.0672 \pm 0.0100$ \\
+                1 & $0.0654 \pm 0.0100$ & $-0.1704 \pm 0.0099$ \\
+                2 & $-0.1854 \pm 0.0098$ & $0.4308 \pm 0.0090$ \\
+                3 & $0.0586 \pm 0.0100$ & $0.0118 \pm 0.0100$ \\
+                4 & $-0.1646 \pm 0.0099$ & $0.0698 \pm 0.0100$ \\
+                5 & $0.0806 \pm 0.0100$ & $-0.0010 \pm 0.0100$ \\
+                6 & $-0.1994 \pm 0.0098$ & $-0.4262 \pm 0.0090$ \\
+                7 & $-0.0656 \pm 0.0100$ & $0.0014 \pm 0.0100$ \\
+                \bottomrule
+            \end{tabular}
+        \end{minipage}\hfill
+        \begin{minipage}{0.45\textwidth}
+            \centering
+            \caption{Hadamard-test amplitude estimates for the erroneous QFT circuit ($1{,}000{,}000$ shots).}
+            \label{tab:hadamard-1m}
+            \begin{tabular}{|c|c|c|}
+                \toprule
+                $j$ & $\Re\,a_j^{(\mathrm{err})}$ & $\Im\,a_j^{(\mathrm{err})}$ \\
+                \midrule
+                0 & $0.692236 \pm 0.000722$ & $0.070776 \pm 0.000997$ \\
+                1 & $0.071334 \pm 0.000997$ & $-0.160268 \pm 0.000987$ \\
+                2 & $-0.195560 \pm 0.000981$ & $0.426190 \pm 0.000905$ \\
+                3 & $0.069870 \pm 0.000998$ & $0.017524 \pm 0.001000$ \\
+                4 & $-0.160876 \pm 0.000987$ & $0.070288 \pm 0.000998$ \\
+                5 & $0.072384 \pm 0.000997$ & $-0.019408 \pm 0.001000$ \\
+                6 & $-0.195406 \pm 0.000981$ & $-0.424912 \pm 0.000905$ \\
+                7 & $-0.070694 \pm 0.000997$ & $0.016472 \pm 0.001000$ \\
+                \bottomrule
+            \end{tabular}
+        \end{minipage}
+        \includegraphics[width=0.85\textwidth]{FILES/Question-1_10_1.png}
+    \end{table}
+
+
+\subsection{Q1.3: Baselines and cross-checks}
+We compared four transforms acting on $\lvert v' \rangle$: the faulty circuit (Hadamard-test estimates), the exact $\mathrm{QFT}_8$, Qiskit's built-in \texttt{QFTGate}, and the classical FFT with unitary normalization. Figure shows magnitude and phase. 
+The erroneous circuit deviates substantially at $j=1$ and $j=3$, yielding a maximum magnitude discrepancy of approximately $0.40$ and a phase error above $4.16$~rad relative to the ideal circuit at $j=4$. The classical FFT and \texttt{QFTGate} outputs coincide with the exact QFT up to numerical precision.
+
+\begin{figure}
+    \centering
+    \fbox{\includegraphics[width=\textwidth]{FILES/Question-1_13_1.png}}
+    \caption{Comparison of Fourier amplitudes from the erroneous QFT circuit (Hadamard-test estimates, $1{,}000{,}000$ shots), exact QFT, Qiskit's built-in \texttt{QFTGate}, and classical FFT.}
+    \label{fig:q1-comparison}
+\end{figure}
+
+\newpage
+\subsection{Q1.4: Noisy $R_3$ variant}
+
+We introduce noise into the QFT circuit by preceding each $R_3$ gate with a random unitary
+\[\delta^2 + (1-\epsilon)^2 = 1 \implies \delta = \sqrt{\epsilon(2-\epsilon)}\] because $U$ is unitary and must preserve the norm of the state vector:
+\[
+\implies U_{\text{noise}} = \begin{pmatrix} 1-\epsilon & i\sqrt{\epsilon(2-\epsilon)} \\ i\sqrt{\epsilon(2-\epsilon)} & 1-\epsilon \end{pmatrix}, \quad \epsilon \in [0, 0.1].
+\]
+
+This construction ensures unitarity for all $\epsilon$. For $n=3$, only one $R_3$ is present, but the approach generalizes. In each trial, a new $\epsilon$ is sampled, and the noisy QFT is constructed. We compare the resulting output amplitudes to the ideal QFT or classical DFT, The variation can be observed using the \href{https://optimizer.live/files/gifs/noisy_qft_eps_transition.gif}{GIF}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{FILES/Question-1_3_1.png}
+    \includegraphics[width=0.85\textwidth]{FILES/Question-1_3_2.png}
+    \includegraphics[width=0.85\textwidth]{FILES/Question-1_3_3.png}
+    \caption{Impact of a random noisy-$R_3$ draw on output magnitudes and phases. Classical FFT amplitudes remain the gold-standard reference.}
+    \label{fig:q1-noisy}
+\end{figure}
+
+\section{Question 2: Transverse-field Ising model (TFIM) simulation}\label{sec:q2}
+\subsection{Suzuki–Trotter decomposition and circuit implementation}
+For each $t$ and $k \in \{1,2\}$, estimate the complex inner product
+$$
+\langle \psi_k(t) | \psi_{\text{comp}}(t) \rangle
+$$
+using a single-ancilla Hadamard test (measure $X$ for the real part and $Y$ for the imaginary part). Report point estimates with error bars, and clearly state the number of measurement shots used.
+
+\subsubsection*{Tasks}
+
+\subsubsection{T1: Circuit implementation of $U_2$, $U_4$, $U_6$}
+Implement $U_2$, $U_4$, $U_6$ with $r = 50$ slices each. Explain briefly how you decompose $e^{-iZ_jZ_{j+1}\alpha}$ and $e^{-iX_j\beta}$ into native gates.
+
+
+\subsubsection*{Step-by-step Suzuki–Trotter Decomposition for the TFIM Hamiltonian}
+
+Given the Hamiltonian:
+$$
+H = J \sum_{j=1}^{N-1} Z_j Z_{j+1} + h \sum_{j=1}^{N} X_j
+$$
+
+We use the second-order Suzuki–Trotter formula:
+$$
+S_2(\lambda) = e^{\lambda A/2} e^{\lambda B} e^{\lambda A/2}
+$$
+where:
+- $A = J \sum_{j=1}^{N-1} Z_j Z_{j+1}$
+- $B = h \sum_{j=1}^{N} X_j$
+
+\begin{enumerate}
+    \item \textbf{Apply half-step evolution for all ZZ terms:}
+    \begin{itemize}
+        \item For each pair $(j, j+1)$, apply $e^{-i J Z_j Z_{j+1} \delta t/2}$
+    \end{itemize}
+    \item \textbf{Apply full-step evolution for all X terms:}
+    \begin{itemize}
+        \item For each qubit $j$, apply $e^{-i h X_j \delta t}$
+    \end{itemize}
+    \item \textbf{Apply another half-step for all ZZ terms:}
+    \begin{itemize}
+        \item For each pair $(j, j+1)$, apply $e^{-i J Z_j Z_{j+1} \delta t/2}$
+    \end{itemize}
+\end{enumerate}
+In the second-order Suzuki–Trotter formula for multiple non-commuting terms, the decomposition is:
+
+$$
+S_2^{(M)}(\Delta) = \left( \prod_{a=1}^{M-1} e^{-H_a \Delta/2} \right) e^{-H_M \Delta} \left( \prod_{a=M-1}^{1} e^{-H_a \Delta/2} \right)
+$$
+
+\begin{itemize}
+    \item The \textbf{first product} applies half-step evolutions in ascending order ($a=1$ to $M-1$).
+    \item The \textbf{second product} (after the full-step $e^{-H_M \Delta}$) applies half-step evolutions in \textbf{reverse order} ($a=M-1$ down to $1$).
+\end{itemize}
+
+This ensures better cancellation of non-commuting errors and is essential for the accuracy of the Suzuki–Trotter expansion.
+
+\subsubsection*{Slicing (Trotter Steps)}
+
+To simulate time evolution for total time $t$, we divide it into $r$ slices (here $r=50$):
+- Each slice has duration $\delta t = t / r$.
+- For each slice, apply the Suzuki–Trotter step as above.
+Using $ e^{-it(A+B)} $ can be approximated as
+
+$$e^{-it(A+B)} \approx \left[ \left( e^{-itA/2r} \right) \left( e^{-itB/r} \right) \left( e^{-itA/2r} \right) \right]^r
+$$
+
+We can write it as
+$$
+\left[
+    e^{-iJ \sum_{j} Z_j Z_{j+1} \frac{t}{2r}}
+    \left(
+        e^{-ih \sum_j X_j \frac{t}{r}}
+    \right)
+    e^{-iJ \sum_{j} Z_j Z_{j+1} \frac{t}{2r}}
+\right]^r
+$$
+
+$$
+\left[
+    \left( \prod_{j=1}^{9} e^{-iJ Z_j Z_{j+1} \frac{t}{2r}} \right)
+    \left( \prod_{j=1}^{10} e^{-ih X_j \frac{t}{r}} \right)
+    \left( \prod_{j=9}^{1} e^{-iJ Z_j Z_{j+1} \frac{t}{2r}} \right)
+\right]^r
+$$
+
+\subsubsection*{Decomposition into Native Gates}
+
+To decompose the evolution operators into native gates: \begin{itemize} \item
+For $e^{-iZ_jZ_{j+1}\alpha}$: This can be implemented using two CNOT gates
+sandwiching an $R_z$ rotation. Specifically, a CNOT gate with qubit $j$ as
+control and qubit $j+1$ as target, followed by an $R_z(2\alpha)$ gate on qubit
+$j+1$, and then another CNOT gate with qubit $j$ as control and qubit $j+1$ as
+target. This is based on the identity $CNOT (I \otimes R_z(2\theta)) CNOT =
+e^{-i\theta Z \otimes Z}$, where we set $\theta = \alpha$. \item For
+$e^{-iX_j\beta}$: This is a single-qubit rotation and can be directly
+implemented as an $R_x(\beta)$ gate on qubit $j$. \end{itemize}
+
+\begin{figure}[h!] \centering \includegraphics[width=0.4\textwidth]{ezz.png}
+\caption{Exact simulation of $H = \frac{J}{2} Z \otimes Z$: choose $R_z(Jt)$ on
+the target sandwiched by CNOTs.} \label{fig:ezz_decomposition} \end{figure}
+
+\subsubsection*{Higher Order Suzuki-Trotter Formulas}
+
+To achieve higher-order approximations, we combine lower-order Suzuki-Trotter
+formulas to cancel error terms.
+
+The second-order Suzuki-Trotter approximation is defined as: $$ S_2(\lambda) =
+e^{\lambda A/2} e^{\lambda B} e^{\lambda A/2} $$ 
+
+A suitable fourth-order formula, denoted $S_4(\lambda)$, is constructed as:
+$$ S_4(\lambda) = S_2(s\lambda)^2 S_2((1-4s)\lambda) S_2(s\lambda)^2 $$ where $s$
+is chosen to be equal to 0.41 to cancel the leading error term.
+
+Similarly, a sixth-order approximation, $S_6(\lambda)$, can be constructed from
+$S_4(\lambda)$: $$ S_6(\lambda) = S_4(\bar{s}\lambda)^2 S_4((1-4\bar{s})\lambda)
+S_4(\bar{s}\lambda)^2 $$
+For the leading error term to vanish, $\bar{s}$ must satisfy
+$$ 4\bar{s}^5 + (1-4\bar{s})^5 = 0 $$
+whose only real root is $\bar{s} \approx 0.37$.
+\\
+\\
+\subsubsection{T2: Hadamard test implementation}
+
+\subsubsection*{Results — overlap estimates $\langle\psi_k(t) | \psi_3(t)\rangle$ and interpretation}
+
+Summary: the order‑4 approximation (k=2, U4) yields overlaps closer to the order‑6 comparator (k=3, U6) than the order‑2 approximation (k=1, U2) across tested times. Tables below include the overlap norm $|\langle\psi_k|\psi_3\rangle|$.
+
+\subsubsection*{Table — r = 50, t $\in \{0.1, 0.5, 1.0\}$ (shots = 2048)}
+\begin{tabular}{|c|c|c|c|c|c|c|}
+\toprule
+t & k & Re & Re\_err & Im & Im\_err \\
+\midrule
+0.1 & 1 & 1.0 & 0.0 & -0.023438 & 0.022091 \\
+0.1 & 2 & 1.0 & 0.0 & -0.028320 & 0.022088 \\
+0.5 & 1 & 1.0 & 0.0 & -0.020508 & 0.022092 \\
+0.5 & 2 & 1.0 & 0.0 & 0.002930 & 0.022097 \\
+1.0 & 1 & 1.0 & 0.0 & 0.024414 & 0.022091 \\
+1.0 & 2 & 1.0 & 0.0 & 0.037109 & 0.022082 \\
+\bottomrule
+\end{tabular}
+
+\subsubsection*{Interpretation for r=50, t $\in \{0.1, 0.5, 1.0\}$}
+\begin{itemize}
+    \item The real part is effectively 1.0 for all (t,k) within sampling error; imaginary parts are small compared to the measurement uncertainty ($\sim 0.02$).
+    \item With r = 50 and small t, Trotter error is negligible $\rightarrow$ different Suzuki orders produce nearly identical states, so overlap $\approx 1$.
+\end{itemize}
+
+\subsubsection*{Why reduce r and increase t (and why this should reveal differences)}
+\begin{itemize}
+    \item \textbf{Trotter-error scaling (informal):}
+    \begin{itemize}
+        \item For an order-p Suzuki formula, local error $\propto (\Delta t)^{p+1}$ with $\Delta t = t/r$; total error $\propto r \cdot (\Delta t)^{p+1} \approx t^{p+1} / r^{p}$.
+        \item Increasing t or decreasing r increases $\Delta t$ and magnifies Trotter error; higher-order formulas (larger p) suppress error more strongly.
+    \end{itemize}
+    \item \textbf{Consequence:}
+    \begin{itemize}
+        \item Reducing r and/or increasing t amplifies differences between U2, U4, U6 so overlaps deviate from 1 and you can observe the expected ordering (S6 $\approx$ S4 closer than S2).
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Table — r = 10, t $\in \{5, 10, 15\}$ (shots = 2048)}
+\begin{tabular}{|c|c|c|c|c|c|c|}
+\toprule
+t & k & Re & Re\_err & Im & Im\_err & Norm \\
+\midrule
+5 & 1 & 1.000000 & 0.000000 & -0.068359 & 0.031177 & 1.002334 \\
+5 & 2 & 1.000000 & 0.000000 & 0.025391 & 0.031240 & 1.000323 \\
+10 & 1 & 0.966797 & 0.007986 & -0.240234 & 0.030335 & 0.996195 \\
+10 & 2 & 1.000000 & 0.000000 & 0.031250 & 0.031235 & 1.000488 \\
+15 & 1 & 0.597656 & 0.025055 & -0.759766 & 0.020319 & 0.966641 \\
+15 & 2 & 1.000000 & 0.000000 & 0.003906 & 0.031250 & 1.000008 \\
+\bottomrule
+\end{tabular}
+
+\subsubsection*{Table — r = 50, t $\in \{5, 10, 15\}$ (shots = 2048)}
+\begin{tabular}{|c|c|c|c|c|c|c|}
+\toprule
+t & k & Re & Re\_err & Im & Im\_err & Norm \\
+\midrule
+5 & 1 & 0.636719 & 0.024097 & -0.767578 & 0.020030 & 0.997317 \\
+5 & 2 & 0.998047 & 0.001952 & 0.050781 & 0.031210 & 0.999338 \\
+10 & 1 & 0.105469 & 0.031076 & 0.496094 & 0.027133 & 0.507185 \\
+10 & 2 & 0.972656 & 0.007258 & 0.218750 & 0.030493 & 0.996952 \\
+15 & 1 & 0.052734 & 0.031207 & 0.076172 & 0.031159 & 0.092700 \\
+15 & 2 & -0.503906 & 0.026992 & 0.423828 & 0.028304 & 0.658316 \\
+\bottomrule
+\end{tabular}
+
+\subsubsection*{Concise interpretation}
+\begin{itemize}
+    \item For both r settings, U4 (k=2) is consistently closer to U6 than U2 (k=1): Re is nearer to 1 and the overlap norm and Im deviations are generally more favorable for k=2.
+    \item This matches expectation: higher‑order Suzuki formulas reduce Trotter error, so S4 approximates S6 better than S2 for the same (t,r).
+\end{itemize}
+
+\subsubsection{T3: Comparison with exact evolution}
+Compare your overlaps with statevector-simulated overlaps (no
+Trotter error). Check that $k = 2$ is uniformly closer to $k = 3$ than $k = 1$;
+if deviations occur, comment on possible reasons such as finite $r$,
+accumulation, or sampling error.
+\subsubsection*{T3 — Comparison with exact evolution (only $|overlap|$ columns)}
+
+\paragraph*{r = 10}
+\begin{tabular}{|c|c|c|c|}
+\toprule
+t & Abs\_U2 (k=1) & Abs\_U4 (k=2) & Abs\_U6 (k=3) \\
+\midrule
+5 & 0.999955 & 0.999999 & 1.000000 \\
+10 & 0.997041 & 0.999986 & 0.999999 \\
+15 & 0.971147 & 0.999945 & 0.999998 \\
+\bottomrule
+\end{tabular}
+
+\paragraph*{r = 20}
+\begin{tabular}{|c|c|c|c|}
+\toprule
+t & Abs\_U2 (k=1) & Abs\_U4 (k=2) & Abs\_U6 (k=3) \\
+\midrule
+5 & 0.998122 & 0.999956 & 0.999998 \\
+10 & 0.873844 & 0.999328 & 0.999965 \\
+15 & 0.648382 & 0.996894 & 0.999910 \\
+\bottomrule
+\end{tabular}
+
+\paragraph*{r = 50}
+\begin{tabular}{|c|c|c|c|}
+\toprule
+t & Abs\_U2 (k=1) & Abs\_U4 (k=2) & Abs\_U6 (k=3) \\
+\midrule
+5 & 0.963951 & 0.999229 & 0.999968 \\
+10 & 0.480022 & 0.961096 & 0.999411 \\
+15 & 0.082915 & 0.680634 & 0.998392 \\
+\bottomrule
+\end{tabular}
+
+\subsubsection*{Interpretation (concise)}
+\begin{itemize}
+    \item Across all tested r $\in \{10, 20, 50\}$ and t $\in \{5, 10, 15\}$ the ordering by overlap magnitude is $U6 > U4 > U2$ (k=3 best, k=2 second, k=1 worst).
+    \item This matches theory: higher-order Suzuki formulas reduce Trotter error. Increasing t (or using fewer accurate slices) magnifies differences, producing larger gaps at higher t.
+\end{itemize}
+\subsection{GHZ State Preparation} Consider the state
+$$|\psi(0)\rangle = \frac{1}{\sqrt{2}} \left( |00\cdots0\rangle + |11\cdots1\rangle \right).$$
+Starting with the computational basis where all input-qubits are $|0\rangle$, design a quantum circuit to time evolve this state. Repeat the exercise in Q2.1 for this state and report your findings.
+
+To achieve this initial state from the computational basis where all input qubits are $|0\rangle$, we use the following quantum circuit:
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.4\textwidth]{ghz.png}
+    \caption{Quantum circuit to prepare the GHZ state $|\psi(0)\rangle = \frac{1}{\sqrt{2}} \left( |00\cdots0\rangle + |11\cdots1\rangle \right)$.}
+    \label{fig:ghz_circuit}
+\end{figure}
+
+Similar results and interpretations regarding the overlap estimates for different Suzuki-Trotter orders and time steps were obtained for this initial GHZ state. The detailed analysis can be found in the attached Jupyter notebook.
+
+
+\section{Question 3: Quantum Phase Estimation (QPE) and Eigenvalue Problems}\label{sec:q3}
+In this exercise you will apply the Quantum Phase Estimation (QPE) algorithm to
+a small unitary operator defined by a short circuit. The QPE procedure was
+discussed in lecture.
+Consider a three-qubit system (qubits labelled top to bottom as $q_2, q_1, q_0$). Define the unitary $U$ by the following circuit:
+\begin{figure}[h!]
+    \centering
+         \includegraphics[width=0.4\textwidth]{qpe.png}
+    % FIX: Image file not found. Uncomment and update the filename below if you have the correct image.
+    % \includegraphics[width=0.8\textwidth]{your_existing_image.png}
+    \caption{Quantum circuit for the unitary $U$ used in Quantum Phase Estimation.}
+    \label{fig:unitary_circuit}
+\end{figure}
+
+
+\subsection{T1: Eigenstate and Eigenvalue Determination}
+Determine at least one eigenstate $|\phi\rangle$ of $U$ and its corresponding eigenvalue $e^{2\pi i\varphi}$, with $\varphi \in [0, 1)$. Show your reasoning.
+
+\paragraph*{} The
+single‑qubit rotation $R_z(\theta)$ has eigenvalues $e^{-i\theta/2}$ and
+$e^{+i\theta/2}$. When this gate is embedded in a larger circuit as \(U = V\,
+\bigl(R_z(\theta)\otimes I_{2^{n-1}}\bigr)\,V^{\dagger}\), the same two numbers
+appear in the spectrum of $U$ (spectrum is invariant under unitary similarity).
+However, whether an eigenvalue is degenerate (has multiplicity $>1$) depends on
+how the conjugation unitary $V$ distributes the single‑qubit action over the
+global Hilbert space.
+
+Because only
+that single mapped basis vector acquires the $e^{-i\theta/2}$ phase in this
+construction, the eigenvalue $e^{-i\theta/2}$ of Rz can reflect in the full circuit
+(multiplicity 1). The complementary phase $e^{+i\theta/2}$ then appears on the
+orthogonal subspace and typically carries the same multiplicity. 
+\\
+In short:
+the Rz eigenvalues do appear in the full circuit, but the entangling pattern and the presence of someother rotation gates can
+affect the  eigenvalues of the whole circuit and its multiplicity.In our case ,
+the $R_z(\pi/4)$ gate is the only rotation operation, So its eigenvalues could be in the spectrum of the total unitary operation.
+
+\paragraph*{Numerical verification of eigenpairs} To verify the analytic
+eigenvalues and eigenvectors of the circuit unitary \(U\) we constructed the
+full \(8\times 8\) matrix for the three‑qubit circuit and used NumPy's linear
+algebra routines. In particular we used \texttt{numpy.linalg.eig} to extract the
+eigenvalues and (right) eigenvectors. The results confirmed the analytic
+predictions: the eigenvalues \(e^{-i\pi/8}\) and \(e^{+i\pi/8}\) were
+present with multiplicity 1 each.
+
+
+\subsection{T2: QPE implementation and results}
+
+Using the state $|\phi\rangle$ found in part (1) as the system register, implement the full Quantum Phase Estimation (QPE) algorithm with ancilla (phase) register sizes
+\[
+t \in \{2,\,4,\,6,\,8\}.
+\]
+For each choice of $t$ run the complete QPE procedure and record the measured ancilla bit-strings. Convert each measured bit-string to a decimal fraction (binary fraction interpretation) and compare the result with the exact phase $\varphi$ obtained in part (1). 
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=0.8\textwidth]{qpe4.png} % change extension/path if needed
+  \caption{Circuit for the QPE implementation (example for $t=4$).}
+  \label{fig:qpe4}
+\end{figure}
+
+\subsubsection*{QPE results for exact phase \(\varphi = 0.0625\) (=\;1/16) corresponding to the eigenvalue $e^{i\pi/8}$}
+
+Using the prepared eigenstate \(|\phi\rangle\) whose exact phase is \(\varphi = 1/16 = 0.0625\), we ran the full QPE routine for ancilla sizes \(t \in \{2,4,6,8\}\). The most frequent measured ancilla bitstring, the decoded binary fraction \(\hat\varphi\), and the absolute error \(|\hat\varphi-\varphi|\) are shown below (fill the top-bitstring and error values from the notebook).
+
+\begin{center}
+\begin{tabular}{c l c c}
+\toprule
+$t$ & Most frequent bitstring  & $\hat\varphi$ (binary fraction → decimal) & error \\
+\midrule
+2 &      00 & $0.\texttt{00}_2 = \texttt{0.00}$ & \texttt{0.0625} \\
+4 & 0001 & $0.\texttt{0001}_2 = \texttt{0.0625}$ & \texttt{0} \\
+6 & 000100& $0.\texttt{000100}_2 = \texttt{0.0625} $ & 0 \\
+8 & 00010000& $0.\texttt{00010000}_2 = \texttt{0.0625} $ & 0\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Note:
+\begin{itemize}
+  \item Because $\varphi = 1/16$ is exactly representable on a $t$-bit grid when $t\ge 4$ (it equals the binary fraction $0.0001_2$ for $t\ge4$), we expect the QPE output to concentrate on the exact bitstring for $t\ge 4$ in an ideal simulator (top probability $\approx$ 1 and error $\approx 0$).
+\end{itemize}
+\subsection*{Lets check the results for someother eigenvalue:} 
+Eigenvalue chosen : (0.537822841 + 0.843057873j)\\
+Corresponding exact phi value : 0.15962346375
+\begin{center} \begin{tabular}{c l c c} \toprule $t$ & Most frequent bitstring &
+$\hat\varphi$ (binary fraction → decimal) & error \\ \midrule 2 & 01 & $0.
+\text{\texttt{01}}_2 = 0.25$ & $0.090377$ \\ 4 & 0011 & $0.
+\text{\texttt{0011}}_2 = 0.1875$ & $0.027877$ \\ 6 & 001010 & $0.
+\text{\texttt{001010}}_2 = 0.15625$ & $0.003373$ \\ 8 & 00101001 & $0.
+\text{\texttt{00101001}}_2 = 0.16015625$ & $0.000533$ \\
+10 & \texttt{0010100011} & $0.\texttt{0010100011}_2 = 0.1591796875$ & $0.000444$
+\\ \bottomrule
+\bottomrule
+\end{tabular} \end{center}
+\paragraph*{Accuracy vs.\ number of ancilla qubits}
+Quantum Phase Estimation (QPE) has an intrinsic grid resolution of size $1/2^t$ when $t$ ancilla (phase) qubits are used: the algorithm returns the nearest $t$‑bit fraction $k/2^t$ (with $k=\mathrm{round}(\varphi 2^t)$) and the measured estimate is $\hat\varphi=k/2^t$. \\
+ The data in the table for $\varphi\approx 0.1596234$ illustrates this: the absolute error falls from $\approx 9.0377\times10^{-2}$ at $t=2$, to $\approx 2.7877\times10^{-2}$ at $t=4$, then to $\approx 3.373\times10^{-3}$ ($t=6$), $\approx 5.33\times10^{-4}$ ($t=8$) and $\approx 4.44\times10^{-4}$ ($t=10$). This rapid decrease follows the $2^{-t}$ scaling of the searchable grid and shows that increasing ancilla bits improves phase resolution and accuracy dramatically. 
+
+\subsection{T3: Distribution of estimates and convergence}
+For each $t$, discuss the accuracy and spread of your estimates. How does the distribution concentrate as $t$ increases? Present your results as a table or histogram, and include a short paragraph interpreting the convergence of the estimates.
+\\
+\\
+\textbf{Case1: Eigenvalue = $e^{i\pi/8}$, exact phase $\varphi = 0.0625$}
+
+Lets look at the probability distribution for different number of ancilla qubits:
+\begin{figure}[h!]
+  \centering
+  % --- two images side-by-side ---
+  \begin{minipage}[b]{0.48\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{qpe625_2.png} % change extension/path if needed
+    \\[0.4em]
+    {\small (a) $t=2$}
+  \end{minipage}\hfill
+  \begin{minipage}[b]{0.48\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{qpe625_4.png}
+    \\[0.4em]
+    {\small (b) $t=4$}
+  \end{minipage}
+
+  % --- third image directly below ---
+  \vspace{0.8em}
+  \begin{minipage}[b]{0.96\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{qpe625_61.png}
+    \\[0.4em]
+    {\small (c) $t=6$}
+  \end{minipage}
+
+  \caption{Measured ancilla distributions from QPE for the case $\varphi = 0.0625$}
+  \label{fig:qpe-three}
+\end{figure}
+
+This behaviour is
+expected: QPE returns the nearest $t$‑bit fraction $k/2^t$, and when $\varphi$
+is exactly representable on the $t$‑bit grid the measured distribution
+concentrates with negligible spread in an ideal simulator.
+For the exact phase $\varphi=0.0625$ the histogram collapses onto the bitstring corresponding to $0.0001_2$ once $t\ge4$ (top outcome probability $\approx1$ and entropy $\approx0$), so additional ancilla qubits only refine the same peak rather than reveal new modes. This behaviour is expected: QPE returns the nearest $t$‑bit fraction $k/2^t$, and when $\varphi$ is exactly representable on the $t$‑bit grid the measured distribution concentrates with negligible spread in an ideal simulator.
+\\
+\newpage
+\textbf{Case2: Eigenvalue = (0.537822+0.8430578j)} 
+  
+exact phase   $\varphi = 0.15962346375$
+\begin{figure}[h!]
+  \centering
+  % two images side-by-side (t=2 and t=4)
+  \begin{minipage}[b]{0.48\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{qpe15_22.png}
+    \\[0.4em]
+    {\small (a) $t=2$}
+  \end{minipage}\hfill
+  \begin{minipage}[b]{0.48\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{qpe15_4.png}
+    \\[0.4em]
+    {\small (b) $t=4$}
+  \end{minipage}
+
+  % third image below (t=8)
+  \vspace{0.8em}
+  \begin{minipage}[b]{0.8\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{qpe15_8.png}
+    \\[0.4em]
+    {\small (c) $t=8$}
+  \end{minipage}
+
+  \caption{Measured ancilla distributions from QPE for the case $\varphi\!\approx\!0.1596234$. (a,b) side‑by‑side for $t=2,4$; (c) below for $t=8$.}
+  \label{fig:qpe15}
+\end{figure}
+
+\paragraph*{Comment on concentration and accuracy}
+For the non‑exact phase $\varphi\approx0.1596234$ the histograms show the expected quantisation behaviour: with small ancilla registers ($t=2,4$) the algorithm returns the nearest coarse grid points and the measured distribution is spread over a few nearby fractions, while for larger $t$ the distribution concentrates strongly on the nearest $t$‑bit grid point (compare the $t=8$ plot). Numerically the nearest grid error falls rapidly with $t$ (e.g. errors $\approx 9.04\mathrm{e}{-2}$ at $t=2$, $2.79\mathrm{e}{-2}$ at $t=4$, $3.37\mathrm{e}{-3}$ at $t=6$, $\approx 5.33\mathrm{e}{-4}$ at $t=8$), illustrating the $O(2^{-t})$ improvement in phase resolution. Residual broadening in real experiments would be caused by imperfect state preparation, finite sampling and device noise; in an ideal simulator the peak becomes dominant as $t$ increases.
+\subsection{T4: Role of the initial eigenstate}
+
+Reflect briefly on the role of the initial eigenstate: what happens if you
+mistakenly supply a superposition that is not an eigenstate of (U)? Give a
+suitable example.
+
+
+\newpage
+\subsection*{Special case: initial superposition of eigenvectors}
+
+Suppose the system register is prepared in an arbitrary superposition of the
+eigenstates $\{|\lambda_i\rangle\}$ of $U$, \[ |\psi_{\rm in}\rangle = \sum_{i}
+\alpha_i\,|\lambda_i\rangle, \qquad \sum_i |\alpha_i|^2 = 1, \] and we run the
+$t$‑qubit QPE procedure (we write $m=t$ when referring to the number of phase
+bits). After the controlled‑$U^{2^k}$ ladder and the inverse QFT on the ancilla,
+the joint ancilla+system state (up to the usual QFT ordering conventions) can be
+written in the form \[ \sum_{j=0}^{2^{m}-1}\;\sum_{i}\;
+\alpha_i\left(\frac{1}{2^{m}}\sum_{k=0}^{2^{m}-1} e^{2\pi i k(\lambda_i -
+j/2^{m})}\right)\,|j\rangle_{\rm anc}\otimes|\lambda_i\rangle_{\rm sys}. \]
+Measuring the ancilla in the computational basis yields outcome $j$ with
+probability \[ p_j \;=\; \sum_i |\alpha_i|^2 \;p'_{j|i}, \qquad p'_{j|i} \;=\;
+\left|\frac{1}{2^{m}}\sum_{k=0}^{2^{m}-1} e^{2\pi i k(\lambda_i -
+j/2^{m})}\right|^2, \] i.e. $p_j$ is a convex combination of the conditional
+probabilities $p'_{j|i}$ weighted by the eigencomponent weights $|\alpha_i|^2$.
+
+Two useful limiting observations: \begin{itemize} \item If $\lambda_i$ is
+exactly representable on the $m$‑bit grid, so that $2^{m}\lambda_i=j_0$ is an
+integer, then the inner geometric series equals $1$ for $j=j_0$ and vanishes for
+$j\neq j_0$. Hence $p'_{j|i}=\delta_{j,j_0}$ and the outcome $j_0$ occurs with
+probability $|\alpha_i|^2$; the ancilla measurement picks out the eigenphase
+exactly and collapses the system to the corresponding eigenvector with
+probability $|\alpha_i|^2$. \item If $\lambda_i$ is not an $m$‑bit rational,
+$p'_{j|i}$ concentrates on the nearest $m$‑bit fractions and the amplitude of
+the peak improves as $m$ increases (grid spacing $1/2^m$). Thus increasing $m$
+reduces quantisation error but does not change the fact that the measurement
+probabilities are governed by the overlaps $|\alpha_i|^2$. \end{itemize}
+
+Takeaway: when the input is not an eigenstate, QPE returns one of the
+eigenphases present in the initial superposition; the probability of obtaining a
+given phase is determined both by the amplitude $|\alpha_i|^2$ of that
+eigencomponent and by how well that eigenphase is approximated on the $m$‑bit
+grid. Consequently QPE can be used not only for phase estimation but also as a
+probabilistic eigenstate preparation method (measuring the ancilla projects the
+system into the corresponding eigenstate with probability given by the spectral
+weight).
+
+
+\appendix
+
+\section{AI Assistance and Prompt Log}
+\addcontentsline{toc}{section}{Appendix 1: AI Assistance and Prompt Log}
+
+This appendix transparently records how AI assistance (GitHub Copilot Chat / large language models) was used during development of the Assignment~2 deliverables. It includes: (i) the substantive prompts provided by the author, (ii) the major code / documentation templates generated or refactored in response, and (iii) brief commentary on how each AI-generated artifact was validated or modified before inclusion.
+
+\subsection*{Scope of AI Use}
+AI assistance (limited strictly to Jupyter notebook development, not manuscript polishing) was used for:
+\begin{itemize}[leftmargin=*]
+    \item Drafting structured helper functions (Hadamard test wrapper, state preparation utilities, QFT comparison plotting cell).
+    \item Converting ad hoc exploratory code into reproducible, parameterized notebook cells.
+    \item Refactoring variable naming for consistency (lowercase forms: \texttt{num\_qubits}, \texttt{state\_vec}, \texttt{qft\_err}).
+    \item Creating safety/error handling patterns (normalization checks, phase alignment helper, error propagation logic for Hadamard test results).
+    \item Generating comparison/visualization scaffolds (magnitude/phase, noise sweep GIF, baseline reconstruction cell) to ensure cells run independently.
+\end{itemize}
+
+No AI system executed experiments autonomously: every circuit build, simulation run, and numerical comparison was re-run locally and outputs visually inspected. Statistical outputs (standard errors, entropy measures) were recomputed from raw counts.
+
+\subsection*{Key Author Prompts (Verbatim or Lightly Normalized)}
+Below are the principal prompts extracted from the working notes (``AI prompts.txt'') and the refinement chat. (Punctuation lightly normalized; code semantics unchanged.)
+
+\begin{enumerate}[leftmargin=*]
+    \item \textbf{Circuit Construction Inquiry:} ``Is there any advantage of using controlled phase over unitary gate as the mpl is not able to show box of gate on the line for target qubit?''
+    \item \textbf{Task Completion Check (Q1.1):} ``Is the question 1.1 complete as given below?'' (followed by the custom \texttt{Rotation\_gate} implementation and three-qubit erroneous QFT circuit code).
+    \item \textbf{Phase-Gate Variant Request:} ``Give phase version of my unitary gate code.''
+    \item \textbf{Transformation / Refactor Prompt:} ``Used copilot to align comments and replace qc with c in the phase version of my unitary code.'' (Implicit request for stylistic consistency.)
+    \item \textbf{End-to-End Hadamard Test Workflow Specification:} Numbered list (1--10) specifying: build and normalize padded vector; prepare state; combine with erroneous QFT; use Aer + Hadamard test to extract complex amplitudes; compute matrix product baseline; implement controlled $U'$ construction; add sampling error bars; plot real/imag error vs. $j$; produce baseline comparisons (erroneous vs. exact vs. classical vs. \texttt{QFTGate}); plot noisy vs. classical QFT magnitude/phase.
+    \item \textbf{Noise Model Clarification:} Implicit prompts in code asking for a unitarity-preserving parameterization of $U_{\text{noise}}$ with $\delta = i\sqrt{\varepsilon(2-\varepsilon)}$ for $\varepsilon\in[0,0.1]$.
+    \item \textbf{Global Phase Alignment Assistance:} Prompt context around creating an \texttt{align\_global\_phase} utility to facilitate visual comparison of amplitude phases.
+    \item \textbf{Statistical Error Propagation:} Requests to derive magnitude / phase error bars from separate real/imag Hadamard test binomial uncertainties.
+    \item \textbf{Template Consolidation:} Prompts leading to generation of a self-contained Q1.3 comparison cell that reconstructs any missing prerequisites so execution order does not matter.
+\end{enumerate}
+
+\subsection*{Representative AI-Influenced Code Templates}
+The following higher-level structural templates originated from AI suggestions, then adapted:
+
+\paragraph{State Preparation Utility (simplified extract).}
+\begin{verbatim}
+prep_circuit, state_vec, vec_padded = build_state_preparation(vec_raw, dim)
+# Ensures zero-padding, normalization, and labeled amplitude encoding gate.
+\end{verbatim}
+
+\paragraph{Hadamard Test Wrapper (conceptual form).}
+\begin{verbatim}
+results = hadamard_test_all_j(shots, qft_circuit=qft_err,
+                                                            prep_circuit=prep_circuit, state_vec=state_vec)
+# Returns per-j estimates of Re/Im with binomial standard errors.
+\end{verbatim}
+
+\paragraph{Global Phase Alignment Helper.}
+\begin{verbatim}
+def align_global_phase(a, ref):
+        for r in ref:
+                if abs(r) > 1e-12:
+                        return a * np.conj(r)/abs(r), ref * np.conj(r)/abs(r)
+        return a, ref
+\end{verbatim}
+
+\paragraph{Self-Contained Baseline Comparison Cell.}
+Rebuilds missing objects (erroneous QFT, correct QFT, classical DFT, library \texttt{QFTGate}) and produces magnitude / phase plots with propagated standard errors for Hadamard-test estimates.
+
+\paragraph{Noisy $R_3$ Injection Pattern.}
+\begin{verbatim}
+Unoise = [[1-eps, 1j*sqrt(eps*(2-eps))], [1j*sqrt(eps*(2-eps)), 1-eps]]
+# Inserted before (or after, variant) each controlled R3 location; validated unitarity.
+\end{verbatim}
+
+\subsection*{Validation and Human Oversight}
+All AI-suggested code was:
+\begin{itemize}[leftmargin=*]
+    \item Executed locally (Qiskit Aer) to confirm numerical outputs and absence of runtime warnings.
+    \item Compared against exact matrix multiplications (\texttt{Operator(circuit).data @ state\_vec}).
+    \item Inspected for phase conventions (ensuring consistent $e^{+2\pi i jk/N}$ sign with classical DFT implementation).
+    \item Adjusted for naming consistency and removal of deprecated helper aliases.
+    \item Re-run after integrating entropy computations and zero-probability filtering (QPE section).
+\end{itemize}
+
+\subsection*{Non-AI Contributions}
+The author manually:
+\begin{itemize}[leftmargin=*]
+    \item Selected the input vector, padding rule, and normalization.
+    \item Implemented and verified the erroneous QFT gate substitutions (all would-be $R_3$ replaced by $R_2$).
+    \item Chose shot counts (10k vs. 1M) to illustrate variance reduction.
+    \item Interpreted convergence trends (QPE entropy and absolute phase error decay) and wrote final discussion.
+\end{itemize}
+
+\subsection*{Limitations of AI Outputs}
+Notebook-focused AI suggestions occasionally:
+\begin{itemize}[leftmargin=*]
+    \item Proposed very large shot counts (increasing runtime) without adaptive stopping criteria.
+    \item Omitted explicit seeding for stochastic elements (noise draws), requiring manual insertion for reproducibility.
+    \item Simplified error propagation (initially ignoring covariance between real and imaginary estimates) which was later refined.
+    \item Generated redundant reconstruction code blocks; these were consolidated to a single self-contained comparison cell.
+\end{itemize}
+All such issues were manually reviewed and corrected in the final notebooks.
+
+
+\section*{Key Prompts and Concise Assistant Outputs (Question 3)}
+Below are the user prompts that were central to solving Question 3 together with short, plain‑text summaries of the assistant responses.
+
+\begin{enumerate}
+    \item \textbf{Prompt.} Create a 3‑qubit quantum circuit \(U\) with H on \(q_2\) and \(q_0\), \(R_z(\pi/4)\) on \(q_1\), then CNOT(2,1) and CNOT(1,0); draw it.\\
+                \textbf{Assistant (summary).} Builds the requested 3‑qubit \texttt{QuantumCircuit}, applies the gates in the given order and renders a diagram (via \texttt{qc.draw('mpl')}).
+
+    \item \textbf{Prompt.} Return the matrix representation of that circuit (Operator) and print the \(8\times 8\) unitary \(U\).\\
+                \textbf{Assistant (summary).} Converts the circuit to a numerical \texttt{Operator} and prints the full \(8\times8\) complex unitary for downstream analysis.
+
+    \item \textbf{Prompt.} Compute eigenvalues and eigenvectors of \(U\) using \texttt{numpy.linalg.eig} and print them.\\
+                \textbf{Assistant (summary).} Runs a numeric eigendecomposition and lists eigenvalues and eigenvectors for inspection.
+
+    \item \textbf{Prompt.} Find an eigenvector for \(\lambda=\exp(i\pi/8)\) (e.g. via SVD or \texttt{eig}) and verify \(U v \approx \lambda v\).\\
+                \textbf{Assistant (summary).} Locates the requested eigenvector (SVD fallback if needed) and numerically verifies the eigenrelation within floating point tolerance.
+
+    \item \textbf{Prompt.} Write a reusable \texttt{build\_qpe(U\_matrix,eigenstate,t)} that creates a QPE circuit with named anc/sys registers, controlled \(U^{2^k}\), inverse QFT, and ancilla measurement.\\
+                \textbf{Assistant (summary).} Provides a function that constructs the full QPE circuit with explicit \texttt{QuantumRegister} and \texttt{ClassicalRegister} layout, controlled powers of \(U\), and the inverse QFT.
+
+    \item \textbf{Prompt.} Provide a \texttt{decode\_counts(counts,t)} function to convert measured bitstrings to decimal/phase and sort by frequency.\\
+                \textbf{Assistant (summary).} Supplies a helper that maps measured bitstrings to decimal indices and phase values \(k/2^t\), returning a frequency‑sorted list of (bitstring, phase, count).
+
+    \item \textbf{Prompt.} Run QPE for \(t\in\{2,4,6,8\}\) using the extracted eigenstate, execute on Aer \texttt{qasm\_simulator}, show circuits and print top decoded outcomes.\\
+                \textbf{Assistant (summary).} Builds and runs the QPE circuits for each \(t\), displays the circuit diagrams and prints the most frequent measured bitstrings with decoded phases and empirical probabilities.
+
+    \item \textbf{Prompt.} Plot histograms for each \(t\) on a fixed ascending‑binary x‑axis (or only observed outcomes) and compute metrics: \texttt{top\_prob}, \texttt{mean\_phase}, \texttt{abs\_error}, \texttt{entropy}.\\
+                \textbf{Assistant (summary).} Produces fixed‑order histograms and computes the requested summary metrics for each \(t\) so distributions are comparable across different ancilla sizes.
+
+ 
+    \item \textbf{Prompt.} Fix qubit mapping: rewrite \texttt{build\_qpe} to use explicit \texttt{QuantumRegister} \texttt{anc/sys} and \texttt{ClassicalRegister} \texttt{c\_phase} and note why this stabilizes diagram indices.\\
+                \textbf{Assistant (summary).} Returns an updated \texttt{build\_qpe} that uses named registers so diagrams and measured bit ordering remain consistent as \(t\) changes.
+
+    
+    \item \textbf{Prompt.} Collect per‑\(t\) summaries into a pandas \texttt{DataFrame} (top bitstring, top phase decimal, top prob, mean phase, abs\_error\_mean, entropy\_bits, distinct\_outcomes) and save as CSV.\\
+                \textbf{Assistant (summary).} Builds and displays a \texttt{DataFrame} with the requested metrics and writes it to \texttt{qpe\_summary.csv} for reproducibility and further analysis.
+\end{enumerate}
+
+\section*{Key Prompts and Concise Assistant Outputs (Question 2)}
+\begin{enumerate}
+    \item \textbf{Prompt.} Implement a Suzuki--Trotter step for the TFIM: CZ/ZZ gates and X‑rotations for \(N\) qubits and time \(\delta t\); return a \texttt{QuantumCircuit}.\\
+                \textbf{Assistant (summary).} Provides \texttt{suzuki\_trotter\_step(qc,N,J,h,delta\_t)} that appends ascending ZZ half‑step, full X rotations, and descending ZZ half‑step to the circuit.
+
+    \item \textbf{Prompt.} Build S2 (order‑2) Trotter circuit S2(t,r) that repeats the step \(r\) times for total time \(t\).\\
+                \textbf{Assistant (summary).} Supplies \texttt{build\_suzuki\_trotter\_circuit(N,J,h,t,r)} which computes \(\delta t=t/r\), repeats the step \(r\) times and returns the system circuit.
+
+    \item \textbf{Prompt.} Construct higher‑order formulas U4 and U6 from S2 via recursive composition (using coefficients \(s, \bar{s}\)).\\
+                \textbf{Assistant (summary).} Gives \texttt{build\_U4} and \texttt{build\_U6} that compose S2/S4 segments with scaled times (e.g. \(s t,(1-4s)t\)) and return full QuantumCircuits.
+
+    \item \textbf{Prompt.} Put all experiment parameters (N, J, h, r, t\_list, shots) in a single top cell.\\
+                \textbf{Assistant (summary).} Recommends a parameter cell listing those variables and notes to re‑run dependent cells after changes.
+
+    \item \textbf{Prompt.} Prepare initial states: \(|0\ldots0\rangle\) and GHZ prep circuit \texttt{qc3}; get Statevector after \texttt{qc3}.\\
+                \textbf{Assistant (summary).} Supplies \texttt{qc3} construction (H then chain CNOTs) and \texttt{sv\_prep = Statevector.from\_label('0'\*N).evolve(qc3)}.
+
+    \item \textbf{Prompt.} Evolve the initial state with U2, U4, U6 and produce final Statevectors and probability dictionaries.\\
+                \textbf{Assistant (summary).} Shows using \texttt{Statevector.evolve(build\_Uk(...))} to obtain final statevectors and \texttt{sv.probabilities\_dict()} for histograms/fidelities.
+
+    \item \textbf{Prompt.} Write a Hadamard‑test wrapper that prepends an arbitrary prep circuit (\texttt{qc3}) so overlaps \(\langle\psi_k(t)|\psi_6(t)\rangle\) are estimated from the prepared state.\\
+                \textbf{Assistant (summary).} Returns \texttt{hadamard\_test(qc\_prep,Uk,U6,N,measure,shots)} which prepends \texttt{qc\_prep}, applies controlled \(U_6 U_k^\dagger\), and measures ancilla for Re/Im estimates.
+
+    \item \textbf{Prompt.} Run overlap experiments: loop over \(\{t\_list\}\) and \(r\) values, run Hadamard tests for \(k=1,2\) vs \(k=3\), collect Re, Im, errors, compute Norm and Norm\_err.\\
+                \textbf{Assistant (summary).} Provides a loop that builds Uk/U6 per (t,r), runs Hadamard tests (X and Y), computes \(\mathrm{Norm}=\sqrt{\mathrm{Re}^2+\mathrm{Im}^2}\) and propagated error, and stores results in a pandas DataFrame.
+
+    \item \textbf{Prompt.} Compute exact evolution via full Hamiltonian \(\exp(-iHt)\) for validation and produce overlaps of trotterized states with exact states (from \(|0\ldots0\rangle\) and from GHZ).\\
+                \textbf{Assistant (summary).} Supplies \texttt{get\_TFIM\_Hamiltonian(N,J,h)} and \texttt{exact\_statevector(N,J,h,t)} (using \texttt{expm}), then compares overlaps via \texttt{psi\_trotter.inner(psi\_exact)}.
+
+    \item \textbf{Prompt.} Produce readable result tables grouped by \(r\) (e.g. \(r\in\{10,20,50\}\)) and \(t\), showing Re, Re\_err, Im, Im\_err, Norm, Norm\_err.\\
+                \textbf{Assistant (summary).} Gives code to pivot/sort the results DataFrame and print/display separate tables per \(r\) for inclusion in the report.
+
+    \item \textbf{Prompt.} Plot measured / simulated histograms of final computational basis probabilities (filtering tiny probabilities) with fixed ascending binary x‑axis or observed‑only x‑axis.\\
+                \textbf{Assistant (summary).} Provides a plotting helper that computes \texttt{probs = sv.probabilities\_dict()}, filters by threshold or keeps top‑k, and uses \texttt{plot\_histogram}/matplotlib for compact figures.
+
+    
+    \item \textbf{Prompt.} Save experimental outputs: DataFrame CSV, figures (PNG), and a short JSON summary for reproducibility.\\
+                \textbf{Assistant (summary).} Supplies \texttt{df.to\_csv(...)} calls, \texttt{plt.savefig(...)} for figures, and \texttt{json.dump(summary\_dict,...)}.
+
+ 
+    \item \textbf{Prompt.} Provide unit tests / small‑\(N\) sanity checks (N=2, small \(r\), short \(t\)) that verify \texttt{build\_U2/U4/U6} reduce to identical results in trivial limits and that composition preserves unitarity.\\
+                \textbf{Assistant (summary).} Returns pytest‑style checks: unitarity (\(U^\dagger U\approx I\)), trotter limit vs \(\exp(-iHt)\) for small N via \texttt{expm}, and that U4 error < U2 error for tested cases.
+
+ \end{enumerate}
+
+
+
+\end{document}

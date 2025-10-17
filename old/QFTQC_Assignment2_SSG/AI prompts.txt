@@ -1,0 +1,63 @@
+AI prompts 
+
+* Wrote the code myself in the given prompt
+
+is there any advantage of using controlled phase over unitary gate as the mpl is not able to show box of gate on the line for target qubit. 
+Is the question 1.1 complete as given below? 
+# Question 1.1 
+from qiskit import QuantumCircuit 
+from qiskit.circuit.library import UnitaryGate 
+import numpy as np 
+# Function to create a custom rotation gate R_k 
+def Rotation_gate(k): 
+    # Define the matrix for the custom gate 
+    phase = np.exp(1j * np.pi / (2 ** (k - 1))) 
+    matrix = np.diag([1, phase]) 
+    # Create the custom gate with the label R_k 
+    custom_gate = UnitaryGate(matrix, label=f'$R_{k}$') 
+    return custom_gate.control() 
+
+R = Rotation_gate 
+
+# Create a quantum circuit with 3 qubits 
+qc = QuantumCircuit(3, 3) 
+
+# Step 1: Apply Respective gates to 1st qubit 
+qc.h(0) # Hadamard gate on qubit 0 
+qc.append(R(2), [1, 0]) # R_2 C-P gate with pi/2 on qubits 0 and 1 
+qc.append(R(2), [2, 0]) # R_2 C-P gate with pi/2 on qubits 0 and 2 (as R_3 is replaced by R_2 as given in the question) 
+
+# Step 2: Apply Respective gates to 2nd and 3rd qubit 
+qc.h(1) # Hadamard gate on qubit 1 
+qc.append(R(2), [2, 1]) # R_2 C-P gate with pi/2 on qubits 1 and 2 
+qc.h(2) # Hadamard gate on qubit 2 
+
+# Step 3: Swap the qubits to reverse their order 
+qc.swap(0, 2)
+
+*Give phase version of my unitary gate code. 
+*Used copilot to align comments and replace qc with c in the phase version of my unitary code.
+
+# Question 1.1
+Prepare the (padded) input state $|v'\rangle$ by amplitude encoding (normalize appropriately). Using the Hadamard test with a single ancilla, estimate the complex output amplitudes
+
+$$a_j^{(\mathrm{err})} = \langle j | \widehat{\mathrm{QFT}}_N | v' \rangle \qquad (j = 0, \dots, 7).$$
+
+Report the estimated $\mathrm{Re}\,a_j^{(\mathrm{err})}$ and $\mathrm{Im}\,a_j^{(\mathrm{err})}$ with error bars from the Hadamard-test sampling.
+
+Do the following processes
+1. Buile and normalize the padded vector
+2. prepare the padded vector in 3 qubit state i.e intialize 
+3. combine the circuit of 3 qubit state with the QFT_error circuit which has gate configuration to be applied.
+4. use qiskit aer to perform to use hadamard test to extract the full complex amplitude 
+5. Do the above process with performing matrix multiplication of erroraneous QFT on the padded vector which is the ideal result. make error bars of the above calculation done using aer with compared to ideal result 
+6. How to make controlled U' for hadamard test if circuit of psi, erroraneous QFT is known.
+7.add code for error bars for estimation of probability because of sampling
+8.Plot real and imaginary part error vs j
+9.Baselines and comparisons:
+• Compute the classical DFT ˆv′ using NumPy/FFT with 1/√N normalization.
+• Compute the correct QFT output amplitudes a(true)
+j = ⟨j| QFT8 |v′⟩.
+Produce a figure with magnitudes and phases vs. j for: Hadamard-test (erroneous), correct
+QFT, and classical FFT. Use QFTGate from Qiskit also for reference.
+10. plot both the classical and noisy QFT on the same graph of magnitude and phase vs j

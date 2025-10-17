@@ -1,0 +1,176 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath, amssymb, amsfonts}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{siunitx}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{float}
+\usepackage{xcolor}
+\usepackage{caption}
+\usepackage{subcaption}
+
+\sisetup{round-mode=places, round-precision=4}
+
+\title{Team Assignment~2\\Quantum Field Theory on a Quantum Computer}
+\author{Shaukat Aziz\\Team Guru}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+This report documents our solutions to the tasks in Team Assignment~\#2 for the course \emph{Quantum Field Theory on a Quantum Computer}. Question~\ref{sec:q1} studies an intentionally faulty Quantum Fourier Transform (QFT) circuit and explores a noisy-$R_3$ variant, Question~\ref{sec:q2} outlines our work-in-progress plan for the transverse-field Ising model (TFIM) simulation, and Question~\ref{sec:q3} presents a detailed Quantum Phase Estimation (QPE) study of a custom three-qubit unitary. All numerical results are reproduced from the companion notebooks \texttt{Question-1.ipynb} and \texttt{qft\_qc\_2ndassign\_3rd.ipynb}, with additional context drawn from the accompanying development chat log.
+\end{abstract}
+
+\tableofcontents
+
+\section{Overview}
+The assignment brief (\texttt{Tassignment2.pdf}) specifies deliverables for three multi-part questions. We implemented the required analyses in Python using Qiskit's Aer simulator. The notebooks listed below contain the executable code and retain inline commentary and execution metadata for reproducibility:
+
+\begin{itemize}[leftmargin=*]
+    \item \texttt{qft\_on\_qc\_shaukat/Question-1.ipynb}: Erroneous QFT construction, Hadamard-test amplitude estimation, baseline comparisons, and noisy $R_3$ experiments for Question~1.
+    \item \texttt{qft\_on\_qc\_guru/qft\_qc\_2ndassign\_3rd.ipynb}: QPE eigenstate identification and multi-ancilla experiments (Question~3), including the debugging steps recorded in the chat log.
+\end{itemize}
+
+Unless otherwise noted, all experiments were executed on the Aer \texttt{qasm\_simulator} with the shot counts stated in the corresponding sections.
+
+\section{Question 1: Erroneous and Noisy QFT}\label{sec:q1}
+
+We fix $n=3$ system qubits ($N=2^n = 8$ basis states). The padded input vector is
+\begin{equation}
+	v' = (1,\; i,\; 2.5,\; 4+i,\; 5,\; 7,\; 0,\; 0),
+\end{equation}
+normalized prior to amplitude encoding.
+
+\subsection{Q1.1: Faulty gate placements}
+Replacing every controlled-$R_3$ gate (phase $e^{i\pi/4}$) in the standard three-qubit QFT by controlled-$R_2$ (phase $e^{i\pi/2}$) yields the erroneous unitary $\widehat{\mathrm{QFT}}_8$. Figure~\ref{fig:qft-err-circuit} documents the altered locations; the only incorrect rotations are those targeting the most-significant qubit.
+
+\begin{table}[H]
+    \centering
+    \caption{Hadamard-test amplitude estimates for the erroneous QFT circuit.}
+    \label{tab:hadamard}
+    \begin{tabular}{ccc}
+        \toprule
+        $j$ & $\Re\,a_j^{(\mathrm{err})}$ & $\Im\,a_j^{(\mathrm{err})}$ \\
+        \midrule
+        0 & $0.6911 \pm 0.0051$ & $0.0890 \pm 0.0070$ \\
+        1 & $0.0642 \pm 0.0071$ & $-0.1488 \pm 0.0070$ \\
+        2 & $-0.1849 \pm 0.0069$ & $0.4273 \pm 0.0064$ \\
+        3 & $0.0840 \pm 0.0070$ & $0.0119 \pm 0.0071$ \\
+        4 & $-0.1603 \pm 0.0070$ & $0.0677 \pm 0.0071$ \\
+        5 & $0.0673 \pm 0.0071$ & $-0.0182 \pm 0.0071$ \\
+        6 & $-0.1819 \pm 0.0070$ & $-0.4252 \pm 0.0064$ \\
+        7 & $-0.0802 \pm 0.0070$ & $0.0090 \pm 0.0071$ \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+These estimates align with the exact matrix-vector product reported in the notebook within statistical error.
+
+\subsection{Q1.3: Baselines and cross-checks}
+We compared four transforms acting on $\lvert v' \rangle$: the faulty circuit (Hadamard-test estimates), the exact $\mathrm{QFT}_8$, Qiskit's built-in \texttt{QFTGate}, and the classical FFT with unitary normalization. Figure~\ref{fig:q1-baselines} shows magnitude and phase. The erroneous circuit deviates substantially at $j=0$ and $j=6$, yielding a maximum magnitude discrepancy of approximately $0.40$ and a phase error above $4.16$~rad relative to the ideal circuit. The classical FFT and \texttt{QFTGate} outputs coincide with the exact QFT up to numerical precision.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{Question-1_files/Question-1_16_0.png}
+    \caption{Impact of a random noisy-$R_3$ draw on output magnitudes and phases. Classical FFT amplitudes remain the gold-standard reference.}
+    \label{fig:q1-noisy}
+\end{figure}
+
+\section{Question 2: Transverse-Field Ising Model}\label{sec:q2}
+The TFIM Hadamard-test experiments (Tasks~T1--T3) have not yet been executed. We reviewed the requirements and drafted the following implementation plan:
+
+\begin{enumerate}[leftmargin=*]
+	\item Construct even-order Suzuki--Trotter circuits $U_{2k}(t)$ (orders $2$, $4$, and $6$) using $r=50$ slices, decomposing $e^{-i Z_j Z_{j+1} \alpha}$ via two-qubit $ZZ$ rotations and $e^{-i X_j \beta}$ via single-qubit $X$-rotations.
+	\item Reuse a Hadamard-test wrapper to measure overlaps against the $k=3$ reference state at $t \in \{0.1, 0.5, 1.0\}$, reporting real/imaginary parts with sampling error bars.
+	\item Benchmark all overlaps against noiseless statevector simulations to verify that the $k=2$ approximation systematically outperforms $k=1$.
+\end{enumerate}
+
+These circuits will be added in a future revision; all other questions are complete in this submission.
+
+\section{Question 3: Quantum Phase Estimation}\label{sec:q3}
+We investigated the three-qubit unitary defined by the circuit in Figure~\ref{fig:q3-unitary} (from the notebook). Eigen-analysis and QPE experiments were executed in \texttt{qft\_qc\_2ndassign\_3rd.ipynb}.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.55\textwidth]{qft_qc_2ndassign_3rd_files/qft_qc_2ndassign_3rd_4_0.png}
+	\caption{Circuit defining the unitary $U$ used in the QPE study.}
+	\label{fig:q3-unitary}
+\end{figure}
+
+\subsection{Task T1: Eigenstate identification}
+Solving $U \lvert \phi \rangle = e^{2\pi i \phi} \lvert \phi \rangle$ numerically yielded several eigenpairs. The eigenstate employed for QPE corresponds to the eigenvalue $e^{2\pi i \phi}$ with $\phi \approx 0.15962346375$. The normalized eight-component eigenvector used for state preparation was
+\begin{align}
+	\lvert \phi \rangle = {} & (-0.09074869+0.07724145 i,\; 0.01426988-0.22742176 i,\; 0.18045285+0.32112435 i,\; 0.59063246,\\
+	& 0.22530406-0.17872043 i,\; -0.33257214+0.17710038 i,\; 0.26743148+0.38392390 i,\; -0.07046097-0.02810309 i)^{\mathsf{T}}.
+\end{align}
+Amplitude encoding of this vector (Qiskit's \texttt{initialize}) accurately reproduces the eigenstate on the simulator.
+
+\subsection{Task T2: QPE with varying ancilla counts}
+We executed QPE for ancilla sizes $t \in \{2, 4, 6, 8\}$ in two regimes.
+
+\paragraph{Exact grid-aligned phase.} To calibrate the pipeline we first used a synthetic eigenphase $\phi = 1/16$, which is exactly representable once $t \geq 4$. Shot counts were set to $4{,}096$ and zero-probability outcomes were filtered out when plotting, eliminating the ``math domain'' errors encountered earlier in development. The results, summarized in Table~\ref{tab:qpe-synthetic}, show probability mass concentrating on the exact bitstring for $t \geq 4$, with entropy approaching zero.
+
+\begin{table}[H]
+    \centering
+    \caption{Synthetic phase $\phi=1/16$: summary statistics from \texttt{qft\_qc\_2ndassign\_3rd.ipynb}.}
+    \label{tab:qpe-synthetic}
+    \begin{tabular}{ccccccc}
+        \toprule
+        $t$ & Top bitstring & $\phi_{\text{top}}$ & Top prob. & Mean phase & $\lvert \phi_{\text{mean}} - \phi \rvert$ & Entropy (bits) \\
+        \midrule
+        2 & 00 & 0.0000 & 0.8220 & 0.0753 & 0.0128 & 0.9280 \\
+        4 & 0001 & 0.0625 & 1.0000 & 0.0625 & 0.0000 & $\approx 0$ \\
+        6 & 000100 & 0.0625 & 1.0000 & 0.0625 & 0.0000 & $\approx 0$ \\
+        8 & 00010000 & 0.0625 & 1.0000 & 0.0625 & 0.0000 & $\approx 0$ \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+\paragraph{True eigenphase $\phi \approx 0.1596$.} Using the eigenstate above and $4{,}096$ shots, QPE outputs concentrate around the binary expansion of the true phase. Table~\ref{tab:qpe-true} lists the observed statistics. The absolute error in the probability-weighted mean shrinks by two orders of magnitude between $t=2$ and $t=8$, while entropy drops from $\approx 1.35$ to $0.47$ bits. Histograms for each setting (e.g., Figure~\ref{fig:qpe-histograms}) include only non-zero outcomes, reflecting the plotting fix implemented during debugging.
+
+\begin{table}[H]
+	\centering
+	\caption{Measured QPE statistics for the genuine eigenphase $\phi \approx 0.15962346375$.}
+	\label{tab:qpe-true}
+	\begin{tabular}{ccccccc}
+					\toprule
+		$t$ & Top bitstring & $\phi_{\text{top}}$ & Top prob. & Mean phase & $\lvert \phi_{\text{mean}} - \phi \rvert$ & Entropy (bits) \\
+		\midrule
+		2 & 01 & 0.250000 & 0.6650 & 0.2379 & 0.0783 & 1.3492 \\
+		4 & 0011 & 0.187500 & 0.4875 & 0.1926 & 0.0330 & 2.0859 \\
+		6 & 001010 & 0.156250 & 0.8486 & 0.1610 & 0.0014 & 1.0638 \\
+		8 & 00101001 & 0.160156 & 0.9424 & 0.1602 & 0.0006 & 0.4741 \\
+		\bottomrule
+	\end{tabular}
+\end{table}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.85\textwidth]{qft_qc_2ndassign_3rd_files/qft_qc_2ndassign_3rd_16_15.png}
+	\caption{Representative histogram (t=8) with zero-probability outcomes removed, confirming the fixes implemented to resolve the earlier math-domain error and x-axis ordering issues discussed in the chat log.}
+	\label{fig:qpe-histograms}
+\end{figure}
+
+\subsection{Task T3: Interpretation}
+The QPE grids converge more slowly for irrational-like phases because the representable fractions are spaced at multiples of $1/2^t$. Our data exhibit the expected trend: increasing $t$ doubles phase resolution, narrows the distribution, reduces Shannon entropy, and decreases the mean absolute error. The debugging adjustments (filtering zero-probability bars, ensuring ascending binary ordering) were essential to compute entropy reliably and to reconcile plots across successive cells, as recorded in the development chat.
+
+\section{AI Use and Reproducibility Notes}
+This submission was prepared with assistance from GitHub Copilot Chat (session transcript attached separately). All figures referenced in this document are generated directly by the accompanying notebooks. Running either notebook from top to bottom regenerates every table and plot; the zero-probability filtering guarantees numerically stable entropy calculations.
+
+\section{Conclusion}
+Question~1's analyses confirm that demoting $R_3$ rotations to $R_2$ dramatically distorts Fourier amplitudes, while the noisy-$R_3$ experiment quantifies the sensitivity of the correct circuit to coherent over/under-rotations. Question~3 demonstrates a full QPE workflow, including mitigation of visualization bugs and a clear convergence study as ancilla precision increases. TFIM overlaps (Question~2) remain as planned future work.
+
+\appendix
+
+\section{File Checklist}
+\begin{itemize}[leftmargin=*]
+	\item \texttt{qft\_on\_qc\_shaukat/Question-1.ipynb}: full implementation for Question~1.
+	\item \texttt{qft\_on\_qc\_guru/qft\_qc\_2ndassign\_3rd.ipynb}: eigen-analysis, QPE experiments, and debugging patches for Question~3.
+	\item \texttt{qft\_on\_qc\_guru/assignment2.tex}: this LaTeX manuscript.
+\end{itemize}
+
+\end{document}
