@@ -1,0 +1,9 @@
+#home-page {
+  /* background: url('https://cf.geekdo-images.com/opengraph/img/UClm667x_KHFRlYDCLReJZTZuzI=/fit-in/1200x630/pic3912914.jpg'); */
+  width: 70vw;
+  height: 300px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}

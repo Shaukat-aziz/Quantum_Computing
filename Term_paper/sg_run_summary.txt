@@ -1,0 +1,16 @@
+
+Sine–Gordon ED Simulation Summary
+---------------------------------
+
+System:
+ - N = 6 sites
+ - Local truncation L = 1  -> d = 3
+ - Quench: visual outputs saved if available.
+
+Saved files (if present):
+ - sg_loschmidt.png  (Loschmidt echo)
+ - sg_packet_propagation.png  (scattering visualization)
+
+Notes:
+ - Ensure you executed the Loschmidt cell (which defines 'times_LE' and 'losch') and
+   the scattering cell (which defines 'times' or 'times_SC' and 'phi_expect') before running this cell.

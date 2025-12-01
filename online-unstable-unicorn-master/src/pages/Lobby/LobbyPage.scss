@@ -1,0 +1,67 @@
+body {
+  /* background: url('https://ksr-ugc.imgix.net/assets/022/217/568/6c2bc068394a5e58c4f1305fca6e1ca4_original.jpg?ixlib=rb-2.1.0&crop=faces&w=1552&h=873&fit=crop&v=1534190392&auto=format&frame=1&q=92&s=4e906136eb1ae0de657b0cc6c5cd21a2'); */
+  /* background-size: cover;
+  background-repeat: no-repeat; */
+}
+
+#lobby-view {
+  width: 70vw;
+  height: 300px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+
+  .label {
+    cursor: pointer;
+  }
+
+  #start-game-button {
+    position: absolute;
+    bottom: 1em;
+    left: 40%;
+    z-index: -1;
+  }
+
+  .ui.message {
+    z-index: -1;
+  }
+}
+
+#unicorn-avatars {
+  width: 70vw;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-wrap: wrap;
+  padding: 5em;
+  justify-content: space-evenly;
+  z-index: 1;
+
+  .ui.header {
+    width: 100%;
+  }
+
+  .icon {
+    cursor: pointer;
+  }
+
+  .ui.label {
+    cursor: pointer;
+  }
+
+  .unicorn-avatar {
+    min-width: 5em;
+    cursor: pointer;
+
+    &:hover {
+      border: 5px solid lightblue;
+    }
+
+    &.selected {
+      border: 5px solid pink;
+    }
+  }
+}

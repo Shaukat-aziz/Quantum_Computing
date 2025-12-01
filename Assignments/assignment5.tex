@@ -1,0 +1,188 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{physics}
+\usepackage{geometry}
+\geometry{margin=1in}
+\usepackage{hyperref}
+\begin{document}
+
+\title{Mathematical Methods -- Assignment 5 \\ \small Solutions (LaTeX)}
+\author{Prepared from Mathews \& Walker and course assignment.}
+\date{\today}
+\maketitle
+
+\section*{Problem 1}
+Evaluate
+\[
+I(\mathbf{k},\mathbf{\ell})=\int_{S^2}\frac{d\Omega(\hat r)}{(1+\mathbf{k}\cdot\hat r)(1+\mathbf{\ell}\cdot\hat r)}
+\]
+where the integration is over all unit directions $\hat r$ (solid angle $d\Omega$).
+
+\subsection*{Solution}
+We shall obtain a convenient representation and evaluate special cases. Assume $|\mathbf{k}|<1$ and $|\mathbf{\ell}|<1$ so the integrals below converge; the same analytic continuation used in Mathews \& Walker applies otherwise. :contentReference[oaicite:2]{index=2}
+
+\paragraph{Step 1: Schwinger/exponential parameter representation.} Use
+\[
+\frac{1}{A}=\int_0^\infty e^{-tA}\,dt\qquad(A>0),
+\]
+so
+\[
+\frac{1}{(1+\mathbf{k}\cdot\hat r)(1+\mathbf{\ell}\cdot\hat r)}
+=\int_0^\infty\!\!\int_0^\infty e^{-(t+s)} e^{-t\mathbf{k}\cdot\hat r - s\mathbf{\ell}\cdot\hat r}\,dt\,ds.
+\]
+Thus
+\[
+I(\mathbf{k},\mathbf{\ell})
+=\int_0^\infty\!\!\int_0^\infty e^{-(t+s)}\Bigg[\int_{S^2} e^{-(t\mathbf{k}+s\mathbf{\ell})\cdot\hat r}\,d\Omega(\hat r)\Bigg] dt\,ds.
+\]
+
+\paragraph{Step 2: angular integral of an exponential.} For any vector $\mathbf{A}$,
+\[
+\int_{S^2} e^{\mathbf{A}\cdot\hat r}\,d\Omega(\hat r)=2\pi\int_{-1}^{1} e^{|\mathbf{A}|\mu}\,d\mu
+=4\pi\frac{\sinh|\mathbf{A}|}{|\mathbf{A}|}.
+\]
+Apply this with $\mathbf{A}=-(t\mathbf{k}+s\mathbf{\ell})$ (the sign does not matter because $\sinh(-x)=-\sinh x$ but absolute value appears):
+\[
+\int_{S^2} e^{-(t\mathbf{k}+s\mathbf{\ell})\cdot\hat r}\,d\Omega = 4\pi\frac{\sinh\big(|t\mathbf{k}+s\mathbf{\ell}|\big)}{|t\mathbf{k}+s\mathbf{\ell}|}.
+\]
+
+\paragraph{Step 3: double integral representation.} Therefore
+\[
+\boxed{\,I(\mathbf{k},\mathbf{\ell}) = 4\pi\int_0^\infty\!\!\int_0^\infty e^{-(t+s)}
+\frac{\sinh\!\big(|t\mathbf{k}+s\mathbf{\ell}|\big)}{|t\mathbf{k}+s\mathbf{\ell}|}\,dt\,ds.}
+\]
+This representation is exact and suitable for further analysis or numerical evaluation.
+
+\paragraph{Step 4: special case — collinear vectors.} If $\mathbf{k}$ and $\mathbf{\ell}$ are parallel (choose a unit vector $\hat n$ with $\mathbf{k}=k\hat n,\;\mathbf{\ell}=\ell\hat n$ with scalars $k,\ell$), then $|t\mathbf{k}+s\mathbf{\ell}|=|tk+s\ell|$ and the angular integration can be reduced to a 1D integral. A more elementary route exists for this collinear case: align $\hat n$ with the polar axis and write the original integral as
+\[
+I(k,\ell)=2\pi\int_{-1}^{1}\frac{d\mu}{(1+k\mu)(1+\ell\mu)}.
+\]
+Perform the partial-fraction decomposition (valid if $k\neq\ell$):
+\[
+\frac{1}{(1+k\mu)(1+\ell\mu)}
+=\frac{1}{k-\ell}\Big(\frac{k}{1+k\mu}-\frac{\ell}{1+\ell\mu}\Big).
+\]
+Thus
+\[
+I(k,\ell)=\frac{2\pi}{k-\ell}\Big[ k\int_{-1}^{1}\frac{d\mu}{1+k\mu}-\ell\int_{-1}^{1}\frac{d\mu}{1+\ell\mu}\Big].
+\]
+Evaluate the elementary integrals
+\[
+\int_{-1}^1\frac{d\mu}{1+a\mu}=\frac{1}{a}\ln\frac{1+a}{1-a}\qquad(|a|<1).
+\]
+Hence for $k\neq\ell$:
+\[
+\boxed{\,I(k,\ell)=\frac{2\pi}{k-\ell}\Big[\ln\frac{1+k}{1-k}-\ln\frac{1+\ell}{1-\ell}\Big].}
+\]
+If $k=\ell$ take the limit $\ell\to k$ to get
+\[
+I(k,k)=2\pi\frac{d}{dk}\!\left(\frac{1}{k}\ln\frac{1+k}{1-k}\right)
+=2\pi\left(\frac{1}{1-k^2}-\frac{1}{2k^2}\ln\frac{1+k}{1-k}\right).
+\]
+
+\paragraph{Remarks:} The representation in terms of the double exponential integral is the most general closed representation; the collinear result above reduces the integral to elementary logarithms. These techniques are standard in spherical integrals and appear in Mathews \& Walker (see the sections on angular integrals and generating functions). :contentReference[oaicite:3]{index=3}
+
+\bigskip
+
+\section*{Problem 2}
+Find the Sommerfeld--Watson transformation for the following series.
+
+\begin{enumerate}
+ \item[(a)] \(\displaystyle \sum_{n=-\infty}^{\infty} (-1)^n f(n).\)
+ \item[(b)] \(\displaystyle \sum_{n=-\infty}^{\infty} f\!\Big(n+\tfrac12\Big).\)
+ \item[(c)] \(\displaystyle \sum_{n=-\infty}^{\infty} (-1)^n f\!\Big(n+\tfrac12\Big).\)
+\end{enumerate}
+
+\subsection*{Solution (standard derivation)}
+The Sommerfeld--Watson idea replaces a discrete sum by a contour integral involving a kernel with simple poles at the integers. Two kernels commonly used are
+\[
+\pi\cot(\pi z)\quad\text{(poles at }z\in\mathbb Z\text{ with residue }1),
+\qquad
+\pi\csc(\pi z)\quad\text{(poles at }z\in\mathbb Z\text{ with residue }(-1)^n\text{ signs).}
+\]
+A general result (see Mathews \& Walker, ch.\ on contour summation) is
+\[
+\sum_{n=-\infty}^{\infty} f(n) = -\frac{1}{2\pi i}\int_{C} f(z)\,\pi\cot(\pi z)\,dz,
+\]
+where \(C\) is a contour enclosing the integers and deformed according to analytic properties of \(f\). :contentReference[oaicite:4]{index=4}
+
+\paragraph{(a) Alternating sum.} Since $(-1)^n$ is obtained by sampling $\pi\csc(\pi z)$ (its residues alternate in sign), we write
+\[
+\boxed{\,\sum_{n=-\infty}^{\infty}(-1)^n f(n)
+= -\frac{1}{2\pi i}\int_{C} f(z)\,\pi\csc(\pi z)\,dz.}
+\]
+Equivalently one can use
+\(\pi\csc(\pi z)=\frac{\pi}{\sin\pi z}\) and displace the contour to pick up contributions from poles of $f$; the integral along the large arcs vanishes under suitable decay of $f$ and the sum is expressed as a sum of residues of $f(z)\pi\csc(\pi z)$.
+
+\paragraph{(b) Half-integer sampling.} For sampling at half-integers $z=n+\tfrac12$ note
+\[
+\pi\cot(\pi z)\ \text{has poles at integers, while}\ \pi\csc(\pi z)\ \text{has zeros at half-integers.}
+\]
+A kernel with simple poles at half-integers is $\pi\csc(\pi z)$ shifted by $1/2$ in the argument, i.e. $\pi\sec(\pi z)$ (since $\sec(\pi z)$ has poles at $z=n+\tfrac12$). Concretely
+\[
+\boxed{\,\sum_{n=-\infty}^{\infty} f\Big(n+\tfrac12\Big)
+= -\frac{1}{2\pi i}\int_{C} f(z)\,\pi\sec(\pi z)\,dz,}
+\]
+with the same contour rules (here $\sec\pi z=1/\cos\pi z$).
+
+\paragraph{(c) Alternating half-integers.} Combine the alternating kernel and the half-integer kernel. One convenient form is
+\[
+(-1)^n f\Big(n+\tfrac12\Big)\ \longleftrightarrow\ \pi\csc(\pi z)\sec(\pi z),
+\]
+so
+\[
+\boxed{\,\sum_{n=-\infty}^{\infty} (-1)^n f\Big(n+\tfrac12\Big)
+= -\frac{1}{2\pi i}\int_{C} f(z)\,\pi\csc(\pi z)\sec(\pi z)\,dz.}
+\]
+\paragraph{Remark:} The exact kernel choice may be rearranged (identities among trigonometric kernels exist) and in practice one shifts the contour to pick up residues of $f$ or rewrite the integral as integrals along branch cuts — this is the Sommerfeld--Watson technique used to convert poorly convergent sums into rapidly convergent integrals or sums over poles. Detailed examples and manipulations are in Mathews \& Walker. :contentReference[oaicite:5]{index=5}
+
+\bigskip
+
+\section*{Problem 3}
+Use the Sommerfeld--Watson transformation to perform the sums.
+
+\begin{enumerate}
+ \item[(a)] \(\displaystyle \sum_{j=-\infty}^{\infty}\frac{e^{i\theta j}}{(j+B)^2+C^2},\quad C>0,\;0\le\theta\le2\pi.\)
+ \item[(b)] \(\displaystyle \frac{1}{x}-2x\Big(\frac{1}{\pi^2+x^2}-\frac{1}{4\pi^2+x^2}+\frac{1}{9\pi^2+x^2}-\cdots\Big)\).
+\end{enumerate}
+
+\subsection*{Solution (outline and final results)}
+\paragraph{(a)} Consider
+\[
+S(\theta)=\sum_{j=-\infty}^{\infty}\frac{e^{i\theta j}}{(j+B)^2+C^2}.
+\]
+We treat the sum as $\displaystyle -\frac{1}{2\pi i}\oint f(z)\pi\cot(\pi z)\,dz$ with
+$f(z)=\dfrac{e^{i\theta z}}{(z+B)^2+C^2}$. Shift the contour to pick residues at the poles of $f$, which are simple poles at $z=-B\pm iC$ (both off the real axis since $C>0$). Evaluating residues yields (after straightforward residue computation and algebra; standard steps are in Mathews \& Walker)
+\[
+\boxed{\,S(\theta)=\frac{\pi}{C}e^{-i\theta(B-iC)}\frac{1}{1-e^{-2\pi i(B-iC)}}
++\frac{\pi}{C}e^{-i\theta(B+iC)}\frac{e^{2\pi i(B+iC)}}{1-e^{2\pi i(B+iC)}}.}
+\]
+This expression is equivalent to the form
+\[
+S(\theta)=\frac{\pi}{C}\frac{e^{-i\theta(B-iC)}}{1-e^{-2\pi i(B-iC)}}
++\frac{\pi}{C}\frac{e^{-i\theta(B+iC)}e^{2\pi i(B+iC)}}{1-e^{2\pi i(B+iC)}},
+\]
+which is the result quoted in the assignment (valid for $C>0$, $0\le\theta\le2\pi$). The intermediate step uses the fact that the residues of $\pi\cot(\pi z)$ at integer $z$ are $1$ and the moved contour picks up the two poles of $f$ off the real axis.
+
+\paragraph{(b)} The expression
+\[
+\frac{1}{x}-2x\Big(\frac{1}{\pi^2+x^2}-\frac{1}{4\pi^2+x^2}+\frac{1}{9\pi^2+x^2}-\cdots\Big)
+\]
+is a Fourier-type series related to sampling a meromorphic function at integer multiples of $\pi$. One standard way to sum such alternating sequences is to use the identity (for $x\not= i n\pi$)
+\[
+\pi\cot(\pi z)=\frac{1}{z}+\sum_{n\neq0}\left(\frac{1}{z-n}+\frac{1}{n}\right),
+\]
+then substitute $z=ix/\pi$ and rearrange; alternatively use partial fraction expansions of trigonometric functions (see Mathews \& Walker, exercises on trigonometric product and partial fraction expansions). The result can be brought to a closed form in terms of elementary/trigonometric functions (one finds expressions involving $\coth$ or $\tanh$ depending on arrangement). A clean final form is
+\[
+\boxed{\frac{1}{x}-2x\sum_{m=1}^{\infty}\frac{(-1)^{m-1}}{m^2\pi^2+x^2}
+=\frac{\pi}{x}\,\frac{1}{\sinh(\pi x)}.}
+\]
+(One may check by partial fraction expansion of $\pi/\sinh(\pi x)$ and comparing residues; details follow from standard contour-summation/Watson transform manipulations. See Mathews \& Walker for similar derivations.) :contentReference[oaicite:6]{index=6}
+
+\bigskip
+\section*{References}
+Mathews, P. M. \& Walker, R. L., \emph{Mathematical Methods of Physics} (relevant sections on contour summation and Sommerfeld--Watson transform). :contentReference[oaicite:7]{index=7}
+
+Assignment file (statement). :contentReference[oaicite:8]{index=8}
+
+\end{document}

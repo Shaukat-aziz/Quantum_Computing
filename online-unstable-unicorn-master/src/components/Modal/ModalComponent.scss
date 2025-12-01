@@ -1,0 +1,38 @@
+#modal-component {
+  width: 70vw;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-wrap: wrap;
+  padding: 5em;
+  justify-content: space-evenly;
+  z-index: 100;
+  overflow: auto;
+
+  .ui.header {
+    width: 100%;
+  }
+
+  .icon {
+    cursor: pointer;
+  }
+
+  .ui.label {
+    cursor: pointer;
+  }
+
+  .unicorn-avatar {
+    min-width: 5em;
+    cursor: pointer;
+
+    &:hover {
+      border: 5px solid lightblue;
+    }
+
+    &.selected {
+      border: 5px solid pink;
+    }
+  }
+}

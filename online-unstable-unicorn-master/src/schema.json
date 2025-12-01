@@ -1,0 +1,69 @@
+// Card info
+{
+  "userInfo": {
+    "userId": "uuid",
+    "username": "",
+    "avatar": "",
+    "stats": {}
+  },
+  "gameInfo": {
+    "gameid": 0,
+    "gameDuration": "",
+    "expansion": "",
+    "winCondition": "",
+    "playing": false,
+    "gameOver": false,
+    "phase": 0,
+    "phases": [
+      {
+        "name": "Pre Effects",
+        "actions": ["checkForEffects"]
+      },
+      {
+        "name": "Draw",
+        "actions": ["drawCard"]
+      },
+      {
+        "name": "Action",
+        "actions": ["playCard", "drawCard"]
+      },
+      {
+        "name": "Post Effects",
+        "actions": ["endTurn"]
+      }
+    ],
+    "cards": [],
+    "upgrades": [],
+    "downgrades": [],
+    "whosTurn": {},
+    "turn": 0
+  },
+  "setInfo": {},
+  "cardInfo": {
+    "id": 1,
+    "name": "SHOTGUN BABY UNICORN",
+    "type": "Baby Unicorn",
+    "description": "If this card would be sacrificed, destroyed, or returned to your hand, return it to the Nursery instead.",
+    "color": "Magenta",
+    "url": "https://unstableunicornsgame.s3.us-east-2.amazonaws.com/pngs/1.png",
+    "activateAtBeginning": false,
+    "upgrade": "",
+    "downgrade": "",
+    "activateAtEnd": false,
+    "activateOnPlay": false,
+    "playRequirement": false,
+    "isGlobal": false
+  },
+  "upgrades": {
+    "id": 1,
+    "name": "skipPhase",
+    "description": "Skip either your Draw phase or your Action phase.",
+    "optional": false
+  },
+  "downgrades": {
+    "id": 1,
+    "name": "skipPhase",
+    "description": "Skip either your Draw phase or your Action phase.",
+    "optional": false
+  }
+}

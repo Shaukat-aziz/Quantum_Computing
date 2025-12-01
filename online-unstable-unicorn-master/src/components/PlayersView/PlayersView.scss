@@ -1,0 +1,30 @@
+#players-view {
+  position: absolute;
+  left: 0;
+  width: 10vw;
+  margin: 2em 0;
+}
+
+#players-view .ui.segment {
+  position: absolute;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  // height: 100px;
+  width: 910px;
+  top: 100px;
+  z-index: 10;
+
+  // &:before {
+  //   content:"\A";
+  //   border-style: solid;
+  //   border-width: 80px 30px 70px 0;
+  //   border-color: transparent #1b1c1d;
+  //   position: absolute;
+  //   left: -30px;
+  // }
+
+  .ui.card {
+    margin: 0 5px;
+  }
+}

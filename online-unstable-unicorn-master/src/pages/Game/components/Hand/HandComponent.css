@@ -1,0 +1,11 @@
+.hand {
+  position: absolute;
+  bottom: 0;
+  width: 70%;
+  height: 250px;
+  left: 15%;
+}
+
+.hand .ui.cards {
+  display: flex;
+}

@@ -1,0 +1,71 @@
+\contentsline {section}{\numberline {1}Introduction}{4}{section.1}%
+\contentsline {subsection}{\numberline {1.1}Motivation and Historical Context}{4}{subsection.1.1}%
+\contentsline {subsection}{\numberline {1.2}Objectives}{4}{subsection.1.2}%
+\contentsline {subsection}{\numberline {1.3}Structure of the Paper}{4}{subsection.1.3}%
+\contentsline {section}{\numberline {2}Physics Overview: The Thirring Model}{4}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Continuum Formulation}{4}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}Bosonization and the Sine-Gordon Connection}{5}{subsection.2.2}%
+\contentsline {subsection}{\numberline {2.3}Physical Observables}{5}{subsection.2.3}%
+\contentsline {subsubsection}{\numberline {2.3.1}Mass Spectrum and Bound States}{5}{subsubsection.2.3.1}%
+\contentsline {subsubsection}{\numberline {2.3.2}Correlation Functions}{5}{subsubsection.2.3.2}%
+\contentsline {subsubsection}{\numberline {2.3.3}Current Conservation and Ward Identities}{5}{subsubsection.2.3.3}%
+\contentsline {subsection}{\numberline {2.4}Regimes of Interest}{5}{subsection.2.4}%
+\contentsline {subsubsection}{\numberline {2.4.1}Weak Coupling ($|g| \ll \pi $)}{5}{subsubsection.2.4.1}%
+\contentsline {subsubsection}{\numberline {2.4.2}Strong Coupling ($g \sim \pi $)}{6}{subsubsection.2.4.2}%
+\contentsline {subsubsection}{\numberline {2.4.3}Massless Limit ($m_0 \to 0$)}{6}{subsubsection.2.4.3}%
+\contentsline {section}{\numberline {3}Lattice Formulation and Qubit Mapping}{6}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Spatial Discretization}{6}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}Lattice Hamiltonian}{6}{subsection.3.2}%
+\contentsline {subsection}{\numberline {3.3}Jordan-Wigner Transformation}{6}{subsection.3.3}%
+\contentsline {subsection}{\numberline {3.4}Qubit Hamiltonian}{7}{subsection.3.4}%
+\contentsline {subsection}{\numberline {3.5}Computational Complexity}{7}{subsection.3.5}%
+\contentsline {section}{\numberline {4}Quantum Computing Implementation}{7}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Algorithm Overview}{7}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}Hamiltonian Construction in Qiskit}{7}{subsection.4.2}%
+\contentsline {subsection}{\numberline {4.3}VQE Implementation}{8}{subsection.4.3}%
+\contentsline {subsection}{\numberline {4.4}Time Evolution}{9}{subsection.4.4}%
+\contentsline {subsection}{\numberline {4.5}Correlation Function Measurement}{9}{subsection.4.5}%
+\contentsline {subsection}{\numberline {4.6}Noise Models}{9}{subsection.4.6}%
+\contentsline {section}{\numberline {5}Mathematica Benchmark}{9}{section.5}%
+\contentsline {subsection}{\numberline {5.1}Exact Diagonalization}{9}{subsection.5.1}%
+\contentsline {subsection}{\numberline {5.2}Bosonization Results}{10}{subsection.5.2}%
+\contentsline {subsection}{\numberline {5.3}Correlation Functions}{10}{subsection.5.3}%
+\contentsline {section}{\numberline {6}Results and Analysis}{10}{section.6}%
+\contentsline {subsection}{\numberline {6.1}Ground State Energy}{10}{subsection.6.1}%
+\contentsline {subsection}{\numberline {6.2}Mass Renormalization}{10}{subsection.6.2}%
+\contentsline {subsection}{\numberline {6.3}Time Evolution and Dynamics}{11}{subsection.6.3}%
+\contentsline {subsection}{\numberline {6.4}Correlation Functions}{11}{subsection.6.4}%
+\contentsline {subsection}{\numberline {6.5}Thirring-Sine-Gordon Duality Verification}{11}{subsection.6.5}%
+\contentsline {section}{\numberline {7}Noise Analysis}{11}{section.7}%
+\contentsline {subsection}{\numberline {7.1}Error Mitigation Strategies}{11}{subsection.7.1}%
+\contentsline {subsection}{\numberline {7.2}Noise Impact on Observables}{11}{subsection.7.2}%
+\contentsline {subsection}{\numberline {7.3}Scalability Assessment}{11}{subsection.7.3}%
+\contentsline {section}{\numberline {8}Discussion and Outlook}{11}{section.8}%
+\contentsline {subsection}{\numberline {8.1}Summary of Achievements}{11}{subsection.8.1}%
+\contentsline {subsection}{\numberline {8.2}Limitations}{12}{subsection.8.2}%
+\contentsline {subsection}{\numberline {8.3}Future Directions}{12}{subsection.8.3}%
+\contentsline {subsection}{\numberline {8.4}Broader Impact}{12}{subsection.8.4}%
+\contentsline {section}{\numberline {9}Sine--Gordon calculations and results}{12}{section.9}%
+\contentsline {subsection}{\numberline {9.1}Introduction}{12}{subsection.9.1}%
+\contentsline {subsection}{\numberline {9.2}Continuum model and lattice discretization}{12}{subsection.9.2}%
+\contentsline {subsection}{\numberline {9.3}Local Hilbert-space truncation (harmonic oscillator basis)}{13}{subsection.9.3}%
+\contentsline {subsection}{\numberline {9.4}Numerical methods}{13}{subsection.9.4}%
+\contentsline {subsection}{\numberline {9.5}Results}{13}{subsection.9.5}%
+\contentsline {subsubsection}{\numberline {9.5.1}Low-energy spectrum and ED diagnostics}{14}{subsubsection.9.5.1}%
+\contentsline {subsubsection}{\numberline {9.5.2}Vertex correlator and two-point function}{14}{subsubsection.9.5.2}%
+\contentsline {subsubsection}{\numberline {9.5.3}Local condensate}{14}{subsubsection.9.5.3}%
+\contentsline {subsubsection}{\numberline {9.5.4}Entanglement entropy}{14}{subsubsection.9.5.4}%
+\contentsline {subsubsection}{\numberline {9.5.5}Loschmidt echo and DQPT detector}{14}{subsubsection.9.5.5}%
+\contentsline {subsubsection}{\numberline {9.5.6}Kink (soliton) sector and mass}{15}{subsubsection.9.5.6}%
+\contentsline {subsubsection}{\numberline {9.5.7}Scattering demonstrator (single run)}{15}{subsubsection.9.5.7}%
+\contentsline {subsection}{\numberline {9.6}Coleman mapping and comparison to Thirring data}{15}{subsection.9.6}%
+\contentsline {subsection}{\numberline {9.7}Discussion and systematic errors}{15}{subsection.9.7}%
+\contentsline {subsection}{\numberline {9.8}Conclusions}{16}{subsection.9.8}%
+\contentsline {subsection}{\numberline {9.9}References}{16}{subsection.9.9}%
+\contentsline {section}{\numberline {10}Conclusion}{16}{section.10}%
+\contentsline {section}{\numberline {A}Additional Code Listings}{17}{appendix.A}%
+\contentsline {subsection}{\numberline {A.1}Complete VQE Implementation}{17}{subsection.A.1}%
+\contentsline {subsection}{\numberline {A.2}Mathematica Exact Diagonalization}{18}{subsection.A.2}%
+\contentsline {section}{\numberline {B}Derivations}{18}{appendix.B}%
+\contentsline {subsection}{\numberline {B.1}Jordan-Wigner Transformation Proof}{18}{subsection.B.1}%
+\contentsline {subsection}{\numberline {B.2}Bosonization Dictionary}{18}{subsection.B.2}%

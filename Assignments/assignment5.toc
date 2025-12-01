@@ -1,0 +1,9 @@
+\contentsline {section}{\numberline {1}Problem 1: Angular Integration on the Sphere}{2}{section.1}%
+\contentsline {section}{\numberline {2}Problem 2: Sommerfeld--Watson Transformations}{2}{section.2}%
+\contentsline {section}{\numberline {3}Problem 3: Applying the Transformation}{3}{section.3}%
+\contentsline {subsection}{\numberline {3.1}(a) Evaluate the series}{3}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}(b) Alternating series form}{3}{subsection.3.2}%
+\contentsline {section}{\numberline {4}Problem 4: Mathews and Walker Problems}{4}{section.4}%
+\contentsline {section}{\numberline {5}Problem 5: Arfken 7.2.18 and 7.2.19}{4}{section.5}%
+\contentsline {section}{\numberline {6}Problem 6: Saddle-Point Approximation}{5}{section.6}%
+\contentsline {section}{\numberline {7}Problem 7: Riemann Zeta Function}{5}{section.7}%

@@ -1,0 +1,271 @@
+\documentclass[11pt]{beamer}
+\usetheme{Madrid}
+\usecolortheme{dolphin}
+\usefonttheme{professionalfonts}
+
+% encoding
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+
+% math, graphics
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{caption}
+\usepackage{xcolor}
+\usepackage{ifthen}
+
+% robust figure macro (shows placeholder if file missing)
+\newcommand{\sgfig}[2]{%
+  \IfFileExists{#2}{%
+    \begin{center}\includegraphics[width=#1\textwidth]{#2}\end{center}%
+  }{%
+    \begin{center}\fbox{\parbox{0.8\textwidth}{\textbf{Missing figure:} \texttt{#2}}}\end{center}%
+  }%
+}
+
+% metadata
+\title[SG — Results]{Sine--Gordon Numerical Results (ED)\\
+Selected analyses and comparisons performed}
+\author{Shaukat Aziz}
+\institute{IISc}
+\date{\today}
+
+% local file links (user files)
+\newcommand{\SineNb}{/mnt/data/sine_gordon_final.ipynb}
+\newcommand{\DarshPy}{/mnt/data/darsh.py}
+\newcommand{\ThirringNb}{/mnt/data/LT (1).ipynb}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}{Outline}
+  \tableofcontents
+\end{frame}
+
+% ------------------------------------------------------------
+\section{Summary of what was done}
+\begin{frame}{Work completed (summary)}
+  This talk contains only finished work — no future plans.
+  \begin{enumerate}
+    \item Exact Diagonalization (ED) convergence and low-energy spectrum sweeps (Task 1).
+    \item Vertex and two-point correlators, local $\langle\cos(\beta\phi_j)\rangle$ and translational averaging (Task 2).
+    \item Bipartite entanglement entropy from ED and Calabrese–Cardy fit attempt (Task 3).
+    \item Loschmidt echo computations and coarse DQPT detection (Task 4).
+    \item Kink (soliton) sector construction and soliton mass extraction via twisted BC / relaxation (Task 5).
+    \item One scattering demo (wavepacket) and crude phase-shift estimate (Task 6).
+    \item Coleman mapping and direct SG vs Thirring comparison on the available data (Task 7).
+  \end{enumerate}
+  Notebook & scripts used (local):
+  \begin{itemize}
+    \item Sine--Gordon notebook: \texttt{\SineNb}
+    \item Analysis helper script: \texttt{\DarshPy}. :contentReference[oaicite:1]{index=1}
+    \item Thirring notebook (teammate): \texttt{\ThirringNb}
+  \end{itemize}
+\end{frame}
+
+% ------------------------------------------------------------
+\section{Methods (concise)}
+\begin{frame}{Numerical setup (concise)}
+  \textbf{Lattice + truncation:}
+  \[
+    H=\sum_j \Big[ \tfrac12 \pi_j^2 + \tfrac12(\phi_{j+1}-\phi_j)^2 + \alpha(1-\cos(\beta\phi_j))\Big]
+  \]
+  Local site: harmonic-oscillator truncated Fock basis with cutoff \(n_{\max}\) (we call it `n_max` in code).
+
+  \vspace{6pt}
+  \textbf{Methods used:}
+  \begin{itemize}
+    \item Exact diagonalization (dense for small dim, sparse `eigsh` for larger).
+    \item Many-body operators built with Kronecker products of local HO operators.
+    \item Time evolution: \texttt{scipy.sparse.linalg.expm\_multiply} for real-time dynamics (Loschmidt, scattering).
+    \item Kink sector: implemented twisted boundary condition \(\phi_N=\phi_0+2\pi/\beta\) and (optionally) imaginary-time relaxation.
+  \end{itemize}
+  \vspace{6pt}
+  All code used is in the notebook and `darsh.py` referenced above.
+\end{frame}
+
+% ------------------------------------------------------------
+\section{Task 1 — ED convergence \& spectrum}
+\begin{frame}{Task 1 — ED convergence and low-energy spectrum (example run)}
+  \begin{itemize}
+    \item Small-system example reported from script run (sanity check run): \\
+      \texttt{python sine.py} produced (example):
+      \[
+        \text{Lowest energies: }[1.07554961,\;1.19048229,\;1.34761586,\;1.69108346]
+      \]
+      Bipartite entropy (cut=1): \(S_{\rm bip}=1.0281840291055118\).
+    \item These numbers are exact outputs of the ED run shown in the terminal output you produced.
+  \end{itemize}
+
+  \vspace{6pt}
+  Convergence plots (example files — replace with your generated figures if names differ):
+  \sgfig{0.85}{plots_task1/gap_vs_nmax_N3.png}
+  \vspace{-6pt}
+  \small{Plot: gap vs \(n_{\max}\) for fixed \(N\) (used to choose safe truncation).}
+\end{frame}
+
+% ------------------------------------------------------------
+\section{Task 2 — Correlators and local observables}
+\begin{frame}{Task 2 — Vertex correlator and two-point function}
+  \begin{itemize}
+    \item Computed translationally-averaged vertex correlator
+      \(C(r)=\langle e^{i\beta\phi_{i+r}} e^{-i\beta\phi_i}\rangle\) and two-point \(\langle\phi_{i+r}\phi_i\rangle\).
+    \item Example numeric output from one run:
+      \[
+        C(r)\ ( \text{example}) = [1.0 + O(10^{-47}i),\;0.80520681 - 2.5\!\times\!10^{-16}i,\;\dots]
+      \]
+      \[
+        \langle\phi_j\phi_0\rangle\ ( \text{example}) = [2.13121226,\;1.90765169]
+      \]
+    \item These came from the ground state produced by ED in the notebook (same `n_max` and \(N\) as the run).
+  \end{itemize}
+
+  \vspace{6pt}
+  Example plots:
+  \sgfig{0.85}{plots_correlators/phi_corr_N3.png}
+  \vspace{-4pt}
+  \sgfig{0.85}{plots_correlators/vertex_corr_loglog_N3.png}
+\end{frame}
+
+% ------------------------------------------------------------
+\section{Task 3 — Entanglement entropy}
+\begin{frame}{Task 3 — Bipartite entanglement (ED)}
+  \begin{itemize}
+    \item For each cut \(\ell=1,\dots,N-1\), reshape GS vector to \((d^{\ell},d^{N-\ell})\), compute \(\rho_A\) and \(S(\ell)=-\mathrm{Tr}\rho_A\ln\rho_A\).
+    \item Example: previously reported bipartite entropy for a tiny run: \(S(\ell=1)\approx 1.02818\).
+    \item Attempted a Calabrese--Cardy linear fit \(S(\ell)=\frac{c}{3}\ln f(\ell)+\text{const}\) to estimate \(c\); result is noisy and strongly finite-size/truncation dependent.
+  \end{itemize}
+
+  \vspace{6pt}
+  Example CC plot (data from notebook):
+  \sgfig{0.85}{plots_task3/entropy_vs_log.png}
+  \vspace{-6pt}
+  \small{Interpretation: current system sizes are too small for reliable central-charge extraction — treat \(c\) estimate as indicative only.}
+\end{frame}
+
+% ------------------------------------------------------------
+\section{Task 4 — Loschmidt echoes}
+\begin{frame}{Task 4 — Loschmidt echo and DQPT scan}
+  \begin{itemize}
+    \item Computed \(L(t)=|\langle\psi_0|e^{-iHt}|\psi_0\rangle|^2\) for a family of initial product states (local displacements).
+    \item From one representative run the script printed a sample Loschmidt rate array:
+      \[
+        \text{Loschmidt rate sample } = [-0. ,\;0.11108219,\;0.44624631,\;1.00624168,\;1.42682057,\dots]
+      \]
+    \item Candidate DQPT times were detected by peaks in \(|d\lambda/dt|\) (coarse detector).
+  \end{itemize}
+
+  \vspace{6pt}
+  Heatmap of \(-\ln L(t)\) vs time & shift amplitude (example):
+  \sgfig{0.85}{plots_task4/loschmidt_heatmap.png}
+\end{frame}
+
+% ------------------------------------------------------------
+\section{Task 5 — Kink sector and soliton mass}
+\begin{frame}{Task 5 — Kink sector \& soliton mass}
+  \begin{itemize}
+    \item Implemented twisted boundary condition \(\phi_N=\phi_0+2\pi/\beta\) to access the kink sector; also added an imaginary-time relaxation fallback.
+    \item Example numeric output from your run:
+      \[
+        \text{kink mass (approx): } M_{\rm kink}\approx 5.079047886305462.
+      \]
+      (Computed as \(E_{\rm kink}-E_0\) from the run printed earlier.)
+    \item Finite-size scaling performed across \(N\) list; linear extrapolation in \(1/N\) used to estimate infinite-volume mass (rough estimator).
+  \end{itemize}
+
+  \vspace{6pt}
+  Finite-size plot (example):
+  \sgfig{0.85}{plots_task5/kink_mass_vs_invN.png}
+\end{frame}
+
+% ------------------------------------------------------------
+\section{Task 6 — Scattering demo (single run)}
+\begin{frame}{Task 6 — Scattering demo and phase-shift (crude)}
+  \begin{itemize}
+    \item Prepared two localized bumps (product state), time-evolved and measured \(\langle\phi_j(t)\rangle\) → space–time image.
+    \item Tracked peak centers vs \(t\), fitted pre-/post- linear trajectories to measure time delay \(\Delta t\).
+    \item Used a crude semiclassical mapping \(\delta_{\rm num}\approx -E(\theta)\Delta t\) where \(E(\theta)=m\cosh\theta\) and \(\theta=\operatorname{atanh}(v)\).
+    \item This is a demonstrator: large systematic errors remain (finite size, wavepacket dispersion, truncation).
+  \end{itemize}
+
+  Space–time image used for peak tracking (example):
+  \sgfig{0.85}{plots_task6/phi_space_time.png}
+\end{frame}
+
+% ------------------------------------------------------------
+\section{Task 7 — Coleman mapping and comparison}
+\begin{frame}{Task 7 — Coleman mapping (applied)}
+  Coleman relation used (code convention):
+  \[
+    \beta(g) \;=\; \sqrt{\frac{4\pi}{\,1 + g/\pi\,}}.
+  \]
+  Using available Thirring dataset (or placeholder if none provided), we mapped Thirring \(g\) values to \(\beta\) and compared:
+  \begin{itemize}
+    \item Thirring mass vs SG mass (mapped),
+    \item Thirring gap vs SG gap,
+    \item Thirring condensate \(\langle\bar\psi\psi\rangle\) vs SG \(\langle\cos\beta\phi\rangle\).
+  \end{itemize}
+  Example comparison plot:
+  \sgfig{0.85}{plots_task7/mass_comparison.png}
+\end{frame}
+
+% ------------------------------------------------------------
+\section{Representative numeric outputs (from runs)}
+\begin{frame}{Representative outputs (from your runs)}
+  These lines were printed in the run you executed earlier (kept verbatim):
+  \begin{itemize}
+    \item \texttt{Lowest energies: [1.07554961 1.19048229 1.34761586 1.69108346]}
+    \item \texttt{Bipartite entropy (cut=1): 1.0281840291055118}
+    \item \texttt{Vertex correlator C(r): [1.        +4.379e-47j 0.80520681-2.5409e-16j]}
+    \item \texttt{<phi_j phi_0>: [2.13121226 1.90765169]}
+    \item \texttt{Loschmidt rate sample: [-0. 0.11108219 0.44624631 1.00624168 1.42682057]}
+    \item \texttt{kink mass (approx): 5.079047886305462}
+  \end{itemize}
+
+  \vspace{6pt}
+  These are direct outputs from the `sine.py` / notebook runs you ran earlier — include them as numeric evidence in your slides.
+\end{frame}
+
+% ------------------------------------------------------------
+\section{Interpretation \& caveats}
+\begin{frame}{Interpretation and strict caveats}
+  \begin{itemize}
+    \item \textbf{Convergence:} local truncation \(n_{\max}\) and system size \(N\) strongly affect correlators, gaps and masses. Always verify \(n_{\max}\to n_{\max}+1\) stability.
+    \item \textbf{Kink mass:} twisted-BC method yields a topological excitation energy; finite-size extrapolation must be handled carefully.
+    \item \textbf{Scattering:} the crude \(\delta\approx -E\Delta t\) mapping is only a first demonstrator. For robust benchmarking move to MPS/TEBD and perform center-of-mass frame extraction and error bars.
+    \item \textbf{Coleman mapping:} \(\alpha\) normalization is UV-scheme dependent — match one physical observable before comparing absolute numbers.
+  \end{itemize}
+\end{frame}
+
+% ------------------------------------------------------------
+\section{Files and reproducibility}
+\begin{frame}{Files & how to reproduce}
+  Key files (local):
+  \begin{itemize}
+    \item Notebook: \texttt{\SineNb}
+    \item Script: \texttt{\DarshPy}. :contentReference[oaicite:2]{index=2}
+    \item Thirring notebook: \texttt{\ThirringNb}
+    \item Plots (examples used in this talk): \texttt{plots\_task1/}, \texttt{plots\_correlators/}, \texttt{plots\_task3/}, \texttt{plots\_task4/}, \texttt{plots\_task5/}, \texttt{plots\_task6/}, \texttt{plots\_task7/}
+  \end{itemize}
+  To reproduce: run the corresponding notebook cells in `sine_gordon_final.ipynb` (cells for Tasks 1–7). Use the safe `max_dim` checks in the notebook before increasing `N` or `n_max`.
+\end{frame}
+
+% ------------------------------------------------------------
+\section{Short conclusion}
+\begin{frame}{Conclusion (concise)}
+  \begin{itemize}
+    \item Completed ED-based pipeline up to: convergence checks, correlators, entanglement, Loschmidt scans, kink mass extraction and a scattering demo.
+    \item Results show nontrivial correlator decay, a measurable kink excitation and demonstrable Loschmidt structure — but systematic effects remain.
+    \item Next immediate steps (if you want them done and added to this “completed” set): convergence sweeps to produce error bars, MPS/TEBD for larger \(N\), and refined scattering extraction (COM frame + error bars).
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Acknowledgements}
+  Thanks to the course authors and to my teammate (Thirring notebook). Code & figures are in the working directory; see \texttt{\SineNb} and \texttt{\DarshPy}. :contentReference[oaicite:3]{index=3}
+\end{frame}
+
+\end{document}

@@ -1,0 +1,485 @@
+\documentclass[oneside,openany]{book}
+% Core Packages
+\usepackage{amsmath,amsfonts,amsthm,amssymb,mathtools}
+\usepackage{geometry}
+\usepackage[most,many,breakable]{tcolorbox}
+\usepackage{xcolor}
+% \usepackage{tikz} % No longer needed for this tcolorbox style
+\usepackage{physics} % For \ket, \bra, \expval
+
+\geometry{a4paper, margin=1in}
+
+% Use book class but keep section numbers independent of chapter (no 0.1, 1.1 etc.)
+\renewcommand\thesection{\arabic{section}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% SELF MADE COLORS (from your preamble)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\definecolor{myg}{RGB}{56, 140, 70} % Green for Solution
+\definecolor{myb}{RGB}{45, 111, 177} % Blue for Problem
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% TCOLORBOX SETUPS (Inspired Style)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\tcbuselibrary{theorems,skins,hooks} % Added library for the new style
+
+% 1. PROBLEM BOX (Based on your inspiration)
+\newtcbtheorem{Exercise}{Exercise}{
+    enhanced,
+    breakable,
+    colback = myb!10,              % Light blue background
+    frame hidden,
+    boxrule = 0sp,
+    borderline west = {2pt}{0pt}{myb}, % Thick blue left border
+    sharp corners,
+    detach title,
+    before upper = \tcbtitle\par\smallskip, % Title on top
+    coltitle = myb,                        % Title color blue
+    fonttitle = \bfseries\sffamily,        % Sans-serif bold title
+    separator sign none,
+}{pr}
+\newcommand{\pr}[2]{\begin{Exercise*}[theorem name={}]{#1}{}#2\end{Exercise*}}
+
+% 2. SOLUTION BOX (Based on your inspiration)
+\newtcolorbox{solution}{
+    enhanced,
+    breakable,
+    colback = myg!10,               % Light green background
+    frame hidden,
+    boxrule = 0sp,
+    borderline west = {2pt}{0pt}{myg}, % Thick green left border
+    sharp corners,
+    detach title,
+    title = Solution,      % Fixed title
+    before upper = \tcbtitle\par\smallskip, % Title on top
+    coltitle = myg,                         % Title color green
+    fonttitle = \bfseries\sffamily,         % Sans-serif bold title
+    separator sign none,
+}
+\newcommand{\sol}[1]{\begin{solution}#1\end{solution}} % Solution shortcut
+
+
+\title{Assignment 2 - QT 207}
+\author{Z SHAUKAT AZIZ (22171)}
+\date{20th October 2025}
+
+
+\begin{document}
+
+\maketitle
+
+\section{Quantum States and Entanglement}
+\setcounter{section}{3} % Set section counter to 3 for Exercise 3.x.x
+\subsection*{ 3.3.1: Entanglement of the Bell State}
+
+\pr{ 3.3.1}{
+Consider the 2-qubit state $|\psi\rangle=\frac{1}{\sqrt{2}}|0\rangle|0\rangle+\frac{1}{\sqrt{2}}|1\rangle|1\rangle$. Show that this state is \textbf{entangled} by proving that there are no possible values $\alpha_0, \alpha_1, \beta_0, \beta_1$ such that:
+$$|\psi\rangle=(\alpha_{0}|0\rangle+\alpha_{1}|1\rangle)(\beta_{0}|0\rangle+\beta_{1}|1\rangle).$$
+}
+
+\sol{
+For $|\psi\rangle$ to be a product state, we must be able to equate the coefficients of the computational basis states in the expansion of the product state to the given state:
+$$ (\alpha_{0}\beta_{0})|00\rangle + (\alpha_{0}\beta_{1})|01\rangle + (\alpha_{1}\beta_{0})|10\rangle + (\alpha_{1}\beta_{1})|11\rangle = \frac{1}{\sqrt{2}}|00\rangle + 0|01\rangle + 0|10\rangle + \frac{1}{\sqrt{2}}|11\rangle $$
+Equating coefficients yields a system of four equations:
+\begin{enumerate}
+    \item $\alpha_{0}\beta_{0} = \frac{1}{\sqrt{2}}$
+    \item $\alpha_{0}\beta_{1} = 0$
+    \item $\alpha_{1}\beta_{0} = 0$
+    \item $\alpha_{1}\beta_{1} = \frac{1}{\sqrt{2}}$
+\end{enumerate}
+\begin{itemize}
+    \item From (1) and (4), since the Right-Hand Side is non-zero, all four coefficients $\alpha_0, \alpha_1, \beta_0, \beta_1$ must be non-zero individually.
+    \item From (2): $\alpha_{0}\beta_{1} = 0$. Since $\alpha_0 \ne 0$ (from Eq. 1), this requires \textbf{$\beta_{1} = 0$}.
+    \item From (3): $\alpha_{1}\beta_{0} = 0$. Since $\beta_0 \ne 0$ (from Eq. 1), this requires \textbf{$\alpha_{1} = 0$}.
+\end{itemize}
+Substituting $\alpha_1=0$ and $\beta_1=0$ into (4) gives:
+$$ \alpha_{1}\beta_{1} = (0)(0) = 0 $$
+The system of equations is incosistent and does not satisfy all four equations simultaneously. Thus, there are no values of $\alpha_0, \alpha_1, \beta_0, \beta_1$ that satisfy the equations. $\implies$ the state $|\psi\rangle$ is \textbf{entangled}.
+i.e cannot be written as a product state.
+}
+
+\subsection*{Exercise 3.4.1: Properties of Projectors and State Decomposition}
+
+\pr{ 3.4.1 (a)}{
+Prove that if the operators $P_{i}$ satisfy $P_{i}^{\dagger}=P_{i}$ (Hermitian) and $P_{i}^{2}=P_{i}$ (Projector), then $P_{i}P_{j}=0$ for all $i\ne j$. (Assume $\sum_k P_k = I$).
+}
+
+\sol{
+We assume the set of projectors $\{P_k\}$ forms a **complete** measurement, meaning the identity operator $I$ can be decomposed as $I = \sum_{k} P_{k}$.
+\begin{enumerate}
+    \item Start with the completeness relation:
+    $$ \sum_{k} P_{k} = I $$
+    \item Multiply by $P_i$ on the left:
+    $$ P_i \left( \sum_{k} P_{k} \right) = P_i I \implies \sum_{k} P_i P_{k} = P_i $$
+    \item Separate the term where $k=i$:
+    $$ P_i P_i + \sum_{k \ne i} P_i P_{k} = P_i $$
+    \item Since $P_i$ is a projector, $P_i^2 = P_i$:
+    $$ P_i + \sum_{k \ne i} P_i P_{k} = P_i $$
+    \item Subtract $P_i$ from both sides:
+    $$ \sum_{k \ne i} P_i P_{k} = 0 $$
+    Since $P_i$ and $P_j$ are orthogonal projectors, the operator $\sum_{k \ne i} P_i P_k$ is a sum of positive semi-definite operators. Since this sum is the zero operator, each term in the sum must be the zero operator.
+\end{enumerate}
+Thus, $\mathbf{P_i P_j = 0}$ for $i \ne j$.
+}
+
+\pr{ 3.4.1 (b)}{
+Prove that any pure state $|\psi\rangle$ can be decomposed as $|\psi\rangle=\sum_{i}\alpha_{i}|\psi_{i}\rangle$ where $\alpha_{i}=\sqrt{p(i)}$, $p(i)=\langle\psi|P_{i}|\psi\rangle$, and $|\psi_{i}\rangle=\frac{P_{i}|\psi\rangle}{\sqrt{p(i)}}$. Also prove that $\langle\psi_{i}|\psi_{j}\rangle=\delta_{i,j}$.
+}
+
+\sol{
+\textbf{Decomposition:}
+Using the completeness relation $I = \sum_i P_i$:
+$$ |\psi\rangle = I |\psi\rangle = \sum_{i} P_{i} |\psi\rangle $$
+We define the normalized state $|\psi_i\rangle$ by first considering the unnormalized state $|\phi_i\rangle = P_i |\psi\rangle$.
+The squared norm of $|\phi_i\rangle$ is:
+$$ \expval{\phi_i | \phi_i} = \langle\psi|P_i^\dagger P_i|\psi\rangle = \langle\psi|P_i^2|\psi\rangle = \langle\psi|P_i|\psi\rangle = p(i) $$
+We define the coefficients $\alpha_i = \sqrt{p(i)}$ and the normalized states $|\psi_i\rangle = \frac{P_i |\psi\rangle}{\sqrt{p(i)}}$.
+Substituting back into the decomposition:
+$$ P_i |\psi\rangle = \sqrt{p(i)} \frac{P_i |\psi\rangle}{\sqrt{p(i)}} = \alpha_i |\psi_i\rangle $$
+Therefore, $|\psi\rangle = \sum_{i} P_{i} |\psi\rangle = \sum_{i} \alpha_{i}|\psi_{i}\rangle$.
+
+\textbf{Orthogonality:}
+We calculate the inner product $\langle\psi_{i}|\psi_{j}\rangle$:
+$$ \langle\psi_{i}|\psi_{j}\rangle = \left( \frac{\langle\psi|P_{i}^\dagger}{\sqrt{p(i)}} \right) \left( \frac{P_{j}|\psi\rangle}{\sqrt{p(j)}} \right) = \frac{1}{\sqrt{p(i)p(j)}} \langle\psi|P_{i}P_{j}|\psi\rangle $$
+\begin{itemize}
+    \item \textbf{If $i \ne j$}: $P_i P_j = 0$ (from part a).
+    $$ \langle\psi_{i}|\psi_{j}\rangle = \frac{1}{\sqrt{p(i)p(j)}} \langle\psi|0|\psi\rangle = 0 $$
+    \item \textbf{If $i = j$}: $P_i P_i = P_i$ and $\langle\psi|P_i|\psi\rangle = p(i)$.
+    $$ \langle\psi_{i}|\psi_{i}\rangle = \frac{1}{p(i)} \langle\psi|P_{i}|\psi\rangle = \frac{p(i)}{p(i)} = 1 $$
+\end{itemize}
+Thus, $\langle\psi_{i}|\psi_{j}\rangle=\delta_{i,j}$.
+}
+
+\pr{ 3.4.1 (c)}{
+Prove that any decomposition $I=\sum_{i}P_{i}$ of the identity operator on a Hilbert space of dimension $\mathbf{N}$ into a sum of nonzero projectors $P_{i}$ can have at most $\mathbf{N}$ terms in the sum.
+}
+
+\sol{
+Let $\mathcal{H}$ be the Hilbert space with dimension $N$.
+\begin{enumerate}
+    \item The **Rank** of an orthogonal sum of operators is the sum of their ranks. Since $P_i$ are orthogonal projectors ($P_i P_j=0$ for $i \ne j$), we have:
+    $$ \mathrm{rank}(I) = \mathrm{rank}\left(\sum_{i} P_{i}\right) = \sum_{i} \mathrm{rank}(P_{i}) $$
+    \item The rank of the identity operator $I$ on an $N$-dimensional space is $N$: $\mathrm{rank}(I) = N$.
+    \item Since each $P_i$ is a \textbf{nonzero} projector, its rank is at least 1: $\mathrm{rank}(P_i) \ge 1$.
+    \item Let $M$ be the number of terms in the sum. Substituting the bounds:
+    $$ N = \sum_{i=1}^{M} \mathrm{rank}(P_{i}) \ge \sum_{i=1}^{M} 1 = M $$
+\end{enumerate}
+Therefore, the number of nonzero orthogonal projectors $M$ cannot exceed the dimension of the space $N$. The decomposition can have at most $\mathbf{N}$ terms in the sum ($M \le N$).
+}
+
+\subsection*{Exercise 3.4.2: Equivalence of Observables}
+
+\pr{ 3.4.2}{
+Show that measuring the observable $|1\rangle\langle 1|$ is equivalent to measuring the observable $\mathbf{Z}$ up to a relabelling of the measurement outcomes.
+}
+
+\sol{
+Two observables are equivalent (up to relabelling) if they have the exact same set of **projectors** onto their eigenspaces, as these projectors determine the physical action (state collapse) and probabilities of measurement.
+
+\textbf{1. Observable $M_1 = |1\rangle\langle 1|$:}
+$$ M_1 = \begin{pmatrix} 0 & 0 \\ 0 & 1 \end{pmatrix} $$
+\begin{itemize}
+    \item \textbf{Eigenvalues (Outcomes):} $\lambda_0 = 0$ and $\lambda_1 = 1$.
+    \item \textbf{Projectors:}
+        \begin{itemize}
+            \item For outcome 0 (eigenvector $|0\rangle$): $P_0 = |0\rangle\langle 0|$.
+            \item For outcome 1 (eigenvector $|1\rangle$): $P_1 = |1\rangle\langle 1|$.
+        \end{itemize}
+\end{itemize}
+
+\textbf{2. Observable $M_2 = Z$ (Pauli $Z$):}
+$$ Z = \begin{pmatrix} 1 & 0 \\ 0 & -1 \end{pmatrix} $$
+\begin{itemize}
+    \item \textbf{Eigenvalues (Outcomes):} $\lambda'_1 = 1$ and $\lambda'_{-1} = -1$.
+    \item \textbf{Projectors:}
+        \begin{itemize}
+            \item For outcome 1 (eigenvector $|0\rangle$): $P'_1 = |0\rangle\langle 0|$.
+            \item For outcome $-1$ (eigenvector $|1\rangle$): $P'_{-1} = |1\rangle\langle 1|$.
+        \end{itemize}
+\end{itemize}
+The set of projectors for $M_1$ is $\mathcal{P}_1 = \{ |0\rangle\langle 0|, |1\rangle\langle 1| \}$.
+The set of projectors for $M_2$ is $\mathcal{P}_2 = \{ |0\rangle\langle 0|, |1\rangle\langle 1| \}$.
+Since $\mathcal{P}_1 = \mathcal{P}_2$, the physical collapse of the state is identical for both measurements. The only difference is the classical label recorded:
+$$ \text{Outcome } 0 \text{ from } M_1 \iff \text{Outcome } 1 \text{ from } Z $$
+$$ \text{Outcome } 1 \text{ from } M_1 \iff \text{Outcome } -1 \text{ from } Z $$
+Thus, the measurements are equivalent up to a relabelling of the outcomes.
+}
+
+\section{Quantum Gates and Circuits}
+\setcounter{section}{4} % Set section counter to 4 for Exercise 4.x.x
+\subsection*{Exercise 4.2.3: Rotation Gate Conjugation and Euler Decomposition}
+
+\pr{ 4.2.3 (a)}{
+Prove $XR_{y}(\theta)X=R_{y}(-\theta)$ and $XR_{z}(\theta)X=R_{z}(-\theta)$.
+}
+
+\sol{
+The matrices are: $X = \begin{pmatrix} 0 & 1 \\ 1 & 0 \end{pmatrix}$, $R_y(\theta) = \begin{pmatrix} \cos(\theta/2) & -\sin(\theta/2) \\ \sin(\theta/2) & \cos(\theta/2) \end{pmatrix}$, and $R_z(\theta) = \begin{pmatrix} e^{-i\theta/2} & 0 \\ 0 & e^{i\theta/2} \end{pmatrix}$.
+
+\textbf{Proof 1: $XR_{y}(\theta)X=R_{y}(-\theta)$}
+\begin{align*}
+XR_{y}(\theta)X &= \begin{pmatrix} 0 & 1 \\ 1 & 0 \end{pmatrix} \begin{pmatrix} \cos(\theta/2) & -\sin(\theta/2) \\ \sin(\theta/2) & \cos(\theta/2) \end{pmatrix} \begin{pmatrix} 0 & 1 \\ 1 & 0 \end{pmatrix} \\
+&= \begin{pmatrix} \sin(\theta/2) & \cos(\theta/2) \\ \cos(\theta/2) & -\sin(\theta/2) \end{pmatrix} \begin{pmatrix} 0 & 1 \\ 1 & 0 \end{pmatrix} \\
+&= \begin{pmatrix} \cos(\theta/2) & \sin(\theta/2) \\ -\sin(\theta/2) & \cos(\theta/2) \end{pmatrix}
+\end{align*}
+The definition of $R_{y}(-\theta)$ is:
+$$ R_{y}(-\theta) = \begin{pmatrix} \cos(-\theta/2) & -\sin(-\theta/2) \\ \sin(-\theta/2) & \cos(-\theta/2) \end{pmatrix} = \begin{pmatrix} \cos(\theta/2) & \sin(\theta/2) \\ -\sin(\theta/2) & \cos(\theta/2) \end{pmatrix} $$
+Since the results are equal, the identity is proven.
+
+\textbf{Proof 2: $XR_{z}(\theta)X=R_{z}(-\theta)$}
+\begin{align*}
+XR_{z}(\theta)X &= \begin{pmatrix} 0 & 1 \\ 1 & 0 \end{pmatrix} \begin{pmatrix} e^{-i\theta/2} & 0 \\ 0 & e^{i\theta/2} \end{pmatrix} \begin{pmatrix} 0 & 1 \\ 1 & 0 \end{pmatrix} \\
+&= \begin{pmatrix} 0 & e^{i\theta/2} \\ e^{-i\theta/2} & 0 \end{pmatrix} \begin{pmatrix} 0 & 1 \\ 1 & 0 \end{pmatrix} \\
+&= \begin{pmatrix} e^{i\theta/2} & 0 \\ 0 & e^{-i\theta/2} \end{pmatrix}
+\end{align*}
+The definition of $R_{z}(-\theta)$ is:
+$$ R_{z}(-\theta) = \begin{pmatrix} e^{-i(-\theta)/2} & 0 \\ 0 & e^{i(-\theta)/2} \end{pmatrix} = \begin{pmatrix} e^{i\theta/2} & 0 \\ 0 & e^{-i\theta/2} \end{pmatrix} $$
+Since the results are equal, the identity is proven.
+}
+
+\pr{ 4.2.3 (b)}{
+Prove **Corollary 4.2.1**: Any single-qubit unitary operator $U$ can be written as $U=e^{i\alpha} A X B X C$, where $A, B, C$ are single-qubit unitaries (from hint: $A\equiv R_{z}(\beta)R_{y}(\gamma/2)$, $B\equiv R_{y}(-\gamma/2)R_{z}(-(\delta+\beta)/2)$ and $C\equiv R_{z}((\delta-\beta)/2)$).
+}
+
+\sol{
+Any unitary operator $U \in \mathrm{U}(2)$ can be decomposed into a global phase $e^{i\alpha}$ and a special unitary operator $U_{\mathrm{SU}(2)}$ using the Euler decomposition:
+$$ U_{\mathrm{SU}(2)} = R_{z}(\beta)R_{y}(\gamma)R_{z}(\delta) $$
+We are asked to prove $U_{\mathrm{SU}(2)} = A X B X C$ using the provided definitions for $A$, $B$, and $C$. We substitute $A, B, C$ into the expression $A X B X C$:
+$$ A X B X C = \left(R_{z}(\beta)R_{y}(\gamma/2)\right) X \left(R_{y}(-\gamma/2)R_{z}(-(\delta+\beta)/2)\right) X \left(R_{z}((\delta-\beta)/2)\right) $$
+First, use the identity $R_z(\theta)X = X R_z(-\theta)$, derived from part (a):
+$$ R_{z}(-(\delta+\beta)/2) X = X R_{z}((\delta+\beta)/2) $$
+Substitute this back:
+\begin{align*}
+A X B X C &= R_{z}(\beta)R_{y}(\gamma/2) X R_{y}(-\gamma/2) \left(\mathbf{X R_{z}((\delta+\beta)/2)}\right) R_{z}((\delta-\beta)/2) \\
+&= R_{z}(\beta)R_{y}(\gamma/2) \mathbf{X R_{y}(-\gamma/2) X} R_{z}\left(\frac{\delta+\beta}{2} + \frac{\delta-\beta}{2}\right)
+\end{align*}
+Next, use the identity $X R_{y}(-\theta) X = R_{y}(\theta)$ (from part a with $\theta \to -\theta$):
+$$ X R_{y}(-\gamma/2) X = R_{y}(\gamma/2) $$
+Substitute this identity and simplify the $R_z$ product:
+\begin{align*}
+A X B X C &= R_{z}(\beta)R_{y}(\gamma/2) \mathbf{R_{y}(\gamma/2)} R_{z}\left(\frac{2\delta}{2}\right) \\
+&= R_{z}(\beta)R_{y}(\gamma)R_{z}(\delta) \\
+&= U_{\mathrm{SU}(2)}
+\end{align*}
+Therefore, $\mathbf{U=e^{i\alpha} A X B X C}$ is proven.
+}
+
+\newpage
+\subsection*{Exercise 4.2.4: CNOT in Different Bases}
+
+\pr{ 4.2.4 (a)}{
+Describe the effect of the **CNOT gate** with respect to the basis $B_{1}=\{|0\rangle|+\rangle , |0\rangle|-\rangle , |1\rangle|+\rangle , |1\rangle|-\rangle\}$. Express your answers in Dirac notation and matrix notation.
+}
+
+\sol{
+The CNOT gate acts on $|c\rangle|t\rangle$ as $CNOT|c\rangle|t\rangle = |c\rangle|t \oplus c\rangle$. The basis $B_1$ uses the computational basis for the control qubit ($|0\rangle, |1\rangle$) and the Hadamard basis for the target qubit ($|\pm\rangle = \frac{|0\rangle \pm |1\rangle}{\sqrt{2}}$).
+
+\textbf{Dirac Notation:}
+\begin{itemize}
+    \item \textbf{Control $|0\rangle$:} The target is unchanged (Target gate is $I$).
+    $$ CNOT|0\rangle|\pm\rangle = |0\rangle I|\pm\rangle = |0\rangle|\pm\rangle $$
+    \item \textbf{Control $|1\rangle$:} The target is flipped (Target gate is $X$).
+    $$ CNOT|1\rangle|\pm\rangle = |1\rangle X|\pm\rangle $$
+    Since $X|+\rangle = |+\rangle$ and $X|-\rangle = -|-\rangle$ (eigenstates of $X$ are $|\pm\rangle$ with eigenvalues $\pm 1$):
+    $$ CNOT|1\rangle|+\rangle = |1\rangle|+\rangle $$
+    $$ CNOT|1\rangle|-\rangle = -|1\rangle|-\rangle $$
+\end{itemize}
+
+\textbf{Matrix Notation ($U_{B_1}$):}
+The basis order is $B_1 = \{|0+\rangle, |0-\rangle, |1+\rangle, |1-\rangle\}$.
+The mapping is:
+$$ |0+\rangle \to 1 \cdot |0+\rangle $$
+$$ |0-\rangle \to 1 \cdot |0-\rangle $$
+$$ |1+\rangle \to 1 \cdot |1+\rangle $$
+$$ |1-\rangle \to -1 \cdot |1-\rangle $$
+Since the basis vectors are eigenvectors of $CNOT$ in this basis, the matrix is diagonal with the eigenvalues $\{1, 1, 1, -1\}$:
+$$ U_{B_1} = \begin{pmatrix} 1 & 0 & 0 & 0 \\ 0 & 1 & 0 & 0 \\ 0 & 0 & 1 & 0 \\ 0 & 0 & 0 & -1 \end{pmatrix} $$
+}
+
+\pr{ 4.2.4 (b)}{
+Describe the effect of the **CNOT gate** with respect to the basis $B_{2}=\{|+\rangle|+\rangle, |+\rangle|-\rangle, |-\rangle|+\rangle, |-\rangle|-\rangle\}$. Express your answers in Dirac notation and matrix notation.
+}
+
+\sol{
+The basis $B_2$ is the product of Hadamard bases for both qubits.
+The CNOT gate in the Hadamard basis is equivalent to the CNOT gate with the control and target qubits swapped in the computational basis ($CNOT_{21}$), as:
+$$ (H \otimes H) CNOT_{12} (H \otimes H) = CNOT_{21} $$
+where $CNOT_{21}$ flips the first qubit (target) if the second qubit (control) is $|1\rangle$.
+
+\textbf{Dirac Notation (using $CNOT_{21}$ equivalence):}
+\begin{itemize}
+    \item \textbf{Control $|+\rangle$ (qubit 1):} $|\pm\rangle$ is the control. CNOT is flipped, so qubit 2 is the control.
+    We use the definition of $CNOT_{12}$:
+    $$ CNOT|+\rangle|+\rangle = CNOT \frac{1}{2}(|00\rangle + |01\rangle + |10\rangle + |11\rangle) $$
+    $$ = \frac{1}{2}(|00\rangle + |01\rangle + |11\rangle + |10\rangle) = |+\rangle|+\rangle $$
+    $$ CNOT|+\rangle|-\rangle = CNOT \frac{1}{2}(|00\rangle - |01\rangle + |10\rangle - |11\rangle) $$
+    $$ = \frac{1}{2}(|00\rangle - |01\rangle + |11\rangle - |10\rangle) = |-\rangle|-\rangle $$
+    $$ CNOT|-\rangle|+\rangle = CNOT \frac{1}{2}(|00\rangle + |01\rangle - |10\rangle - |11\rangle) $$
+    $$ = \frac{1}{2}(|00\rangle + |01\rangle - |11\rangle - |10\rangle) = |-\rangle|+\rangle $$
+    $$ CNOT|-\rangle|-\rangle = CNOT \frac{1}{2}(|00\rangle - |01\rangle - |10\rangle + |11\rangle) $$
+    $$ = \frac{1}{2}(|00\rangle - |01\rangle - |11\rangle + |10\rangle) = |+\rangle|-\rangle $$
+\end{itemize}
+\textbf{The mappings are:}
+$$ \begin{aligned} CNOT|+\rangle|+\rangle &= |+\rangle|+\rangle \\ CNOT|+\rangle|-\rangle &= |-\rangle|-\rangle \\ CNOT|-\rangle|+\rangle &= |-\rangle|+\rangle \\ CNOT|-\rangle|-\rangle &= |+\rangle|-\rangle \end{aligned} $$
+
+\textbf{Matrix Notation ($U_{B_2}$):}
+The basis order is $B_2 = \{|++\rangle, |+-\rangle, |-+\rangle, |--\rangle\}$.
+\begin{itemize}
+    \item $|++\rangle \to |++\rangle$
+    \item $|+-\rangle \to |--\rangle$ (swaps with the 4th element's position)
+    \item $|-+\rangle \to |-+\rangle$
+    \item $|--\rangle \to |+-\rangle$ (swaps with the 2nd element's position)
+\end{itemize}
+The resulting matrix is:
+$$ U_{B_2} = \begin{pmatrix} 1 & 0 & 0 & 0 \\ 0 & 0 & 0 & 1 \\ 0 & 0 & 1 & 0 \\ 0 & 1 & 0 & 0 \end{pmatrix} $$
+}
+\newpage
+\section{Measurement in Quantum Computing}
+\setcounter{section}{5} % Set section counter to 5 for Exercise 5.x.x
+\subsection*{Exercise 5.2.1: Bell State Decomposition Identity}
+
+\pr{ 5.2.1}{
+Prove that
+$$|\psi\rangle|\beta_{00}\rangle=\frac{1}{2}|\beta_{00}\rangle|\psi\rangle+\frac{1}{2}|\beta_{01}\rangle(X|\psi\rangle)+\frac{1}{2}|\beta_{10}\rangle(Z|\psi\rangle)+\frac{1}{2}|\beta_{11}\rangle(XZ|\psi\rangle).$$
+}
+\sol{
+We label the three registers as 1,2,3: register 1 holds the arbitrary single-qubit state $\ket{\psi}_1$, and registers 2--3 hold the Bell state $\ket{\beta_{00}}_{23}$. The Bell-basis resolution of identity on registers 1 and 2 is given by:
+\[
+I_{12}=\sum_{a,b\in\{0,1\}}\ket{\beta_{ab}}_{12}\bra{\beta_{ab}}.
+\]
+Thus
+\[
+\ket{\psi}_1\ket{\beta_{00}}_{23}
+= \sum_{a,b}\ket{\beta_{ab}}_{12}\,\Big(\bra{\beta_{ab}}_{12}\,(\ket{\psi}_1\ket{\beta_{00}}_{23})\Big).
+\]
+We evaluate the overlap
+\[
+\mathcal{C}_{ab}:=\bra{\beta_{ab}}_{12}\,(\ket{\psi}_1\ket{\beta_{00}}_{23}).
+\]
+Use $\ket{\beta_{ab}}_{12}=(I\otimes X^{b}Z^{a})\ket{\beta_{00}}_{12}$, so
+\[
+\bra{\beta_{ab}}_{12}=\bra{\beta_{00}}_{12}\,(I\otimes Z^{a}X^{b}).
+\]
+Therefore
+\[
+\mathcal{C}_{ab}
+= \bra{\beta_{00}}_{12}\,(I\otimes Z^{a}X^{b})\big(\ket{\psi}_1\ket{\beta_{00}}_{23}\big).
+\]
+Now use the maximally-entangled identity $(I\otimes M)\ket{\beta_{00}}=(M^{\mathsf T}\otimes I)\ket{\beta_{00}}$ (and $X^{\mathsf T}=X,\;Z^{\mathsf T}=Z$) to move $Z^{a}X^{b}$ onto register 1:
+\[
+(I_1\otimes Z_2^{a}X_2^{b})\big(\ket{\psi}_1\ket{\beta_{00}}_{23}\big)
+= \big((X^{b}Z^{a}\ket{\psi})_1\big)\otimes\ket{\beta_{00}}_{23}.
+\]
+Hence
+\[
+\mathcal{C}_{ab}
+= \bra{\beta_{00}}_{12}\,\big((X^{b}Z^{a}\ket{\psi})_1\otimes\ket{\beta_{00}}_{23}\big).
+\]
+Finally use the overlap identity $\bra{\beta_{00}}_{12}\big(\ket{\phi}_1\otimes\ket{\beta_{00}}_{23}\big)=\tfrac{1}{2}\ket{\phi}_3$ (valid for any single-qubit $\ket\phi$). With $\ket\phi=X^{b}Z^{a}\ket\psi$ we get
+\[
+\mathcal{C}_{ab}=\tfrac{1}{2}\,(X^{b}Z^{a}\ket\psi)_3.
+\]
+Substituting back into the sum gives
+\[
+\ket{\psi}_1\ket{\beta_{00}}_{23}
+=\tfrac{1}{2}\sum_{a,b\in\{0,1\}}\ket{\beta_{ab}}_{12}\,(X^{b}Z^{a}\ket\psi)_3,
+\]
+which, when expanded term-by-term, is exactly
+\[
+\ket{\psi}_1\ket{\beta_{00}}_{23}
+=\tfrac{1}{2}\ket{\beta_{00}}_{12}\ket{\psi}_3
++\tfrac{1}{2}\ket{\beta_{01}}_{12}(X\ket{\psi})_3
++\tfrac{1}{2}\ket{\beta_{10}}_{12}(Z\ket{\psi})_3
++\tfrac{1}{2}\ket{\beta_{11}}_{12}(XZ\ket{\psi})_3.
+\]
+}
+
+\section{Quantum Algorithms}
+\setcounter{section}{6} % Set section counter to 6 for Exercise 6.x.x
+\subsection*{Exercise 6.4.1: Multiqubit Hadamard Transform}
+
+\pr{ 6.4.1}{
+Prove that
+\begin{multline*}
+\left(\frac{|0\rangle+(-1)^{x_{1}}|1\rangle}{\sqrt{2}}\right)\left(\frac{|0\rangle+(-1)^{x_{2}}|1\rangle}{\sqrt{2}}\right)\cdots \\
+\cdots \left(\frac{|0\rangle+(-1)^{x_{n}}|1\rangle}{\sqrt{2}}\right)
+= \frac{1}{\sqrt{2^{n}}}\sum_{z_{1}z_{2}\ldots z_{n}\in\{0,1\}^{n}}(-1)^{x_{1}z_{1}+x_{2}z_{2}+\cdots+x_{n}z_{n}} \\
+{}\times |z_{1}\rangle|z_{2}\rangle\cdots|z_{n}\rangle.
+\end{multline*}
+}
+
+\sol{
+We prove the identity by expanding each factor and then taking the tensor product.
+
+For each \(k\):
+\[
+\frac{\ket{0}+(-1)^{x_k}\ket{1}}{\sqrt{2}}
+= \frac{1}{\sqrt{2}}\sum_{z_k\in\{0,1\}}(-1)^{x_k z_k}\ket{z_k},
+\]
+because when $z_k=0$ the term equals $\tfrac1{\sqrt2}\ket0$ and when $z_k=1$ it equals $\tfrac{(-1)^{x_k}}{\sqrt2}\ket1$.
+
+Now take the tensor product over $k=1,\dots,n$:
+\[
+\bigotimes_{k=1}^n\frac{\ket{0}+(-1)^{x_k}\ket{1}}{\sqrt{2}}
+= \left(\prod_{k=1}^n\frac{1}{\sqrt{2}}\right)
+\bigotimes_{k=1}^n\sum_{z_k\in\{0,1\}}(-1)^{x_k z_k}\ket{z_k}
+= \frac{1}{\sqrt{2^n}}\bigotimes_{k=1}^n\sum_{z_k\in\{0,1\}}(-1)^{x_k z_k}\ket{z_k}.
+\]
+
+Expanding the tensor product of sums gives a single sum over all $n$-bit strings \(z=(z_1,\dots,z_n)\):
+\[
+\bigotimes_{k=1}^n\sum_{z_k\in\{0,1\}}(-1)^{x_k z_k}\ket{z_k}
+= \sum_{z_1,\ldots,z_n\in\{0,1\}} \left(\prod_{k=1}^n(-1)^{x_k z_k}\right)\ket{z_1}\ket{z_2}\cdots\ket{z_n}.
+\]
+Since
+\[
+\prod_{k=1}^n(-1)^{x_k z_k} = (-1)^{\sum_{k=1}^n x_k z_k},
+\]
+we obtain
+\[
+\bigotimes_{k=1}^n\frac{\ket{0}+(-1)^{x_k}\ket{1}}{\sqrt{2}}
+= \frac{1}{\sqrt{2^n}}\sum_{z\in\{0,1\}^n}(-1)^{\sum_{k=1}^n x_k z_k}\ket{z_1}\ket{z_2}\cdots\ket{z_n},
+\]
+which is the desired identity.
+}
+
+
+\subsection*{Exercise 6.5.1: Action of Multiqubit Hadamard on a Superposition}
+
+\pr{ 6.5.1}{
+Let $x,y\in\{0,1\}^{n}$ and let $s=x\oplus y$. Show that
+$$H^{\otimes n}(\frac{1}{\sqrt{2}}|x\rangle+\frac{1}{\sqrt{2}}|y\rangle)=\frac{1}{\sqrt{2^{n-1}}}\sum_{z\in\{s\}^{\perp}}(-1)^{x\cdot z}|z\rangle.$$
+}
+
+\sol{
+\textbf{1. Apply $H^{\otimes n}$ to the Superposition}
+We use the multi-qubit Hadamard formula $H^{\otimes n}|w\rangle = \frac{1}{\sqrt{2^n}}\sum_{z}(-1)^{w\cdot z}|z\rangle$:
+\begin{align*}
+H^{\otimes n}\left(\frac{1}{\sqrt{2}}|x\rangle+\frac{1}{\sqrt{2}}|y\rangle\right) &= \frac{1}{\sqrt{2}} H^{\otimes n}|x\rangle + \frac{1}{\sqrt{2}} H^{\otimes n}|y\rangle \\
+&= \frac{1}{\sqrt{2}} \left( \frac{1}{\sqrt{2^n}}\sum_{z}(-1)^{x\cdot z}|z\rangle \right) + \frac{1}{\sqrt{2}} \left( \frac{1}{\sqrt{2^n}}\sum_{z}(-1)^{y\cdot z}|z\rangle \right) \\
+&= \frac{1}{\sqrt{2^{n+1}}} \sum_{z \in \{0,1\}^n} \left( (-1)^{x\cdot z} + (-1)^{y\cdot z} \right) |z\rangle
+\end{align*}
+
+\textbf{2. Analyze the Coefficient $C_z = (-1)^{x\cdot z} + (-1)^{y\cdot z}$}
+Since $s = x \oplus y$, the dot product $s \cdot z$ relates $x \cdot z$ and $y \cdot z$ modulo 2: $s \cdot z = (x \cdot z) \oplus (y \cdot z) \pmod{2}$.
+\begin{itemize}
+    \item \textbf{Case 1: $z \in \{s\}^{\perp}$ (where $s \cdot z = 0 \pmod{2}$)}
+    If $s \cdot z = 0$, then $x \cdot z$ and $y \cdot z$ have the same parity, so $(-1)^{x\cdot z} = (-1)^{y\cdot z}$.
+    $$ C_z = (-1)^{x\cdot z} + (-1)^{x\cdot z} = 2 (-1)^{x\cdot z} $$
+    \item \textbf{Case 2: $z \notin \{s\}^{\perp}$ (where $s \cdot z = 1 \pmod{2}$)}
+    If $s \cdot z = 1$, then $x \cdot z$ and $y \cdot z$ have opposite parity, so $(-1)^{y\cdot z} = - (-1)^{x\cdot z}$.
+    $$ C_z = (-1)^{x\cdot z} + (-(-1)^{x\cdot z}) = 0 $$
+\end{itemize}
+
+\textbf{3. Final Substitution}
+Only the terms where $z \in \{s\}^{\perp}$ survive, which is a subspace of dimension $n-1$:
+\begin{align*}
+H^{\otimes n}\left(\frac{1}{\sqrt{2}}|x\rangle+\frac{1}{\sqrt{2}}|y\rangle\right) &= \frac{1}{\sqrt{2^{n+1}}} \sum_{z \in \{s\}^{\perp}} \left( 2 (-1)^{x\cdot z} \right) |z\rangle \\
+&= \frac{2}{\sqrt{2^{n} \cdot 2}} \sum_{z \in \{s\}^{\perp}} (-1)^{x\cdot z} |z\rangle \\
+&= \frac{\sqrt{4}}{\sqrt{2^{n} \cdot 2}} \sum_{z \in \{s\}^{\perp}} (-1)^{x\cdot z} |z\rangle \\
+&= \frac{\sqrt{2}}{\sqrt{2^{n}}} \sum_{z \in \{s\}^{\perp}} (-1)^{x\cdot z} |z\rangle \\
+&= \frac{1}{\sqrt{2^{n-1}}} \sum_{z \in \{s\}^{\perp}} (-1)^{x\cdot z} |z\rangle
+\end{align*}
+}
+
+\end{document}

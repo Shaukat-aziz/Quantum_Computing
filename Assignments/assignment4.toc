@@ -1,0 +1,41 @@
+\contentsline {section}{\numberline {1}Problem 1}{1}{section.1}%
+\contentsline {paragraph}{Step 1: Rotation }{2}{section*.3}%
+\contentsline {paragraph}{Step 2: Cayley/Möbius map}{2}{section*.4}%
+\contentsline {paragraph}{Step 3: Power map}{2}{section*.5}%
+\contentsline {paragraph}{Step 4: Multiply by cube roots of unity}{2}{section*.6}%
+\contentsline {paragraph}{Checks / boundary behaviour}{2}{section*.7}%
+\contentsline {section}{\numberline {2}Problem 2}{2}{section.2}%
+\contentsline {paragraph}{Map sending unit circle to real axis.}{2}{section*.9}%
+\contentsline {paragraph}{What $z\DOTSB \mapstochar \rightarrow 1/z$ does.}{3}{section*.10}%
+\contentsline {section}{\numberline {3}Problem 3}{3}{section.3}%
+\contentsline {paragraph}{Cauchy–Riemann (CR) equations:}{3}{section*.12}%
+\contentsline {paragraph}{Harmonicity:}{3}{section*.13}%
+\contentsline {paragraph}{Mixed product identity:}{3}{section*.14}%
+\contentsline {paragraph}{Maximum / minimum principle:}{3}{section*.15}%
+\contentsline {section}{\numberline {4}Problem 4 --- Mathews $\&$ Walker A-1, A-2, A-5, A-6}{3}{section.4}%
+\contentsline {paragraph}{A-1 (typical):}{4}{section*.17}%
+\contentsline {paragraph}{A-2 (typical):}{4}{section*.18}%
+\contentsline {paragraph}{A-5 and A-6:}{4}{section*.19}%
+\contentsline {section}{\numberline {5}Problem 5 (Arfken exercises listed)}{4}{section.5}%
+\contentsline {paragraph}{6.2.8 (CR in polar form).}{5}{section*.21}%
+\contentsline {paragraph}{6.2.9 (Laplace in polar).}{5}{section*.22}%
+\contentsline {paragraph}{6.3.3, 6.3.4 (path dependence examples).}{5}{section*.23}%
+\contentsline {paragraph}{6.4.7 (maximum modulus principle).}{5}{section*.24}%
+\contentsline {paragraph}{6.5.9 (Laurent uniqueness).}{5}{section*.25}%
+\contentsline {paragraph}{7.1.5 (unit step representation).}{5}{section*.26}%
+\contentsline {section}{\numberline {6}Problem 6 (Mittag–Leffler expansion for $\sec \pi z$)}{6}{section.6}%
+\contentsline {paragraph}{Pole structure and residues.}{6}{section*.28}%
+\contentsline {paragraph}{Mittag–Leffler expansion.}{6}{section*.29}%
+\contentsline {paragraph}{Verification at $z=0$:}{6}{section*.30}%
+\contentsline {section}{\numberline {7}Problem 7 (infinite product identity)}{7}{section.7}%
+\contentsline {paragraph}{Step 1: Product formula for $\sinh $.}{7}{section*.32}%
+\contentsline {paragraph}{Step 2: Product formula for $\cos $.}{7}{section*.33}%
+\contentsline {paragraph}{Step 3: Combine shifted factors.}{7}{section*.34}%
+\contentsline {section}{\numberline {8}Problem 8 — Mathews $\&$ Walker Chapter 3 exercises list}{7}{section.8}%
+\contentsline {paragraph}{3-1 (example):}{7}{section*.36}%
+\contentsline {paragraph}{3-5/3-6 (contour integrals):}{8}{section*.37}%
+\contentsline {paragraph}{Worked instance — 3-10 (if it is about evaluating $\DOTSI \ointop \ilimits@ \frac {dz}{z^2-1}$ on $|z|=2$):}{8}{section*.38}%
+\contentsline {section}{\numberline {9}Appendix problems: A-1, A-2, A-5, A-6}{9}{section.9}%
+\contentsline {section}{\numberline {10}Chapter 3 — Selected exercises (full solutions)}{11}{section.10}%
+\contentsline {section}{\numberline {11}Chapter 6 highlights referenced in assignment (selected exercises)}{14}{section.11}%
+\contentsline {section}{\numberline {12}Closing remarks and what I included}{16}{section.12}%

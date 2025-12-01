@@ -1,0 +1,120 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{geometry}
+\geometry{a4paper, margin=1in}
+
+    \begin{document}
+    \begin{center}
+        {\LARGE \bfseries Assignment-3 Solutions}\\[1.2ex]
+        {\large Gurudeva Prasath. PM (221-22143)}\\
+        {\small QT 207}
+    \end{center}
+
+\section*{II. Quantum Fourier Transform (QFT) and the Unitary QFT Operator}
+
+\subsection*{Exercise 2: Find an operator $\hat{F}$ which implements the discrete Fourier transform and show that it is unitary.}
+
+\subsubsection*{Definition of the QFT operator}
+The quantum Fourier transform (QFT) operator $\hat{F}$ acts on the computational basis $\{\lvert j\rangle\}_{j=0}^{N-1}$ as
+\begin{equation}
+    \hat{F}\lvert j\rangle = \frac{1}{\sqrt{N}}\sum_{k=0}^{N-1}e^{2\pi i jk/N}\lvert k\rangle.
+\end{equation}
+In matrix form the elements of $\hat{F}$ are
+\begin{equation}
+    F_{k j} = \langle k\rvert\hat{F}\lvert j\rangle = \frac{1}{\sqrt{N}}e^{2\pi i jk/N},
+\end{equation}
+so that
+\begin{equation}
+    \hat{F} = \frac{1}{\sqrt{N}}\sum_{k,j=0}^{N-1} e^{2\pi i jk/N} \lvert k\rangle\langle j\rvert.
+\end{equation}
+
+\subsubsection*{Unitarity of $\hat{F}$}
+An operator is unitary if $\hat{F}\hat{F}^{\dagger}=\hat{F}^{\dagger}\hat{F}=I$. The adjoint acts on basis states as
+\begin{equation}
+    \hat{F}^{\dagger}\lvert k\rangle = \frac{1}{\sqrt{N}}\sum_{j=0}^{N-1} e^{-2\pi i jk/N} \lvert j\rangle.
+\end{equation}
+Compute the matrix product elements:
+\begin{align}
+    (\hat{F}\hat{F}^{\dagger})_{k k'} &= \sum_{j=0}^{N-1} F_{k j} F^{*}_{k' j} \\
+    &= \frac{1}{N}\sum_{j=0}^{N-1} e^{2\pi i j(k-k')/N}.
+\end{align}
+The sum on the right is a finite geometric series which equals $N$ when $k=k'$ and $0$ otherwise, so
+\begin{equation}
+    (\hat{F}\hat{F}^{\dagger})_{k k'} = \delta_{k k'},
+\end{equation}
+and therefore $\hat{F}\hat{F}^{\dagger}=I$. Similarly one shows $\hat{F}^{\dagger}\hat{F}=I$, proving $\hat{F}$ is unitary.
+
+\rule{\linewidth}{0.4pt}
+
+\section*{III. Discrete Fourier Transform (DFT) on Periodic States}
+
+\subsection*{Exercise 3: Apply the QFT to the periodic state $\lvert\phi_{r,b}\rangle$ and obtain the resulting state.}
+
+Consider the periodic state
+\begin{equation}
+    \lvert\phi_{r,b}\rangle = \frac{1}{\sqrt{m}}\sum_{z=0}^{m-1} \lvert zr + b\rangle,
+\end{equation}
+where $r$ is the period, $b$ is an offset, and $m$ is the number of repetitions. Applying the QFT (dimension $N$) gives
+\begin{align}
+    \hat{F}\lvert\phi_{r,b}\rangle &= \frac{1}{\sqrt{m}}\sum_{z=0}^{m-1} \hat{F}\lvert zr+b\rangle \\
+    &= \frac{1}{\sqrt{mN}}\sum_{z=0}^{m-1}\sum_{k=0}^{N-1} e^{2\pi i (zr+b)k/N} \lvert k\rangle.
+\end{align}
+Interchanging the sums and factoring out the $z$-independent factor yields
+\begin{equation}
+    \hat{F}\lvert\phi_{r,b}\rangle = \sum_{k=0}^{N-1} \left[ \frac{1}{\sqrt{mN}} e^{2\pi i b k/N} \sum_{z=0}^{m-1} e^{2\pi i z r k/N} \right] \lvert k\rangle.
+\end{equation}
+Define the geometric sum
+\begin{equation}
+    S(k) = \sum_{z=0}^{m-1} e^{2\pi i z r k/N}.
+\end{equation}
+If $r k / N$ is not an integer then the phases in the sum cancel and $S(k)=0$ (destructive interference). If $r k / N$ is an integer, write $k = t(N/r)$ with integer $t$, then each term equals $1$ and
+\begin{equation}
+    S(k) = \sum_{z=0}^{m-1} 1 = m.
+\end{equation}
+Using $N=mr$, the amplitude for those $k$ values becomes
+\begin{equation}
+    A_k = \frac{1}{\sqrt{mN}} e^{2\pi i b k/N} \times m = \sqrt{\frac{m}{N}} e^{2\pi i b k/N} = \frac{1}{\sqrt{r}} e^{2\pi i b k/N}.
+\end{equation}
+Thus the transformed state is a uniform superposition over the $r$ values of $k$ satisfying $k = t(N/r)$:
+\begin{equation}
+    \hat{F}\lvert\phi_{r,b}\rangle = \frac{1}{\sqrt{r}}\sum_{t=0}^{r-1} e^{2\pi i b t / r}\,\lvert t N / r\rangle.
+\end{equation}
+This is the standard result used in period-finding: constructive interference picks out frequencies that are integer multiples of $N/r$ while other frequencies vanish by destructive interference.
+
+\rule{\linewidth}{0.4pt}
+
+\section*{IV. Relation Between Hadamard and QFT}
+
+\subsection*{Exercise 4: Show that the state $\frac{1}{\sqrt{q}}\sum_{y=0}^{q-1}\lvert y\rangle$ can be prepared both by Hadamards and by the QFT.}
+
+Let $q=2^{k}$. Starting from the register $\lvert 0\rangle^{\otimes k}$, applying $k$ single-qubit Hadamard gates gives
+\begin{equation}
+    H^{\otimes k} \lvert 0\rangle^{\otimes k} = \frac{1}{\sqrt{2^{k}}}\sum_{y=0}^{2^{k}-1} \lvert y\rangle = \frac{1}{\sqrt{q}}\sum_{y=0}^{q-1} \lvert y\rangle.
+\end{equation}
+On the other hand, the QFT on $N=q=2^{k}$ satisfies
+\begin{equation}
+    \hat{F}\lvert 0\rangle = \frac{1}{\sqrt{q}}\sum_{y=0}^{q-1} e^{2\pi i (0) y/q} \lvert y\rangle = \frac{1}{\sqrt{q}}\sum_{y=0}^{q-1} \lvert y\rangle.
+\end{equation}
+Hence both operations prepare the same equally weighted superposition. In particular, for $k=1$ (single qubit) the Hadamard gate is the QFT for $N=2$.
+
+\rule{\linewidth}{0.4pt}
+
+\section*{V. Destructive Interference in QFT}
+
+\subsection*{Exercise 5: Explain how the number of terms reduces from $q/r$ to $r$ after the QFT due to destructive interference.}
+
+Starting with the periodic state
+\begin{equation}
+    \lvert\phi_{a_0}\rangle = \frac{1}{\sqrt{m}}\sum_{z=0}^{m-1} \lvert z r + a_0\rangle, \qquad m = q/r,
+\end{equation}
+the QFT produces amplitudes proportional to the geometric sum
+\begin{equation}
+    S(k)=\sum_{z=0}^{m-1} e^{2\pi i z r k / q}.
+\end{equation}
+If $r k/q$ is not an integer then $S(k)=0$ because the phases cancel (destructive interference). If $k=t(q/r)$ then $S(k)=m=q/r$ and the amplitude for such $k$ is
+\begin{equation}
+    A_k = \frac{1}{\sqrt{mq}} e^{2\pi i a_0 k / q} S(k) = \frac{1}{\sqrt{r}} e^{2\pi i a_0 k / q}.
+\end{equation}
+Only $r$ values of $k$ (those proportional to $q/r$) have nonzero amplitude, so the original superposition over $m=q/r$ periodic positions is mapped to a superposition over $r$ frequency modes. This is the mechanism behind the period-finding step in Shor's algorithm.
+
+\end{document}

@@ -1,0 +1,348 @@
+
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{geometry}
+\geometry{
+  a4paper,
+  margin=1in,
+}
+
+\begin{document}
+
+\title{Assignment-3 Solutions}
+\author{Shaukat aziz}
+\date{QT 207}
+\maketitle
+
+\section*{II. Quantum Fourier Transform (QFT) and Unitary Operator}
+
+\subsection*{Exercise 2: Find an operator $\hat{F}$ which transforms a state into its DFT and show that it is unitary.}
+
+\subsubsection*{Defining the QFT Operator $\hat{F}$}
+
+Consider an $N$-dimensional Hilbert space with computational basis
+\[
+\{|j\rangle\}_{j=0}^{N-1}.
+\]
+The quantum Fourier transform (QFT) operator $\hat{F}$ is defined by its action on the basis states as
+\begin{equation}
+  \hat{F}\,|j\rangle
+  = \frac{1}{\sqrt{N}}\sum_{k=0}^{N-1} e^{2\pi i jk/N}\,|k\rangle,
+  \qquad j = 0,1,\dots,N-1.
+\end{equation}
+
+In matrix form,
+\[
+\hat{F} = \sum_{k=0}^{N-1} \sum_{j=0}^{N-1}
+\langle k|\hat{F}|j\rangle\,|k\rangle \langle j| ,
+\]
+with matrix elements
+\begin{equation}
+  \langle k|\hat{F}|j\rangle
+  = \frac{1}{\sqrt{N}} e^{\frac{2\pi i}{N} jk}.
+\end{equation}
+Therefore,
+\begin{equation}
+  \hat{F}
+  = \frac{1}{\sqrt{N}}\sum_{k=0}^{N-1} \sum_{j=0}^{N-1}
+  e^{\frac{2\pi i}{N} jk}\,|k\rangle\langle j|.
+\end{equation}
+
+If a general state is
+\[
+|\psi\rangle = \sum_{j=0}^{N-1} x_j |j\rangle,
+\]
+then
+\[
+\hat{F}|\psi\rangle
+= \sum_{k=0}^{N-1} \left(
+  \frac{1}{\sqrt{N}} \sum_{j=0}^{N-1} e^{2\pi i jk/N} x_j
+\right) |k\rangle,
+\]
+so the amplitudes are exactly the DFT of $\{x_j\}$.
+
+\subsubsection*{Showing that $\hat{F}$ is Unitary}
+
+An operator is unitary if
+\[
+\hat{F}\hat{F}^\dagger = \hat{I}
+\quad\text{and}\quad
+\hat{F}^\dagger\hat{F} = \hat{I}.
+\]
+
+The matrix elements of $\hat{F}^\dagger$ are
+\[
+\langle j|\hat{F}^\dagger|k\rangle
+= \overline{\langle k|\hat{F}|j\rangle}
+= \frac{1}{\sqrt{N}} e^{-2\pi i jk/N}.
+\]
+
+Consider the matrix element of $\hat{F}\hat{F}^\dagger$:
+\begin{align*}
+(\hat{F}\hat{F}^\dagger)_{kk'}
+&= \langle k|\hat{F}\hat{F}^\dagger|k'\rangle \\
+&= \sum_{j=0}^{N-1} \langle k|\hat{F}|j\rangle \langle j|\hat{F}^\dagger|k'\rangle \\
+&= \sum_{j=0}^{N-1}
+\left(\frac{1}{\sqrt{N}} e^{2\pi i jk/N}\right)
+\left(\frac{1}{\sqrt{N}} e^{-2\pi i jk'/N}\right) \\
+&= \frac{1}{N} \sum_{j=0}^{N-1}
+e^{2\pi i j(k-k')/N}.
+\end{align*}
+The sum over roots of unity gives
+\[
+\sum_{j=0}^{N-1}
+e^{2\pi i j(k-k')/N}
+=
+\begin{cases}
+N, & k = k',\\[2pt]
+0, & k \neq k'.
+\end{cases}
+\]
+Hence
+\[
+(\hat{F}\hat{F}^\dagger)_{kk'}
+= \delta_{kk'}, \qquad
+\hat{F}\hat{F}^\dagger = \hat{I}.
+\]
+
+By the same calculation (or by the fact that $\hat{F}$ is a square matrix with orthonormal columns), one also finds
+\[
+\hat{F}^\dagger \hat{F} = \hat{I}.
+\]
+Therefore $\hat{F}$ is unitary.
+
+\bigskip
+\hrule
+\bigskip
+
+\section*{III. Discrete Fourier Transform (DFT) on Periodic States}
+
+\subsection*{Exercise 3: Performing DFT on the periodic state $|\phi_{r,b}\rangle \to |\tilde{\phi}\rangle$, obtain the resulting state.}
+
+The periodic state is
+\begin{equation}
+  |\phi_{r,b}\rangle
+  = \frac{1}{\sqrt{m}} \sum_{z=0}^{m-1} |zr + b\rangle,
+\end{equation}
+where $r$ is the period, $b$ is an offset, and $m$ is the number of repetitions.
+
+Let the Hilbert space dimension be $N$, and assume $N = mr$ so that $m = N/r$ is an integer. The QFT (DFT) modulo $N$ acts as
+\begin{equation}
+  \hat{F}_N |x\rangle =
+  \frac{1}{\sqrt{N}} \sum_{k=0}^{N-1} e^{2\pi i xk/N}\,|k\rangle.
+\end{equation}
+
+Apply $\hat{F}_N$ to $|\phi_{r,b}\rangle$:
+\begin{align*}
+\hat{F}_N |\phi_{r,b}\rangle
+&= \frac{1}{\sqrt{m}} \sum_{z=0}^{m-1} \hat{F}_N |zr + b\rangle \\
+&= \frac{1}{\sqrt{m}} \sum_{z=0}^{m-1}
+\left(
+  \frac{1}{\sqrt{N}} \sum_{k=0}^{N-1} e^{2\pi i (zr + b)k/N} |k\rangle
+\right) \\
+&= \frac{1}{\sqrt{mN}} \sum_{k=0}^{N-1} e^{2\pi i bk/N}
+\left(
+  \sum_{z=0}^{m-1} e^{2\pi i z r k / N}
+\right) |k\rangle.
+\end{align*}
+
+Define the inner sum
+\[
+S(k) = \sum_{z=0}^{m-1} e^{2\pi i z r k / N}.
+\]
+Using $N = mr$, this becomes
+\[
+S(k) = \sum_{z=0}^{m-1} e^{2\pi i z k / m}.
+\]
+
+This is a geometric series with common ratio $e^{2\pi i k/m}$. Hence
+\[
+S(k) =
+\begin{cases}
+m, & k \equiv 0 \pmod{m},\\
+0, & k \not\equiv 0 \pmod{m}.
+\end{cases}
+\]
+
+Thus only $k$ that are multiples of $m$ survive. Write $k = t m$ with $t = 0,1,\dots,r-1$:
+\begin{align*}
+\hat{F}_N |\phi_{r,b}\rangle
+&= \frac{1}{\sqrt{mN}} \sum_{t=0}^{r-1}
+e^{2\pi i b (tm)/N} \, m \, |tm\rangle \\
+&= \frac{\sqrt{m}}{\sqrt{N}}
+\sum_{t=0}^{r-1} e^{2\pi i b t / r} \, |tm\rangle.
+\end{align*}
+Since $m = N/r$,
+\[
+\frac{\sqrt{m}}{\sqrt{N}} = \sqrt{\frac{m}{mr}} = \frac{1}{\sqrt{r}},
+\]
+and $tm = tN/r$. Therefore the Fourier-transformed state is
+\begin{equation}
+  |\tilde{\phi}\rangle
+  = \hat{F}_N |\phi_{r,b}\rangle
+  = \frac{1}{\sqrt{r}}
+    \sum_{t=0}^{r-1} e^{2\pi i b t / r} \left|\frac{tN}{r}\right\rangle.
+\end{equation}
+
+\bigskip
+\hrule
+\bigskip
+
+\section*{IV. Relation Between Hadamard and QFT}
+
+\subsection*{Exercise 4: Show that $\displaystyle \frac{1}{\sqrt{q}}\sum_{y=0}^{q-1}|y\rangle$ can be obtained by applying Hadamard and also by applying Fourier transform. What does this tell you about the relation between Hadamard and Fourier transform?}
+
+Let $q = 2^k$. The first register has $k$ qubits, initialized to $|0\rangle^{\otimes k}$.
+
+\subsubsection*{Using the Hadamard Gate}
+
+For a single qubit,
+\[
+\hat{H}|0\rangle = \frac{1}{\sqrt{2}}(|0\rangle + |1\rangle).
+\]
+Therefore,
+\begin{align*}
+\hat{H}^{\otimes k} |0\rangle^{\otimes k}
+&= \bigotimes_{j=1}^{k} \hat{H}_j |0\rangle_j \\
+&= \bigotimes_{j=1}^{k} \frac{1}{\sqrt{2}}(|0\rangle_j + |1\rangle_j) \\
+&= \frac{1}{\sqrt{2^k}}
+   \sum_{y_1,\dots,y_k \in \{0,1\}}
+   |y_1 y_2 \dots y_k\rangle.
+\end{align*}
+Identifying $y = y_1 y_2 \dots y_k$ as the binary representation of $y \in \{0,\dots,q-1\}$, we get
+\begin{equation}
+  \hat{H}^{\otimes k} |0\rangle^{\otimes k}
+  = \frac{1}{\sqrt{q}} \sum_{y=0}^{q-1} |y\rangle.
+\end{equation}
+
+\subsubsection*{Using the QFT}
+
+The QFT on $q = 2^k$ basis states is defined as
+\[
+\hat{F}_q |j\rangle
+= \frac{1}{\sqrt{q}}\sum_{y=0}^{q-1}
+e^{2\pi i j y / q}|y\rangle.
+\]
+Apply it to $|0\rangle$:
+\begin{equation}
+  \hat{F}_q |0\rangle
+  = \frac{1}{\sqrt{q}}\sum_{y=0}^{q-1}
+  e^{2\pi i \cdot 0 \cdot y / q}|y\rangle
+  = \frac{1}{\sqrt{q}}\sum_{y=0}^{q-1}|y\rangle.
+\end{equation}
+
+\subsubsection*{Conclusion}
+
+Both operations produce the same equal superposition from the initial state $|0\rangle^{\otimes k}$:
+\[
+\hat{H}^{\otimes k}|0\rangle^{\otimes k}
+= \hat{F}_q |0\rangle.
+\]
+This shows:
+
+\begin{itemize}
+  \item For $N=2$, the single-qubit Hadamard gate is exactly the QFT on $\mathbb{Z}_2$.
+  \item For $N=2^k$, $\hat{H}^{\otimes k}$ and $\hat{F}_q$ coincide on $|0\rangle^{\otimes k}$ and are closely related. The QFT over $\mathbb{Z}_{2^k}$ can be built from Hadamard gates plus controlled phase rotations.
+\end{itemize}
+
+So the Hadamard transform is a special (very simple) case of a quantum Fourier transform.
+
+\bigskip
+\hrule
+\bigskip
+
+\section*{V. Destructive Interference in QFT}
+
+\subsection*{Exercise 5: The sum changed from $q/r$ terms to $r$ terms during QFT. This was a result of destructive interference in the QFT on the state. Show how it happened.}
+
+From Shor's order-finding procedure, after measuring the second register we obtain in the first register the state
+\begin{equation}
+  |\phi_{a_0}\rangle
+  = \frac{1}{\sqrt{q/r}}
+    \sum_{z=0}^{q/r - 1} |zr + a_0\rangle,
+\end{equation}
+where $q = mr$ and hence $q/r = m$.
+
+Apply the QFT modulo $q$:
+\[
+\hat{F}_q |x\rangle
+= \frac{1}{\sqrt{q}}\sum_{k=0}^{q-1}
+e^{2\pi i xk/q} |k\rangle.
+\]
+
+Then
+\begin{align*}
+\hat{F}_q |\phi_{a_0}\rangle
+&= \frac{1}{\sqrt{m}}
+\sum_{z=0}^{m-1} \hat{F}_q |zr + a_0\rangle \\
+&= \frac{1}{\sqrt{m}}
+\sum_{z=0}^{m-1}
+\left(
+  \frac{1}{\sqrt{q}} \sum_{k=0}^{q-1}
+  e^{2\pi i (zr + a_0)k/q}|k\rangle
+\right) \\
+&= \frac{1}{\sqrt{mq}} \sum_{k=0}^{q-1}
+e^{2\pi i a_0 k / q}
+\left(
+  \sum_{z=0}^{m-1} e^{2\pi i z r k / q}
+\right) |k\rangle.
+\end{align*}
+
+Again define
+\[
+S(k) = \sum_{z=0}^{m-1} e^{2\pi i z r k / q}.
+\]
+Using $q = mr$, we get
+\[
+S(k) = \sum_{z=0}^{m-1} e^{2\pi i z k / m}.
+\]
+
+This is the same geometric series as before:
+\[
+S(k) =
+\begin{cases}
+m, & k \equiv 0 \pmod{m},\\[2pt]
+0, & k \not\equiv 0 \pmod{m}.
+\end{cases}
+\]
+
+\paragraph{Destructive interference.}
+If $k$ is not a multiple of $m = q/r$, then $e^{2\pi i k/m} \neq 1$, and the terms
+\[
+e^{2\pi i z k/m},\quad z=0,\dots,m-1
+\]
+sum to zero. That is,
+\[
+S(k)=0 \quad \Rightarrow \quad \text{amplitude of }|k\rangle = 0.
+\]
+All such components are removed by destructive interference.
+
+\paragraph{Constructive interference.}
+If $k$ \emph{is} a multiple of $m$, say $k = t m$ with $t=0,1,\dots,r-1$, then
+\[
+e^{2\pi i z k/m} = e^{2\pi i z t} = 1
+\]
+for all $z$, so
+\[
+S(k) = \sum_{z=0}^{m-1} 1 = m.
+\]
+Thus for $k = t m$,
+\begin{align*}
+\hat{F}_q |\phi_{a_0}\rangle
+&= \frac{1}{\sqrt{mq}} \sum_{t=0}^{r-1}
+e^{2\pi i a_0 (tm) / q} \, m \, |tm\rangle \\
+&= \frac{\sqrt{m}}{\sqrt{q}}
+\sum_{t=0}^{r-1}
+e^{2\pi i a_0 t / r} \, |tm\rangle.
+\end{align*}
+Since $m = q/r$, we have $\sqrt{m/q} = 1/\sqrt{r}$, and $tm = t q/r$, so
+\begin{equation}
+  \hat{F}_q |\phi_{a_0}\rangle
+  = \frac{1}{\sqrt{r}} \sum_{t=0}^{r-1}
+    e^{2\pi i a_0 t / r} \left|\frac{tq}{r}\right\rangle.
+\end{equation}
+
+Originally, $|\phi_{a_0}\rangle$ was a superposition of $q/r = m$ basis states. After the QFT, only $r$ basis states (those with $k = t q/r$) have non-zero amplitude. The reduction from $q/r$ terms to $r$ terms is exactly due to the destructive interference of all other components in the geometric sum $S(k)$.
+
+\end{document}
+```

@@ -1,0 +1,13 @@
+\beamer@sectionintoc {1}{Summary of what was done}{3}{0}{1}
+\beamer@sectionintoc {2}{Methods (concise)}{4}{0}{2}
+\beamer@sectionintoc {3}{Task 1 — ED convergence \& spectrum}{5}{0}{3}
+\beamer@sectionintoc {4}{Task 2 — Correlators and local observables}{6}{0}{4}
+\beamer@sectionintoc {5}{Task 3 — Entanglement entropy}{7}{0}{5}
+\beamer@sectionintoc {6}{Task 4 — Loschmidt echoes}{8}{0}{6}
+\beamer@sectionintoc {7}{Task 5 — Kink sector and soliton mass}{9}{0}{7}
+\beamer@sectionintoc {8}{Task 6 — Scattering demo (single run)}{10}{0}{8}
+\beamer@sectionintoc {9}{Task 7 — Coleman mapping and comparison}{11}{0}{9}
+\beamer@sectionintoc {10}{Representative numeric outputs (from runs)}{12}{0}{10}
+\beamer@sectionintoc {11}{Interpretation \& caveats}{13}{0}{11}
+\beamer@sectionintoc {12}{Files and reproducibility}{14}{0}{12}
+\beamer@sectionintoc {13}{Short conclusion}{15}{0}{13}

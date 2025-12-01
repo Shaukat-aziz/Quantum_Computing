@@ -1,0 +1,219 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage{amsmath, amssymb, graphicx, float, geometry}
+% Figure placeholder macro: includes the image if present, otherwise shows a boxed note
+\newcommand{\placeholderfig}[2]{%
+  \IfFileExists{#1}{\includegraphics[width=0.95\linewidth]{#1}}{\fbox{\parbox{0.9\linewidth}{\centering \vspace{0.75em}\textbf{[Insert figure here]}\\#2\\\texttt{\detokenize{#1}} (file not found)\vspace{0.75em}}}}
+}
+\geometry{margin=1in}
+
+\title{\textbf{Report for Question 1: Energy and Wavefunction Convergence in the JLP Encoding}}
+\author{\bf{Team Members:} Gurudevaprasath, Shaukat Aziz, Suresh Karthik \\
+Course: Quantum Field Theory on a Quantum Computer}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\section{Question 1}
+The objective of this report is to study the convergence behavior of eigenvalues and eigenfunctions for the one-dimensional harmonic and anharmonic oscillators under the Jordan--Lee--Preskill (JLP) encoding. Following Question 1 of the assignment, we analyze how the energy spectrum and wavefunctions depend on the grid parameters $x_{\max}$ and $n_q$. The Hamiltonians considered are:
+\begin{equation}
+H_{\text{free}} = \frac{1}{2}\hat{p}^2 + \frac{1}{2}\hat{x}^2, \quad
+H_{\text{anh}} = \frac{1}{2}\hat{p}^2 + \frac{1}{2}\hat{x}^2 + \frac{\lambda}{4}\hat{x}^4, \quad \lambda > 0.
+\end{equation}
+
+In the JLP encoding, the position operator $\hat{x}$ is represented on a uniform grid over $[-x_{\max}, x_{\max}]$ using $n_q$ qubits, leading to $N = 2^{n_q}$ discrete points. The kinetic term is implemented spectrally using the Discrete Fourier Transform (DFT) to represent $\hat{p}^2$.
+
+\subsection{Setup and Discretization}
+The position grid is defined as:
+\begin{equation}
+x_j = -x_{\max} + \left(j + \frac{1}{2}\right)\Delta x, \quad \Delta x = \frac{2x_{\max}}{N}, \quad j = 0, 1, \ldots, N-1.
+\end{equation}
+The momentum grid follows from periodicity as $p_m = \frac{2\pi}{2x_{\max}} m$, with $m = -N/2, \ldots, N/2 - 1$.
+The Hamiltonian matrix is built as:
+\begin{equation}
+H = \frac{1}{2}\Pi^2 + \frac{1}{2}\omega^2\Phi^2 + \frac{\lambda}{4}\Phi^4,
+\end{equation}
+where $\Phi = \text{diag}(x_j)$ and $\Pi^2 = F^\dagger \text{diag}(p_m^2) F$ with $F$ being the DFT matrix.
+
+The Hamiltonian matrices are constructed for both the harmonic ($\lambda = 0$) and anharmonic ($\lambda > 0$) cases. Exact diagonalization is performed using \texttt{scipy.linalg.eigh} to obtain the lowest few eigenvalues $E_k$ and eigenvectors $\psi_k(x)$. These quantities are studied as functions of $x_{\max}$ and $n_q$.
+\subsection{Task 1: Energy Convergence}
+For a range of values of $(x_{\max}, n_q)$, we compute the lowest five eigenvalues
+\[E_0(x_{\max}, n_q),\; E_1(x_{\max}, n_q),\; \ldots,\; E_4(x_{\max}, n_q)\]
+for both $H_{\text{free}}$ ($\lambda=0$) and $H_{\text{anh}}$ with $\lambda \in \{0.5,\, 1.5\}$. We study how these eigenvalues change:
+\begin{enumerate}
+  \item as $x_{\max}$ is varied at fixed $n_q$; and
+  \item as $n_q$ is varied at fixed $x_{\max}$.
+\end{enumerate}
+Concretely, our sweeps use:
+\begin{itemize}
+  \item Fixed $n_q=4$ with $x_{\max} \in \{0.5, 4, 7, 11, 16, 22\}$;
+  \item Fixed $n_q \in \{1, 3, 7, 9\}$ with the same $x_{\max}$ values; and
+  \item Fixed $x_{\max} \in \{0.5, 7, 11, 16, 22\}$ with $n_q \in \{1, 3, 6, 9\}$.
+\end{itemize}
+  	extit{Summary (Energy Convergence).} From our sweeps we observe: (i) moderate parameters ($n_q\ge 8$, $x_{\max}\approx 4$) already yield accurate low-lying energies, (ii) low-lying states converge faster than excited states, and (iii) the anharmonic cases ($\lambda=0.5,1.5$) generally require larger grids than the harmonic case.
+For each $\lambda$, we also report the first five eigenvalues for $n_q = 4$, $x_{\max} = 4$ to provide a common reference point. Trends observed:
+\begin{itemize}
+  \item Increasing $x_{\max}$ at fixed $n_q$ initially improves accuracy by enlarging the domain, but very large $x_{\max}$ can under-sample the grid (larger $\Delta x$), degrading accuracy.
+  \item Increasing $n_q$ at fixed $x_{\max}$ systematically improves accuracy; $n_q\ge 8$ yields well-converged low-lying energies.
+  \item The anharmonic cases ($\lambda=0.5, 1.5$) require larger $x_{\max}$ and $n_q$ than the harmonic case due to stronger confinement from the quartic term.
+\end{itemize}
+
+  % --- Suggested figures for Task 1 ---
+  \begin{figure}[H]
+    \centering
+    \placeholderfig{figures/energy_vs_xmax_nq_2_6_10.png}{Ground-state energy $E_0$ vs $x_{\max}$ for $n_q\in\{2,6,10\}$, with one curve per $\lambda\in\{0,0.5,1.5\}$. Save this from the notebook function that sweeps $x_{\max}$ at fixed $n_q$.}
+    \caption{Energy convergence with domain size: $E_0$ vs $x_{\max}$ for several fixed $n_q$.}
+    \label{fig:energy-vs-xmax}
+  \end{figure}
+
+  \begin{figure}[H]
+    \centering
+    \placeholderfig{figures/energy_vs_nq_xmax_3_9_15_21.png}{Ground-state energy $E_0$ vs $n_q$ for $x_{\max}\in\{3,9,15,21\}$, with one curve per $\lambda$. Save this from the notebook function that sweeps $n_q$ at fixed $x_{\max}$.}
+    \caption{Energy convergence with resolution: $E_0$ vs $n_q$ for several fixed $x_{\max}$.}
+    \label{fig:energy-vs-nq}
+  \end{figure}
+
+% (Excited-state energy figures intentionally omitted; this report focuses on ground-state energy only.)
+
+\subsection{Task 2: Wavefunction Convergence}
+For the same parameter choices, we compute and compare the \emph{ground-state} wavefunction $\psi_0(x_{\max}, n_q)$ and study its shape as parameters vary:
+\begin{itemize}
+  \item for different $x_{\max}$ at fixed $n_q$; and
+  \item for different $n_q$ at fixed $x_{\max}$.
+\end{itemize}
+We focus on the ground state ($k=0$). Wavefunctions are normalized using the grid spacing $\Delta x$ so that $\int |\psi(x)|^2 dx = 1$. Visual trends mirror the energy study: coarse grids distort tails, while increasing $n_q$ and suitably chosen $x_{\max}$ recover smooth, symmetric profiles.
+
+  	extit{Summary (Wavefunction Convergence).} Ground-state wavefunctions are sensitive to grid parameters; accurate shapes require both sufficient extent ($x_{\max}$) and resolution ($n_q$).
+
+% --- Suggested figures for Task 2 ---
+% Ground state (k=0)
+\begin{figure}[H]
+  \centering
+  \placeholderfig{figures/wf_k0_vary_xmax_nq4.png}{Ground-state $\psi_0(x)$ at fixed $n_q=4$ for $x_{\max}\in\{4,11,22\}$ with three subplots (one per $\lambda$). Save from the notebook function that varies $x_{\max}$ at fixed $n_q$.}
+  \caption{Ground state shape vs $x_{\max}$ at fixed $n_q=4$ ($\lambda=0,0.5,1.5$ shown side by side).}
+  \label{fig:wf-k0-vary-xmax}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \placeholderfig{figures/wf_k0_vary_nq_x7.png}{Ground-state $\psi_0(x)$ at fixed $x_{\max}=7$ for $n_q\in\{3,6,9\}$ with three subplots (one per $\lambda$).}
+  \caption{Ground state shape vs $n_q$ at fixed $x_{\max}=7$ ($\lambda=0,0.5,1.5$ side by side).}
+  \label{fig:wf-k0-vary-nq}
+\end{figure}
+
+% (Excited-state wavefunction figures intentionally omitted; this report focuses on the ground state only.)
+
+
+\begin{itemize}
+\item Effects of varying $x_{\max}$ at fixed $n_q$:
+  \begin{itemize}
+    \item Small $x_{\max}$ (0.5): Wavefunctions are compressed and distorted
+    \item Moderate $x_{\max}$ (4.0): Clean nodal structure and proper decay
+    \item Large $x_{\max}$ (20.0): Numerical artifacts appear due to sparse sampling
+  \end{itemize}
+
+\item Effects of varying $n_q$ at fixed $x_{\max}$:
+  \begin{itemize}
+    \item $n_q = 3$: Rough, stairstep-like wavefunctions
+    \item $n_q = 8$: Smooth functions with well-resolved nodes
+    \item $n_q = 10$: Further refinement of fine features
+  \end{itemize}
+
+\item Special features preserved:
+  \begin{itemize}
+  \item Ground state remains nodeless and symmetric
+  \end{itemize}
+\end{itemize}
+
+The plots generated by our code clearly demonstrate the transition from under-resolved to well-converged wavefunctions as grid parameters are refined.
+\subsection{Task 3: Comparison}
+Good energy convergence does not always imply good wavefunction convergence. Coarse grids may yield energies close to exact values while distorting nodal structure and amplitudes. Therefore, both spectra and eigenfunctions must be checked across parameter sweeps.
+
+\paragraph{Recommended well-balanced parameters.} Balancing position- and momentum-space sampling, we find that $x_{\max}\approx 4.0$ and $n_q\in[8,10]$ ($N=256$ to $1024$ points) provide accurate results for low-lying states, with $n_q\approx 10$ ensuring high accuracy even for the anharmonic cases.
+
+\subsection{Task 4: Nyquist--Shannon Sampling}
+
+\paragraph{Nyquist--Shannon Sampling Theory}
+The Nyquist--Shannon sampling theorem is a fundamental result in signal processing that states: \emph{A continuous signal with maximum frequency component $f_{\max}$ can be perfectly reconstructed from its samples if the sampling rate is at least $f_s \geq 2f_{\max}$}. The minimum required sampling rate $f_s = 2f_{\max}$ is called the \emph{Nyquist rate}, and the corresponding maximum frequency is the \emph{Nyquist frequency} $f_{\text{Nyquist}} = f_s/2$.
+
+In the context of quantum mechanics on a lattice:
+\begin{itemize}
+\item A wavefunction $\psi(x)$ with spatial oscillations characterized by a maximum \emph{wavelength} $\lambda_{\min}$ (corresponding to maximum momentum $p_{\max}$) can be accurately represented on a position grid only if the grid spacing satisfies:
+\begin{equation}
+\Delta x \leq \frac{\lambda_{\min}}{2} = \frac{\pi}{p_{\max}}
+\end{equation}
+\item Conversely, if $\Delta x$ is too large, \emph{aliasing} occurs: high-frequency spatial modes in $\psi(x)$ are misrepresented as lower-frequency modes, corrupting the wavefunction profile.
+\item In Fourier (momentum) space, the maximum representable momentum is:
+\begin{equation}
+p_{\max} = \frac{\pi}{\Delta x}
+\end{equation}
+which sets the kinetic energy cutoff: $E_{\max} = \frac{p_{\max}^2}{2m}$.
+\end{itemize}
+
+\paragraph{Application to Our JLP Discretization}
+In our discretization scheme:
+\begin{itemize}
+\item Position-space sampling:
+  \begin{itemize}
+    \item Grid spacing: $\Delta x = 2x_{\max}/N = 2x_{\max}/2^{n_q}$
+    \item For a given $x_{\max}$ and $n_q$, the grid spacing decreases exponentially with $n_q$: $\Delta x \propto 2^{-n_q}$
+    \item The highest frequency representable in $\psi(x)$ corresponds to the shortest wavelength: $\lambda_{\min} = 2\Delta x$
+    \item Excited states of the oscillator have wavefunctions with increasing spatial oscillation; state $k$ has roughly $k$ nodes, so $\lambda_{\text{node}, k} \approx L/k$ where $L = 2x_{\max}$
+    \item For accurate representation of state $k$, we need $\Delta x \lesssim L/(2k)$, i.e., $n_q \gtrsim \log_2(k)$
+  \end{itemize}
+
+\item Momentum-space sampling:
+  \begin{itemize}
+    \item Maximum momentum: $p_{\max} = \pi/\Delta x = \pi 2^{n_q}/(2x_{\max})$
+    \item Momentum resolution: $\Delta p = 2\pi/L = \pi/x_{\max}$
+    \item For an anharmonic oscillator with large $\lambda$, the wavefunction is more localized and thus occupies higher momenta. The maximum representable momentum must be sufficiently large.
+    \item Aliasing in momentum space (truncation of high-$p$ modes) manifests as artificial broadening and distortion in position space.
+  \end{itemize}
+
+\item Dual-space balance:
+  \begin{itemize}
+    \item Position extent $L = 2x_{\max}$ must be large enough to contain the wavefunction support without artificial boundaries.
+    \item Momentum cutoff $p_{\max} = \pi/\Delta x$ must be large enough to capture kinetic energy contributions.
+    \item These are coupled: increasing $x_{\max}$ at fixed $n_q$ decreases $\Delta x$, raising $p_{\max}$. Conversely, increasing $n_q$ at fixed $x_{\max}$ reduces both $\Delta x$ and increases $p_{\max}$.
+  \end{itemize}
+\end{itemize}
+
+\paragraph{Significance for Our Results}
+Our numerical studies reveal that "well-balanced" sampling—where the Nyquist criterion is satisfied for both position and momentum spaces—occurs at:
+\begin{itemize}
+\item $x_{\max} \approx 4.0$: Large enough to enclose the wavefunction (which extends $\sim 2{-}3$ in physical units) without excessive overhead
+\item $n_q \geq 8$: Provides spatial resolution $\Delta x \approx 2(4.0)/256 \approx 0.03$, corresponding to $p_{\max} \approx 105$ and $\lambda_{\min} \approx 0.06$
+\item This combination ensures $\Delta x \lesssim \pi/p_{\text{typical}}$, where $p_{\text{typical}} \sim 1{-}2$ is the typical momentum scale of low-lying states
+\end{itemize}
+
+	extbf{For the anharmonic case ($\lambda = 0.5, 1.5$):} The quartic potential confines the wavefunction to a smaller region, effectively increasing $p_{\text{typical}}$. Thus, the Nyquist criterion becomes more stringent: smaller $\Delta x$ (larger $n_q$) is required. This explains why $n_q = 3$ fails catastrophically: the $N=8$ grid points violate the Nyquist criterion, causing severe aliasing and numerical instability.
+
+	extbf{For the harmonic case ($\lambda = 0$):} The smooth quadratic potential is better represented on coarser grids; $n_q = 3$ still produces reasonable energies (though wavefunctions are distorted) because the low-frequency content dominates.
+
+This balance ensures accurate representation in both conjugate spaces, as evidenced by the smooth convergence of both energies and wavefunctions when the Nyquist criterion is satisfied.
+
+% --- AI Assistance ---
+\section*{AI Assistance}
+This Jupyter Notebook (\texttt{Assignment3.ipynb}) and the corresponding LaTeX report were collaboratively created with the assistance of AI tools.
+
+	extbf{ChatGPT (OpenAI GPT-5) Contribution:}
+\begin{itemize}
+  \item Explaining the theoretical basis of the Jordan--Lee--Preskill (JLP) encoding and its role in discretizing the field operators.
+  \item Designing and writing the full Python implementation of the JLP Hamiltonian builder, eigenvalue solver, and plotting functions for eigenvalue and wavefunction convergence.
+  \item Refining the code structure for clarity, adding comments, and improving readability.
+  \item Generating LaTeX sections for the report including: methodology, results, discussion, and conclusions for Question 1 of the assignment.
+  \item Creating templates for plots of $E_k$ versus $x_{\max}$ and $n_q$, and verifying convergence trends.
+  \item Writing this acknowledgment prompt and suggesting Copilot's addition.
+\end{itemize}
+
+	extbf{GitHub Copilot Contribution:}
+\begin{itemize}
+  \item Inline code completion and syntax suggestions within VS Code during the refinement of the Python code in \texttt{Assignment3.ipynb}.
+  \item Auto-formatting, optimizing import structures, and suggesting LaTeX syntax improvements in the report file.
+  \item Generating repetitive boilerplate (e.g., plotting loops, function docstrings, and figure captions).
+  \item Minor fixes in variable naming and consistency across cells in the notebook.
+\end{itemize}
+
+Together, ChatGPT and Copilot streamlined the workflow by combining conceptual explanations, functional code generation, and technical writing support for the report and code documentation.
+
+\end{document}

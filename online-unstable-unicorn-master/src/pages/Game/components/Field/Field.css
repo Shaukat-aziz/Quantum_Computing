@@ -1,0 +1,11 @@
+.field {
+  display: flex;
+  justify-content: center;
+  height: 20vh;
+}
+
+.field .ui.card {
+  height: 165px !important;
+  width: 125px !important;
+  margin: 10px !important;
+}

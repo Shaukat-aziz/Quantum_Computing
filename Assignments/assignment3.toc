@@ -1,0 +1,12 @@
+\contentsline {section}{\numberline {1}Problem 1 — finite sums}{1}{section.1}%
+\contentsline {paragraph}{First sum \(S_1\) (pairing / symmetry).}{2}{section*.4}%
+\contentsline {paragraph}{Second sum \(S_2\) (reduce to \(\csc ^2\) and evaluate finite trig sum).}{2}{section*.5}%
+\contentsline {paragraph}{Evaluation of \(\Sigma \) via cotangent partial fractions (periodicity + reindexing).}{2}{section*.6}%
+\contentsline {section}{\numberline {2}Problem 2 — convergence tests (Arfken 5.2.6 and 5.2.7)}{3}{section.2}%
+\contentsline {section}{\numberline {3}Problem 3 — series with alternating product coefficients}{4}{section.3}%
+\contentsline {section}{\numberline {4}Problem 4}{5}{section.4}%
+\contentsline {section}{\numberline {5}Problem 5 — Euler transformation for \(\pi \)}{5}{section.5}%
+\contentsline {section}{\numberline {6}Problem 6 — Poisson resummation and theta modular transformations}{6}{section.6}%
+\contentsline {section}{\numberline {7}Problem 7 — asymptotic expansion of \(Z(\lambda )\)}{7}{section.7}%
+\contentsline {section}{\numberline {8}Problem 8 — Mathews \& Walker problems 2-8 through 2-12}{8}{section.8}%
+\contentsline {section}{\numberline {9}Problem 9 — Arfken 5.11.4--5.11.9 (infinite products)}{9}{section.9}%

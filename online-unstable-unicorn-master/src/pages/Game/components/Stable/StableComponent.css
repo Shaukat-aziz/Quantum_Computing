@@ -1,0 +1,12 @@
+.stable {
+  position: absolute;
+  height: 100vh;
+  overflow: auto;
+  top: 0;
+  right: 0;
+}
+
+.stable .ui.cards {
+  display: flex;
+  flex-direction: column;
+}
